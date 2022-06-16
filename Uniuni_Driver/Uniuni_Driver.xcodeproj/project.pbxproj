@@ -7,15 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B02F0542859792800C23165 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B02F0532859792800C23165 /* LoginViewController.swift */; };
 		9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8C2858DCF5006865AA /* AppDelegate.swift */; };
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
-		9B513C912858DCF5006865AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C902858DCF5006865AA /* ViewController.swift */; };
-		9B513C942858DCF5006865AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C922858DCF5006865AA /* Main.storyboard */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
 		9B513CA42858DCF6006865AA /* Uniuni_DriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */; };
-		9B513CAE2858DCF6006865AA /* Uniuni_DriverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513CAD2858DCF6006865AA /* Uniuni_DriverUITests.swift */; };
-		9B513CB02858DCF6006865AA /* Uniuni_DriverUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513CAF2858DCF6006865AA /* Uniuni_DriverUITestsLaunchTests.swift */; };
+		9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB75229285A1B0E003618F6 /* TabbarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,19 +34,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B02F0532859792800C23165 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B513C892858DCF5006865AA /* Uniuni_Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uniuni_Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513C8C2858DCF5006865AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B513C8E2858DCF5006865AA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9B513C902858DCF5006865AA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9B513C932858DCF5006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9B513C952858DCF6006865AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B513C982858DCF6006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B513C9A2858DCF6006865AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uniuni_DriverTests.swift; sourceTree = "<group>"; };
 		9B513CA92858DCF6006865AA /* Uniuni_DriverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B513CAD2858DCF6006865AA /* Uniuni_DriverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uniuni_DriverUITests.swift; sourceTree = "<group>"; };
-		9B513CAF2858DCF6006865AA /* Uniuni_DriverUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uniuni_DriverUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9BB75229285A1B0E003618F6 /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,12 +72,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B02F04D2859784E00C23165 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				9B02F051285978B700C23165 /* Register */,
+				9B02F050285978A800C23165 /* Login */,
+				9B02F052285978DD00C23165 /* Tab Navigation */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		9B02F04F2859788800C23165 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Custom Views";
+			sourceTree = "<group>";
+		};
+		9B02F050285978A800C23165 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				9B02F0532859792800C23165 /* LoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		9B02F051285978B700C23165 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		9B02F052285978DD00C23165 /* Tab Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				9BB75229285A1B0E003618F6 /* TabbarController.swift */,
+			);
+			path = "Tab Navigation";
+			sourceTree = "<group>";
+		};
 		9B513C802858DCF5006865AA = {
 			isa = PBXGroup;
 			children = (
 				9B513C8B2858DCF5006865AA /* Uniuni_Driver */,
 				9B513CA22858DCF6006865AA /* Uniuni_DriverTests */,
-				9B513CAC2858DCF6006865AA /* Uniuni_DriverUITests */,
 				9B513C8A2858DCF5006865AA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,8 +136,8 @@
 			children = (
 				9B513C8C2858DCF5006865AA /* AppDelegate.swift */,
 				9B513C8E2858DCF5006865AA /* SceneDelegate.swift */,
-				9B513C902858DCF5006865AA /* ViewController.swift */,
-				9B513C922858DCF5006865AA /* Main.storyboard */,
+				9B02F04D2859784E00C23165 /* Scenes */,
+				9B02F04F2859788800C23165 /* Custom Views */,
 				9B513C952858DCF6006865AA /* Assets.xcassets */,
 				9B513C972858DCF6006865AA /* LaunchScreen.storyboard */,
 				9B513C9A2858DCF6006865AA /* Info.plist */,
@@ -116,15 +151,6 @@
 				9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */,
 			);
 			path = Uniuni_DriverTests;
-			sourceTree = "<group>";
-		};
-		9B513CAC2858DCF6006865AA /* Uniuni_DriverUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9B513CAD2858DCF6006865AA /* Uniuni_DriverUITests.swift */,
-				9B513CAF2858DCF6006865AA /* Uniuni_DriverUITestsLaunchTests.swift */,
-			);
-			path = Uniuni_DriverUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +259,6 @@
 			files = (
 				9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */,
 				9B513C962858DCF6006865AA /* Assets.xcassets in Resources */,
-				9B513C942858DCF5006865AA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +283,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B513C912858DCF5006865AA /* ViewController.swift in Sources */,
+				9B02F0542859792800C23165 /* LoginViewController.swift in Sources */,
+				9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */,
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
 			);
@@ -276,8 +302,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B513CB02858DCF6006865AA /* Uniuni_DriverUITestsLaunchTests.swift in Sources */,
-				9B513CAE2858DCF6006865AA /* Uniuni_DriverUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +321,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		9B513C922858DCF5006865AA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9B513C932858DCF5006865AA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		9B513C972858DCF6006865AA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -442,7 +458,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -470,7 +485,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
