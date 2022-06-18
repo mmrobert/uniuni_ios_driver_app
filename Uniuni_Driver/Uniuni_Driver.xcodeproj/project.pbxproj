@@ -14,6 +14,7 @@
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
 		9B513CA42858DCF6006865AA /* Uniuni_DriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */; };
 		9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB75229285A1B0E003618F6 /* TabbarController.swift */; };
+		9BC9F7EE285CB3FB00376D95 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9BC9F7F0285CB3FB00376D95 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,10 @@
 		9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uniuni_DriverTests.swift; sourceTree = "<group>"; };
 		9B513CA92858DCF6006865AA /* Uniuni_DriverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BB75229285A1B0E003618F6 /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
+		9BC9F7EF285CB3FB00376D95 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9BC9F7F1285CB4C300376D95 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		9BC9F7F2285CB4C400376D95 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9BC9F7F5285CCB8200376D95 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +146,7 @@
 				9B513C952858DCF6006865AA /* Assets.xcassets */,
 				9B513C972858DCF6006865AA /* LaunchScreen.storyboard */,
 				9B513C9A2858DCF6006865AA /* Info.plist */,
+				9BC9F7F0285CB3FB00376D95 /* Localizable.strings */,
 			);
 			path = Uniuni_Driver;
 			sourceTree = "<group>";
@@ -239,6 +245,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = 9B513C802858DCF5006865AA;
 			productRefGroup = 9B513C8A2858DCF5006865AA /* Products */;
@@ -258,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */,
+				9BC9F7EE285CB3FB00376D95 /* Localizable.strings in Resources */,
 				9B513C962858DCF6006865AA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,8 +333,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				9B513C982858DCF6006865AA /* Base */,
+				9BC9F7F1285CB4C300376D95 /* fr */,
+				9BC9F7F5285CCB8200376D95 /* en */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		9BC9F7F0285CB3FB00376D95 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9BC9F7EF285CB3FB00376D95 /* en */,
+				9BC9F7F2285CB4C400376D95 /* fr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -336,6 +355,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -396,6 +416,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

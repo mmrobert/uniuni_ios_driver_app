@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Uniuni_Driver
+
+  Created by Boqian Cheng on 2022-06-17.
+  
+*/
+
+"Delivery" = "Livraison";
+"Pickup" = "Récupérer";
+"Profile" = "Profil";

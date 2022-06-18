@@ -28,7 +28,8 @@ class TabBarController: UITabBarController {
         let deliveryVC = UIViewController()  // to be customized in future
         deliveryVC.view.backgroundColor = .lightGray
         let deliveryNav = UINavigationController(rootViewController: deliveryVC)
-        deliveryNav.tabBarItem = UITabBarItem(title: "Delivery", image: nil, tag: 1)
+        let deliveryStr = NSLocalizedString("Delivery", comment: "")
+        deliveryNav.tabBarItem = UITabBarItem(title: deliveryStr, image: nil, tag: 1)
         return deliveryNav
     }
     
@@ -36,7 +37,8 @@ class TabBarController: UITabBarController {
         let pickupVC = UIViewController()  // to be customized in future
         pickupVC.view.backgroundColor = .white
         let pickupNav = UINavigationController(rootViewController: pickupVC)
-        pickupNav.tabBarItem = UITabBarItem(title: "Pickup", image: nil, tag: 2)
+        let pickupStr = NSLocalizedString("Pickup", comment: "")
+        pickupNav.tabBarItem = UITabBarItem(title: pickupStr, image: nil, tag: 2)
         return pickupNav
     }
     
@@ -44,7 +46,8 @@ class TabBarController: UITabBarController {
         let profileVC = UIViewController()  // to be customized in future
         profileVC.view.backgroundColor = .yellow
         let profileNav = UINavigationController(rootViewController: profileVC)
-        profileNav.tabBarItem = UITabBarItem(title: "Profile", image: nil, tag: 3)
+        let profileStr = NSLocalizedString("Profile", comment: "")
+        profileNav.tabBarItem = UITabBarItem(title: profileStr, image: nil, tag: 3)
         return profileNav
     }
 
