@@ -10,8 +10,8 @@ import UIKit
 
 public enum AppTab {
     case delivery
-    case pickup
-    case profile
+    case scan
+    case income
 }
 
 class TabBarController: UITabBarController {
@@ -19,45 +19,44 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tabBar.backgroundColor = .gray
-        self.tabBar.tintColor = .white
-        self.viewControllers = [deliveryTab(), pickupTab(), profileTab()]
+        self.tabBar.backgroundColor = UIColor.tabbarBackground
+        self.tabBar.tintColor = UIColor.tabbarTint
+        self.viewControllers = [deliveryTab(), scanTab(), incomeTab()]
     }
     
-    private func deliveryTab() -> UIViewController {
-        let deliveryVC = UIViewController()  // to be customized in future
-        deliveryVC.view.backgroundColor = .lightGray
+    private func deliveryTab() -> UINavigationController {
+        let deliveryVC = DeliveryListViewController(
+            deliveringViewModel: DeliveryListViewModel(),
+            undeliveredViewModel: DeliveryListViewModel()
+        )
         let deliveryNav = UINavigationController(rootViewController: deliveryVC)
-        let deliveryStr = NSLocalizedString("Delivery", comment: "")
-        deliveryNav.tabBarItem = UITabBarItem(title: deliveryStr, image: nil, tag: 1)
+        deliveryNav.tabBarItem = UITabBarItem(title: String.deliveryStr, image: UIImage.delivery, tag: 1)
         return deliveryNav
     }
     
-    private func pickupTab() -> UIViewController {
-        let pickupVC = UIViewController()  // to be customized in future
-        pickupVC.view.backgroundColor = .white
-        let pickupNav = UINavigationController(rootViewController: pickupVC)
-        let pickupStr = NSLocalizedString("Pickup", comment: "")
-        pickupNav.tabBarItem = UITabBarItem(title: pickupStr, image: nil, tag: 2)
-        return pickupNav
+    private func scanTab() -> UINavigationController {
+        let scanVC = UIViewController()  // to be customized in future
+        scanVC.view.backgroundColor = .white
+        let scanNav = UINavigationController(rootViewController: scanVC)
+        scanNav.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
+        return scanNav
     }
     
-    private func profileTab() -> UIViewController {
-        let profileVC = UIViewController()  // to be customized in future
-        profileVC.view.backgroundColor = .yellow
-        let profileNav = UINavigationController(rootViewController: profileVC)
-        let profileStr = NSLocalizedString("Profile", comment: "")
-        profileNav.tabBarItem = UITabBarItem(title: profileStr, image: nil, tag: 3)
-        return profileNav
+    private func incomeTab() -> UINavigationController {
+        let incomeVC = UIViewController()  // to be customized in future
+        incomeVC.view.backgroundColor = .yellow
+        let incomeNav = UINavigationController(rootViewController: incomeVC)
+        incomeNav.tabBarItem = UITabBarItem(title: String.incomeStr, image: UIImage.dollar, tag: 3)
+        return incomeNav
     }
 
     public func chooseTab(appTab: AppTab) {
         switch appTab {
         case .delivery:
             selectedIndex = 0
-        case .pickup:
+        case .scan:
             selectedIndex = 1
-        case .profile:
+        case .income:
             selectedIndex = 2
         }
     }
