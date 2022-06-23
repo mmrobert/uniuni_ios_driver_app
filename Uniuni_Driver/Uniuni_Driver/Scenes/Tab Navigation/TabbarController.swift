@@ -25,10 +25,7 @@ class TabBarController: UITabBarController {
     }
     
     private func deliveryTab() -> UINavigationController {
-        let deliveryVC = DeliveryListViewController(
-            deliveringViewModel: DeliveryListViewModel(),
-            undeliveredViewModel: DeliveryListViewModel()
-        )
+        let deliveryVC = DeliveryListViewController(packagesListViewModel: PackagesListViewModel())
         let deliveryNav = UINavigationController(rootViewController: deliveryVC)
         deliveryNav.tabBarItem = UITabBarItem(title: String.deliveryStr, image: UIImage.delivery, tag: 1)
         return deliveryNav

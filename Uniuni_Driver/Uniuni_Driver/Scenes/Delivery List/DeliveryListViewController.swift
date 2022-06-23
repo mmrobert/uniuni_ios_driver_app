@@ -47,19 +47,16 @@ class DeliveryListViewController: UIViewController {
         return view
     }()
     
-    private var deliveringViewModel: DeliveryListViewModel
-    private var undeliveredViewModel: DeliveryListViewModel
+    private var packagesListViewModel: PackagesListViewModel
     
     private var disposables = Set<AnyCancellable>()
     
-    private var deliveringList: [PackageViewModel] = []
-    private var undeliveredList: [PackageViewModel] = []
+    private var packagesList: [PackageViewModel] = []
     
     private var listToDisplay: [PackageViewModel] = []
     
-    init(deliveringViewModel: DeliveryListViewModel, undeliveredViewModel: DeliveryListViewModel) {
-        self.deliveringViewModel = deliveringViewModel
-        self.undeliveredViewModel = undeliveredViewModel
+    init(packagesListViewModel: PackagesListViewModel) {
+        self.packagesListViewModel = packagesListViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -81,9 +78,8 @@ class DeliveryListViewController: UIViewController {
         
         self.observingViewModels()
         
-        // get data
-        self.deliveringViewModel.mockDeliveringList()
-        self.undeliveredViewModel.mockUndeliveredList()
+        // fetch packages
+        self.packagesListViewModel.fetchPackages()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,17 +87,10 @@ class DeliveryListViewController: UIViewController {
     }
     
     private func observingViewModels() {
-        self.deliveringViewModel.$list
+        self.packagesListViewModel.$list
             .sink(receiveValue: { [weak self] list in
                 guard let strongSelf = self else { return }
-                strongSelf.deliveringList = list
-                strongSelf.segmentSelected()
-            })
-            .store(in: &disposables)
-        self.undeliveredViewModel.$list
-            .sink(receiveValue: { [weak self] list in
-                guard let strongSelf = self else { return }
-                strongSelf.undeliveredList = list
+                strongSelf.packagesList = list
                 strongSelf.segmentSelected()
             })
             .store(in: &disposables)
@@ -111,11 +100,17 @@ class DeliveryListViewController: UIViewController {
     private func segmentSelected() {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            self.listToDisplay = self.deliveringList
+            self.listToDisplay = self.packagesList.filter {
+                $0.state == .delivering
+            }
         case 1:
-            self.listToDisplay = self.undeliveredList
+            self.listToDisplay = self.packagesList.filter {
+                $0.state == .undelivered
+            }
         default:
-            self.listToDisplay = self.deliveringList
+            self.listToDisplay = self.packagesList.filter {
+                $0.state == .delivering
+            }
         }
         
         self.tableView.reloadData()

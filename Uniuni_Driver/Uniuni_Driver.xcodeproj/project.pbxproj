@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B02F0542859792800C23165 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B02F0532859792800C23165 /* LoginViewController.swift */; };
+		9B2CBA2E2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9B2CBA2C2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld */; };
 		9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8C2858DCF5006865AA /* AppDelegate.swift */; };
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
@@ -18,9 +19,10 @@
 		9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F7FF285E509900376D95 /* UIColor-Extension.swift */; };
 		9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F801285E515400376D95 /* UIImage-Extension.swift */; };
 		9BC9F804285E53B300376D95 /* StringLocalizationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F803285E53B300376D95 /* StringLocalizationExtension.swift */; };
-		9BC9F807285E5E5F00376D95 /* DeliveryListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F806285E5E5F00376D95 /* DeliveryListModels.swift */; };
+		9BC9F807285E5E5F00376D95 /* PackagesListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */; };
 		9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */; };
 		9BC9F810285F67A500376D95 /* UINavigationController-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */; };
+		9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE332862CE29006391D9 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		9B02F0532859792800C23165 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9B2CBA2D2862C3010001FA08 /* Uniuni_Driver.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Uniuni_Driver.xcdatamodel; sourceTree = "<group>"; };
 		9B513C892858DCF5006865AA /* Uniuni_Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uniuni_Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513C8C2858DCF5006865AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B513C8E2858DCF5006865AA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,9 +68,10 @@
 		9BC9F7FF285E509900376D95 /* UIColor-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor-Extension.swift"; sourceTree = "<group>"; };
 		9BC9F801285E515400376D95 /* UIImage-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage-Extension.swift"; sourceTree = "<group>"; };
 		9BC9F803285E53B300376D95 /* StringLocalizationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLocalizationExtension.swift; sourceTree = "<group>"; };
-		9BC9F806285E5E5F00376D95 /* DeliveryListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryListModels.swift; sourceTree = "<group>"; };
+		9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackagesListModels.swift; sourceTree = "<group>"; };
 		9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryListViewController.swift; sourceTree = "<group>"; };
 		9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController-Extension.swift"; sourceTree = "<group>"; };
+		9BE4BE332862CE29006391D9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +168,9 @@
 				9B02F04F2859788800C23165 /* Custom Views */,
 				9BC9F80A285E604900376D95 /* Protocols */,
 				9BC9F7FE285E505A00376D95 /* Extensions */,
+				9BE4BE322862CE00006391D9 /* CoreDataStack */,
 				9B513C952858DCF6006865AA /* Assets.xcassets */,
+				9B2CBA2C2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld */,
 				9B513C972858DCF6006865AA /* LaunchScreen.storyboard */,
 				9B513C9A2858DCF6006865AA /* Info.plist */,
 				9BC9F7F0285CB3FB00376D95 /* Localizable.strings */,
@@ -194,7 +200,7 @@
 		9BC9F805285E5E1500376D95 /* Delivery List */ = {
 			isa = PBXGroup;
 			children = (
-				9BC9F806285E5E5F00376D95 /* DeliveryListModels.swift */,
+				9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */,
 				9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */,
 			);
 			path = "Delivery List";
@@ -205,6 +211,14 @@
 			children = (
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		9BE4BE322862CE00006391D9 /* CoreDataStack */ = {
+			isa = PBXGroup;
+			children = (
+				9BE4BE332862CE29006391D9 /* CoreDataManager.swift */,
+			);
+			path = CoreDataStack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,12 +360,14 @@
 				9B02F0542859792800C23165 /* LoginViewController.swift in Sources */,
 				9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */,
 				9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */,
+				9B2CBA2E2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld in Sources */,
 				9BC9F810285F67A500376D95 /* UINavigationController-Extension.swift in Sources */,
+				9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */,
 				9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */,
 				9BC9F804285E53B300376D95 /* StringLocalizationExtension.swift in Sources */,
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
-				9BC9F807285E5E5F00376D95 /* DeliveryListModels.swift in Sources */,
+				9BC9F807285E5E5F00376D95 /* PackagesListModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +712,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9B2CBA2C2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9B2CBA2D2862C3010001FA08 /* Uniuni_Driver.xcdatamodel */,
+			);
+			currentVersion = 9B2CBA2D2862C3010001FA08 /* Uniuni_Driver.xcdatamodel */;
+			path = Uniuni_Driver.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9B513C812858DCF5006865AA /* Project object */;
 }
