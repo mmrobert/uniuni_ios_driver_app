@@ -15,4 +15,6 @@ extension UIColor {
     static let highlightedBlue: UIColor? = UIColor(named: "highlighted-blue")
     static let lightBlackText: UIColor? = UIColor(named: "light-black-text")
     static let naviBarButton: UIColor? = UIColor(named: "navi-bar-button")
+    static let redBackground: UIColor? = UIColor(named: "red-background")
+    static let lightGray198: UIColor? = UIColor(named: "light-gray")
 }

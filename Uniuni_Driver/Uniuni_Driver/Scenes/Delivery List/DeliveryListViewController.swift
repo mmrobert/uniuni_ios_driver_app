@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import SwiftUI
 
 class DeliveryListViewController: UIViewController {
     
@@ -21,6 +22,8 @@ class DeliveryListViewController: UIViewController {
         static let cornerRadius: CGFloat = 6
         static let borderWidth: CGFloat = 1
         static let stackSpacing: CGFloat = 2
+        
+        static let cellReuseIdentifier: String = "deliveryListCell"
     }
     
     private let segmentedControlContainer: UIView = {
@@ -55,6 +58,9 @@ class DeliveryListViewController: UIViewController {
     
     private var listToDisplay: [PackageViewModel] = []
     
+    private var sortTitleLabel: UILabel?
+    private var packageSort: PackageSort = .date
+    
     init(packagesListViewModel: PackagesListViewModel) {
         self.packagesListViewModel = packagesListViewModel
         super.init(nibName: nil, bundle: nil)
@@ -80,6 +86,7 @@ class DeliveryListViewController: UIViewController {
         
         // fetch packages
         self.packagesListViewModel.fetchPackages()
+        //self.packagesListViewModel.saveMockPackagesList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +120,7 @@ class DeliveryListViewController: UIViewController {
             }
         }
         
+        self.listToDisplay = self.packagesListViewModel.sort(list: self.listToDisplay, by: self.packageSort)
         self.tableView.reloadData()
     }
     
@@ -130,7 +138,10 @@ class DeliveryListViewController: UIViewController {
         let sortBtnView = UIStackView(arrangedSubviews: [sortTitle, sortImage])
         sortBtnView.axis = .horizontal
         sortBtnView.spacing = Constants.stackSpacing
+        let sortTap = UITapGestureRecognizer(target: self, action: #selector(DeliveryListViewController.sortButtonAction))
+        sortBtnView.addGestureRecognizer(sortTap)
         let sortBtn = UIBarButtonItem(customView: sortBtnView)
+        self.sortTitleLabel = sortTitle
         self.navigationItem.rightBarButtonItems = [searchBtn, routeBtn, sortBtn]
     }
     
@@ -141,7 +152,9 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func searchButtonAction() {
-        
+        let searchView = PackageSearchView()
+        let searchVC = UIHostingController(rootView: searchView)
+        self.navigationController?.pushViewController(searchVC, animated: true)
     }
     
     @objc
@@ -151,7 +164,26 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func sortButtonAction() {
-        
+        let sortSelection = TopActionSheet()
+        let dateSort = TopActionSheetViewModel.Action(title: String.dateStr) { [weak self] _ in
+            self?.sortTitleLabel?.text = String.dateStr
+            self?.packageSort = .date
+            self?.segmentSelected()
+        }
+        let routeSort = TopActionSheetViewModel.Action(title: String.routeStr) { [weak self] _ in
+            self?.sortTitleLabel?.text = String.routeStr
+            self?.packageSort = .route
+            self?.segmentSelected()
+        }
+        let distanceSort = TopActionSheetViewModel.Action(title: String.distanceStr) { [weak self] _ in
+            self?.sortTitleLabel?.text = String.distanceStr
+            self?.packageSort = .distance
+            self?.segmentSelected()
+        }
+        let actions = [dateSort, routeSort, distanceSort]
+        sortSelection.configure(viewModel: TopActionSheetViewModel(title: String.sortListByStr, actions: actions))
+        sortSelection.modalPresentationStyle = .overCurrentContext
+        self.present(sortSelection, animated: true)
     }
 }
 
@@ -182,8 +214,10 @@ extension DeliveryListViewController {
     }
     
     private func setupTableView() {
+        self.tableView.register(PackageTableViewCell.self, forCellReuseIdentifier: Constants.cellReuseIdentifier)
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView.separatorStyle = .none
         self.view.addSubview(self.tableView)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
@@ -202,8 +236,9 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = self.listToDisplay[indexPath.row].serialNo
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellReuseIdentifier, for: indexPath) as! PackageTableViewCell
+        let viewModel = self.listToDisplay[indexPath.row]
+        cell.configure(packageViewModel: viewModel)
         return cell
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class PackagesListViewModel {
+class PackagesListViewModel: ObservableObject {
     
     let coreDataManager = CoreDataManager.shared
     
@@ -28,6 +28,7 @@ class PackagesListViewModel {
                 name: package.name,
                 address: package.address,
                 distance: package.distance,
+                type: package.type,
                 state: package.state
             )
         }
@@ -46,12 +47,62 @@ class PackagesListViewModel {
                         name: package.name,
                         address: package.address,
                         distance: package.distance,
+                        type: package.type,
                         state: package.state
                     )
                 }
             })
             .store(in: &disposables)
         self.coreDataManager.fetchPackages()
+    }
+    
+    func sort(list: [PackageViewModel], by: PackageSort) -> [PackageViewModel] {
+        var sorted: [PackageViewModel] = []
+        switch by {
+        case .date:
+            sorted = list.sorted(by: { (lh, rh) -> Bool in
+                let lhType = lh.type ?? .regular
+                let rhType = rh.type ?? .regular
+                let lhDate = lh.date ?? Date.dateTimeString()
+                let rhDate = rh.date ?? Date.dateTimeString()
+                if lhType.rawValue < rhType.rawValue {
+                    return true
+                } else if lhType.rawValue > rhType.rawValue {
+                    return false
+                } else {
+                    return lhDate < rhDate
+                }
+            })
+        case .route:
+            sorted = list.sorted(by: { (lh, rh) -> Bool in
+                let lhType = lh.type ?? .regular
+                let rhType = rh.type ?? .regular
+                let lhRoute = lh.routeNo ?? ""
+                let rhRoute = rh.routeNo ?? ""
+                if lhType.rawValue < rhType.rawValue {
+                    return true
+                } else if lhType.rawValue > rhType.rawValue {
+                    return false
+                } else {
+                    return lhRoute < rhRoute
+                }
+            })
+        case .distance:
+            sorted = list.sorted(by: { (lh, rh) -> Bool in
+                let lhType = lh.type ?? .regular
+                let rhType = rh.type ?? .regular
+                let lhDistance = lh.distance ?? ""
+                let rhDistance = rh.distance ?? ""
+                if lhType.rawValue < rhType.rawValue {
+                    return true
+                } else if lhType.rawValue > rhType.rawValue {
+                    return false
+                } else {
+                    return lhDistance < rhDistance
+                }
+            })
+        }
+        return sorted
     }
     
     func saveMockPackagesList() {
@@ -62,6 +113,7 @@ class PackagesListViewModel {
             name: "John Lee",
             address: "2367 Bayview St",
             distance: "30KM Away",
+            type: .express,
             state: .delivering
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -71,6 +123,7 @@ class PackagesListViewModel {
             name: "Lucy John",
             address: "88367 Grandview Blvd",
             distance: "60KM Away",
+            type: .express,
             state: .delivering
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -80,6 +133,7 @@ class PackagesListViewModel {
             name: "Kelo Wang",
             address: "8367 Main Ave",
             distance: "20KM Away",
+            type: .regular,
             state: .delivering
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -89,6 +143,7 @@ class PackagesListViewModel {
             name: "Richard Lee",
             address: "1367 Broadway Ave",
             distance: "10KM Away",
+            type: .regular,
             state: .undelivered
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -98,6 +153,7 @@ class PackagesListViewModel {
             name: "John Lee",
             address: "2367 Bayview St",
             distance: "30KM Away",
+            type: .regular,
             state: .undelivered
         ))
     }
@@ -110,16 +166,19 @@ struct PackageDataModel {
     var name: String?
     var address: String?
     var distance: String?
+    var type: PackageType?
     var state: PackageState?
 }
 
-struct PackageViewModel {
+struct PackageViewModel: Identifiable {
+    var id = UUID()
     var serialNo: String?
     var date: String?
     var routeNo: String?
     var name: String?
     var address: String?
     var distance: String?
+    var type: PackageType?
     var state: PackageState?
 }
 
@@ -132,5 +191,30 @@ enum PackageState: String {
             return nil
         }
         return PackageState(rawValue: description)
+    }
+}
+
+enum PackageType: String {
+    case express
+    case regular
+    
+    static func getTypeFrom(description: String?) -> PackageType? {
+        guard let description = description else {
+            return nil
+        }
+        return PackageType(rawValue: description)
+    }
+}
+
+enum PackageSort: String {
+    case date
+    case route
+    case distance
+    
+    static func getSortFrom(description: String?) -> PackageSort? {
+        guard let description = description else {
+            return nil
+        }
+        return PackageSort(rawValue: description)
     }
 }

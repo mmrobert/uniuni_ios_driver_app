@@ -16,4 +16,5 @@ extension UIImage {
     static let route: UIImage? = UIImage(named: "icon-route")
     static let search: UIImage? = UIImage(named: "icon-search")
     static let sort: UIImage? = UIImage(named: "icon-sort")
+    static let iconMedicalCross: UIImage? = UIImage(named: "icon-medical-cross")
 }
