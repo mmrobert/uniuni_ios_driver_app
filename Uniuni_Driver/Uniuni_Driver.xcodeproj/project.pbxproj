@@ -13,7 +13,7 @@
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
-		9B85669A28675810006932E2 /* MockCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85669928675810006932E2 /* MockCoreDataManager.swift */; };
+		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
 		9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB75229285A1B0E003618F6 /* TabbarController.swift */; };
 		9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4ED2867B85800354726 /* PackageCardView.swift */; };
 		9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */; };
@@ -55,7 +55,7 @@
 		9B513C982858DCF6006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B513C9A2858DCF6006865AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B85669928675810006932E2 /* MockCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataManager.swift; sourceTree = "<group>"; };
+		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9BB75229285A1B0E003618F6 /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		9BC2D4ED2867B85800354726 /* PackageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageCardView.swift; sourceTree = "<group>"; };
 		9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageCardViewModel.swift; sourceTree = "<group>"; };
@@ -191,7 +191,6 @@
 			isa = PBXGroup;
 			children = (
 				9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */,
-				9B85669928675810006932E2 /* MockCoreDataManager.swift */,
 			);
 			path = Uniuni_DriverTests;
 			sourceTree = "<group>";
@@ -213,6 +212,7 @@
 				9BC9F803285E53B300376D95 /* StringLocalizationExtension.swift */,
 				9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */,
 				9BC2D4F42869E56500354726 /* Date-Extension.swift */,
+				9BACEFA5287543E300969C44 /* Double-Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -356,6 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */,
 				9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */,
 				9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */,
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,
@@ -384,7 +385,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B85669A28675810006932E2 /* MockCoreDataManager.swift in Sources */,
 				9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

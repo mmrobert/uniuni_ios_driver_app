@@ -10,25 +10,25 @@ import UIKit
 
 class PackageCardViewModel {
     
-    var packageNo: String?
-    var medicalIcon: UIImage?
-    var packageType: PackageType?
+    var trackingNo: String?
+    var goodsType: GoodsType?
+    var expressType: ExpressType?
     var routeNo: String?
     var receiverName: String?
     var receiverAddress: String?
     var receiverDistance: String?
 
-    init(packageNo: String?,
-         medicalIcon: UIImage?,
-         packageType: PackageType?,
+    init(trackingNo: String?,
+         goodsType: GoodsType?,
+         expressType: ExpressType?,
          routeNo: String?,
          receiverName: String?,
          receiverAddress: String?,
          receiverDistance: String?) {
 
-        self.packageNo = packageNo
-        self.medicalIcon = medicalIcon
-        self.packageType = packageType
+        self.trackingNo = trackingNo
+        self.goodsType = goodsType
+        self.expressType = expressType
         self.routeNo = routeNo
         self.receiverName = receiverName
         self.receiverAddress = receiverAddress

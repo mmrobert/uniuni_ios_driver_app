@@ -15,10 +15,10 @@ struct PackageSearchView: View {
         var body: some View {
             List {
                 ForEach(searchString == "" ? viewModel.list : viewModel.list.filter {
-                    guard let serialNo = $0.serialNo else {
+                    guard let trackingNo = $0.tracking_no else {
                         return false
                     }
-                    return serialNo.contains(searchString)
+                    return trackingNo.contains(searchString)
                 }) {
                     SearchCellView(package: $0)
                 }
