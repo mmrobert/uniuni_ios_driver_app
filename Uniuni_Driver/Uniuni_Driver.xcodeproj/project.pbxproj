@@ -13,8 +13,12 @@
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
-		9B513CA42858DCF6006865AA /* Uniuni_DriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */; };
+		9B85669A28675810006932E2 /* MockCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85669928675810006932E2 /* MockCoreDataManager.swift */; };
 		9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB75229285A1B0E003618F6 /* TabbarController.swift */; };
+		9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4ED2867B85800354726 /* PackageCardView.swift */; };
+		9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */; };
+		9BC2D4F328680AE800354726 /* PackageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4F228680AE800354726 /* PackageTableViewCell.swift */; };
+		9BC2D4F52869E56500354726 /* Date-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2D4F42869E56500354726 /* Date-Extension.swift */; };
 		9BC9F7EE285CB3FB00376D95 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9BC9F7F0285CB3FB00376D95 /* Localizable.strings */; };
 		9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F7FF285E509900376D95 /* UIColor-Extension.swift */; };
 		9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F801285E515400376D95 /* UIImage-Extension.swift */; };
@@ -22,18 +26,17 @@
 		9BC9F807285E5E5F00376D95 /* PackagesListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */; };
 		9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */; };
 		9BC9F810285F67A500376D95 /* UINavigationController-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */; };
+		9BCA84FF286F319D0046C0C2 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */; };
+		9BCA8502286F4C190046C0C2 /* PackageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */; };
+		9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA8503286F67990046C0C2 /* SearchCellView.swift */; };
 		9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE332862CE29006391D9 /* CoreDataManager.swift */; };
+		9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */; };
+		9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B34286B783100372045 /* TopActionSheet.swift */; };
+		9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		9B513CA02858DCF6006865AA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9B513C812858DCF5006865AA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9B513C882858DCF5006865AA;
-			remoteInfo = Uniuni_Driver;
-		};
-		9B513CAA2858DCF6006865AA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9B513C812858DCF5006865AA /* Project object */;
 			proxyType = 1;
@@ -52,9 +55,12 @@
 		9B513C982858DCF6006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B513C9A2858DCF6006865AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uniuni_DriverTests.swift; sourceTree = "<group>"; };
-		9B513CA92858DCF6006865AA /* Uniuni_DriverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B85669928675810006932E2 /* MockCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataManager.swift; sourceTree = "<group>"; };
 		9BB75229285A1B0E003618F6 /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
+		9BC2D4ED2867B85800354726 /* PackageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageCardView.swift; sourceTree = "<group>"; };
+		9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageCardViewModel.swift; sourceTree = "<group>"; };
+		9BC2D4F228680AE800354726 /* PackageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageTableViewCell.swift; sourceTree = "<group>"; };
+		9BC2D4F42869E56500354726 /* Date-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date-Extension.swift"; sourceTree = "<group>"; };
 		9BC9F7EF285CB3FB00376D95 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9BC9F7F5285CCB8200376D95 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		9BC9F7F6285E25CD00376D95 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -71,7 +77,13 @@
 		9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackagesListModels.swift; sourceTree = "<group>"; };
 		9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryListViewController.swift; sourceTree = "<group>"; };
 		9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController-Extension.swift"; sourceTree = "<group>"; };
+		9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageSearchView.swift; sourceTree = "<group>"; };
+		9BCA8503286F67990046C0C2 /* SearchCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellView.swift; sourceTree = "<group>"; };
 		9BE4BE332862CE29006391D9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
+		9BF57B34286B783100372045 /* TopActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheet.swift; sourceTree = "<group>"; };
+		9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheetViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,13 +101,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9B513CA62858DCF6006865AA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -106,6 +111,7 @@
 				9B02F050285978A800C23165 /* Login */,
 				9B02F052285978DD00C23165 /* Tab Navigation */,
 				9BC9F805285E5E1500376D95 /* Delivery List */,
+				9BCA8500286F4BB50046C0C2 /* Package Search - SwiftUI */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -113,6 +119,9 @@
 		9B02F04F2859788800C23165 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				9BC2D4ED2867B85800354726 /* PackageCardView.swift */,
+				9BF57B34286B783100372045 /* TopActionSheet.swift */,
+				9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -154,7 +163,6 @@
 			children = (
 				9B513C892858DCF5006865AA /* Uniuni_Driver.app */,
 				9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */,
-				9B513CA92858DCF6006865AA /* Uniuni_DriverUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,6 +174,7 @@
 				9B513C8E2858DCF5006865AA /* SceneDelegate.swift */,
 				9B02F04D2859784E00C23165 /* Scenes */,
 				9B02F04F2859788800C23165 /* Custom Views */,
+				9BC2D4EF2867B8E600354726 /* Custom ViewModels */,
 				9BC9F80A285E604900376D95 /* Protocols */,
 				9BC9F7FE285E505A00376D95 /* Extensions */,
 				9BE4BE322862CE00006391D9 /* CoreDataStack */,
@@ -181,9 +190,19 @@
 		9B513CA22858DCF6006865AA /* Uniuni_DriverTests */ = {
 			isa = PBXGroup;
 			children = (
-				9B513CA32858DCF6006865AA /* Uniuni_DriverTests.swift */,
+				9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */,
+				9B85669928675810006932E2 /* MockCoreDataManager.swift */,
 			);
 			path = Uniuni_DriverTests;
+			sourceTree = "<group>";
+		};
+		9BC2D4EF2867B8E600354726 /* Custom ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */,
+				9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */,
+			);
+			path = "Custom ViewModels";
 			sourceTree = "<group>";
 		};
 		9BC9F7FE285E505A00376D95 /* Extensions */ = {
@@ -193,6 +212,7 @@
 				9BC9F801285E515400376D95 /* UIImage-Extension.swift */,
 				9BC9F803285E53B300376D95 /* StringLocalizationExtension.swift */,
 				9BC9F80F285F67A500376D95 /* UINavigationController-Extension.swift */,
+				9BC2D4F42869E56500354726 /* Date-Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -202,6 +222,7 @@
 			children = (
 				9BC9F806285E5E5F00376D95 /* PackagesListModels.swift */,
 				9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */,
+				9BC2D4F228680AE800354726 /* PackageTableViewCell.swift */,
 			);
 			path = "Delivery List";
 			sourceTree = "<group>";
@@ -211,6 +232,15 @@
 			children = (
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		9BCA8500286F4BB50046C0C2 /* Package Search - SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */,
+				9BCA8503286F67990046C0C2 /* SearchCellView.swift */,
+			);
+			path = "Package Search - SwiftUI";
 			sourceTree = "<group>";
 		};
 		9BE4BE322862CE00006391D9 /* CoreDataStack */ = {
@@ -259,24 +289,6 @@
 			productReference = 9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9B513CA82858DCF6006865AA /* Uniuni_DriverUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9B513CB92858DCF6006865AA /* Build configuration list for PBXNativeTarget "Uniuni_DriverUITests" */;
-			buildPhases = (
-				9B513CA52858DCF6006865AA /* Sources */,
-				9B513CA62858DCF6006865AA /* Frameworks */,
-				9B513CA72858DCF6006865AA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9B513CAB2858DCF6006865AA /* PBXTargetDependency */,
-			);
-			name = Uniuni_DriverUITests;
-			productName = Uniuni_DriverUITests;
-			productReference = 9B513CA92858DCF6006865AA /* Uniuni_DriverUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -291,10 +303,6 @@
 						CreatedOnToolsVersion = 13.3;
 					};
 					9B513C9E2858DCF6006865AA = {
-						CreatedOnToolsVersion = 13.3;
-						TestTargetID = 9B513C882858DCF5006865AA;
-					};
-					9B513CA82858DCF6006865AA = {
 						CreatedOnToolsVersion = 13.3;
 						TestTargetID = 9B513C882858DCF5006865AA;
 					};
@@ -319,7 +327,6 @@
 			targets = (
 				9B513C882858DCF5006865AA /* Uniuni_Driver */,
 				9B513C9E2858DCF6006865AA /* Uniuni_DriverTests */,
-				9B513CA82858DCF6006865AA /* Uniuni_DriverUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -342,13 +349,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9B513CA72858DCF6006865AA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -356,18 +356,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */,
+				9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */,
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,
 				9B02F0542859792800C23165 /* LoginViewController.swift in Sources */,
 				9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */,
 				9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */,
+				9BC2D4F328680AE800354726 /* PackageTableViewCell.swift in Sources */,
 				9B2CBA2E2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld in Sources */,
+				9BCA84FF286F319D0046C0C2 /* PaddingLabel.swift in Sources */,
 				9BC9F810285F67A500376D95 /* UINavigationController-Extension.swift in Sources */,
+				9BC2D4F52869E56500354726 /* Date-Extension.swift in Sources */,
 				9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */,
 				9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */,
 				9BC9F804285E53B300376D95 /* StringLocalizationExtension.swift in Sources */,
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
+				9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */,
+				9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */,
+				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
 				9BC9F807285E5E5F00376D95 /* PackagesListModels.swift in Sources */,
+				9BCA8502286F4C190046C0C2 /* PackageSearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,14 +384,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B513CA42858DCF6006865AA /* Uniuni_DriverTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9B513CA52858DCF6006865AA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				9B85669A28675810006932E2 /* MockCoreDataManager.swift in Sources */,
+				9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,11 +396,6 @@
 			isa = PBXTargetDependency;
 			target = 9B513C882858DCF5006865AA /* Uniuni_Driver */;
 			targetProxy = 9B513CA02858DCF6006865AA /* PBXContainerItemProxy */;
-		};
-		9B513CAB2858DCF6006865AA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9B513C882858DCF5006865AA /* Uniuni_Driver */;
-			targetProxy = 9B513CAA2858DCF6006865AA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -638,40 +636,6 @@
 			};
 			name = Release;
 		};
-		9B513CBA2858DCF6006865AA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-DriverUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Uniuni_Driver;
-			};
-			name = Debug;
-		};
-		9B513CBB2858DCF6006865AA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-DriverUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Uniuni_Driver;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -698,15 +662,6 @@
 			buildConfigurations = (
 				9B513CB72858DCF6006865AA /* Debug */,
 				9B513CB82858DCF6006865AA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9B513CB92858DCF6006865AA /* Build configuration list for PBXNativeTarget "Uniuni_DriverUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9B513CBA2858DCF6006865AA /* Debug */,
-				9B513CBB2858DCF6006865AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

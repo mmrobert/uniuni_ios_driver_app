@@ -8,8 +8,9 @@
         <attribute name="routeNo" optional="YES" attributeType="String"/>
         <attribute name="serialNo" optional="YES" attributeType="String"/>
         <attribute name="state" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Package" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="Package" positionX="-63" positionY="-18" width="128" height="149"/>
     </elements>
 </model>

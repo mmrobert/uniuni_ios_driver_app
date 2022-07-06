@@ -1,21 +1,24 @@
 //
-//  CoreDataManager.swift
-//  Uniuni_Driver
+//  MockCoreDataManager.swift
+//  Uniuni_DriverTests
 //
-//  Created by Boqian Cheng on 2022-06-21.
+//  Created by Boqian Cheng on 2022-06-25.
 //
 
 import Foundation
+@testable import Uniuni_Driver
 import Combine
 import CoreData
 
-class CoreDataManager {
+class MockCoreDataManager {
     
-    static let shared = CoreDataManager()
+    static let shared = MockCoreDataManager()
     
     private init() {}
     
     @Published var packages: [PackageDataModel] = []
+    // added for test
+    @Published var savingFinished: Bool = false
     
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
@@ -42,7 +45,7 @@ class CoreDataManager {
 
         let taskContext = newTaskContext()
         
-        taskContext.perform {
+        taskContext.perform { [weak self] in
             guard let entity = NSEntityDescription.entity(forEntityName: "Package", in: taskContext) else { return }
             
             let object = NSManagedObject(entity: entity, insertInto: taskContext)
@@ -52,7 +55,6 @@ class CoreDataManager {
             object.setValue(package.date, forKeyPath: "date")
             object.setValue(package.address, forKeyPath: "address")
             object.setValue(package.distance, forKeyPath: "distance")
-            object.setValue(package.type?.rawValue, forKeyPath: "type")
             object.setValue(package.state?.rawValue, forKeyPath: "state")
             
             do {
@@ -60,6 +62,7 @@ class CoreDataManager {
             } catch let error as NSError {
                 print("Could not save package: \(error)")
             }
+            self?.savingFinished = true
         }
     }
     
@@ -82,8 +85,6 @@ class CoreDataManager {
                     pack.name = object.value(forKey: "name") as? String
                     pack.address = object.value(forKey: "address") as? String
                     pack.distance = object.value(forKey: "distance") as? String
-                    let typeStr = object.value(forKey: "type") as? String
-                    pack.type = PackageType.getTypeFrom(description: typeStr)
                     let stateStr = object.value(forKey: "state") as? String
                     pack.state = PackageState.getStateFrom(description: stateStr)
                     return pack
@@ -102,3 +103,4 @@ class CoreDataManager {
         return taskContext
     }
 }
+
