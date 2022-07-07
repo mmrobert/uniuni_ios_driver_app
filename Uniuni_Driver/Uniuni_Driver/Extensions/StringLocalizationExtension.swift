@@ -18,4 +18,10 @@ extension String {
     static let distanceStr: String = NSLocalizedString("Distance", comment: "")
     static let sortListByStr: String = NSLocalizedString("Sort_List_By", comment: "")
     static let searchStr: String = NSLocalizedString("Search", comment: "")
+    static let wrongAddressStr: String = NSLocalizedString("Wrong Address", comment: "")
+    static let regularStr: String = NSLocalizedString("Regular", comment: "")
+    static let expressStr: String = NSLocalizedString("Express", comment: "")
+    static let medicalStr: String = NSLocalizedString("Medical", comment: "")
+    static let KMAwayStr: String = NSLocalizedString("KM Away", comment: "")
+    static let MIAwayStr: String = NSLocalizedString("MI Away", comment: "")
 }

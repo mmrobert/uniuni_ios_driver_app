@@ -19,20 +19,20 @@ class PackageCardView: UIView {
         static let horizontalSpacing: CGFloat = 10
         static let verticalSpacing: CGFloat = 12
         static let medicalIconWidth: CGFloat = 19
-        static let packageTypeWidth: CGFloat = 75
-        static let packageTypeHeight: CGFloat = 22
-        static let packageTypeCornerRadius: CGFloat = 11
+        static let expressTypeWidth: CGFloat = 75
+        static let expressTypeHeight: CGFloat = 22
+        static let expressTypeCornerRadius: CGFloat = 11
         static let separatorLineHeight: CGFloat = 1
         static let routeContainerWidth: CGFloat = 120
     }
     
     struct Theme {
         var backgroundColor: UIColor = .white
-        var packageNoTextColor: UIColor = .black
-        var packageNoTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
-        var packageTypeTextColor: UIColor = .white
-        var packageTypeTextFont: UIFont = UIFont.systemFont(ofSize: 12)
-        var packageTypeBackgroundColor: UIColor? = UIColor.redBackground
+        var trackingNoTextColor: UIColor = .black
+        var trackingNoTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
+        var expressTypeTextColor: UIColor = .white
+        var expressTypeTextFont: UIFont = UIFont.systemFont(ofSize: 12)
+        var expressTypeBackgroundColor: UIColor? = UIColor.redBackground
         var separatingLineColor: UIColor? = UIColor.screenBase
         var receiverNameTextColor: UIColor = .black
         var receiverNameTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
@@ -51,12 +51,12 @@ class PackageCardView: UIView {
         return view
     }()
     
-    private lazy var packageNoLabel: UILabel = {
+    private lazy var trackingNoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
-        label.font = Theme.default.packageNoTextFont
-        label.textColor = Theme.default.packageNoTextColor
+        label.font = Theme.default.trackingNoTextFont
+        label.textColor = Theme.default.trackingNoTextColor
         label.numberOfLines = 1
         label.textAlignment = .left
         return label
@@ -70,13 +70,13 @@ class PackageCardView: UIView {
         return imgView
     }()
     
-    private lazy var packageTypeLabel: UILabel = {
+    private lazy var expressTypeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
-        label.font = Theme.default.packageTypeTextFont
-        label.textColor = Theme.default.packageTypeTextColor
-        label.backgroundColor = Theme.default.packageTypeBackgroundColor
+        label.font = Theme.default.expressTypeTextFont
+        label.textColor = Theme.default.expressTypeTextColor
+        label.backgroundColor = Theme.default.expressTypeBackgroundColor
         label.numberOfLines = 1
         label.textAlignment = .center
         return label
@@ -203,19 +203,23 @@ class PackageCardView: UIView {
     }
     
     private func configureViewModel(viewModel: PackageCardViewModel) {
-        self.packageNoLabel.text = viewModel.packageNo
+        self.trackingNoLabel.text = viewModel.trackingNo
         self.routeValueLabel.text = viewModel.routeNo
         self.receiverNameLabel.text = viewModel.receiverName
         self.receiverAddressLabel.text = viewModel.receiverAddress
         self.receiverDistanceLabel.text = viewModel.receiverDistance
-        if viewModel.packageType == .express {
-            self.packageTypeLabel.isHidden = false
-            self.packageTypeLabel.text = viewModel.packageType?.rawValue.capitalized
+        if viewModel.expressType == .express {
+            self.expressTypeLabel.isHidden = false
+            self.expressTypeLabel.text = viewModel.expressType?.getDisplayString()
         } else {
-            self.packageTypeLabel.isHidden = true
-            self.packageTypeLabel.text = nil
+            self.expressTypeLabel.isHidden = true
+            self.expressTypeLabel.text = nil
         }
-        self.medicalIcon.image = viewModel.medicalIcon
+        if viewModel.goodsType == .medical {
+            self.medicalIcon.image = UIImage.iconMedicalCross
+        } else {
+            self.medicalIcon.image = nil
+        }
     }
     
     private func configureTheme(theme: PackageCardView.Theme) {
@@ -236,29 +240,29 @@ extension PackageCardView {
         NSLayoutConstraint.activate(
             [medicalIcon.widthAnchor.constraint(equalToConstant: Constants.medicalIconWidth)]
         )
-        self.packageTypeLabel.layer.cornerRadius = Constants.packageTypeCornerRadius
-        self.packageTypeLabel.layer.masksToBounds = true
+        self.expressTypeLabel.layer.cornerRadius = Constants.expressTypeCornerRadius
+        self.expressTypeLabel.layer.masksToBounds = true
         NSLayoutConstraint.activate(
-            [packageTypeLabel.widthAnchor.constraint(equalToConstant: Constants.packageTypeWidth),
-             packageTypeLabel.heightAnchor.constraint(equalToConstant: Constants.packageTypeHeight)]
+            [expressTypeLabel.widthAnchor.constraint(equalToConstant: Constants.expressTypeWidth),
+             expressTypeLabel.heightAnchor.constraint(equalToConstant: Constants.expressTypeHeight)]
         )
-        self.packageTitleContainer.addSubview(self.packageNoLabel)
+        self.packageTitleContainer.addSubview(self.trackingNoLabel)
         self.packageTitleContainer.addSubview(self.medicalIcon)
-        self.packageTitleContainer.addSubview(self.packageTypeLabel)
+        self.packageTitleContainer.addSubview(self.expressTypeLabel)
         
         NSLayoutConstraint.activate(
-            [packageNoLabel.leadingAnchor.constraint(equalTo: packageTitleContainer.leadingAnchor),
-             packageNoLabel.topAnchor.constraint(equalTo: packageTitleContainer.topAnchor),
-             packageNoLabel.bottomAnchor.constraint(equalTo: packageTitleContainer.bottomAnchor)]
+            [trackingNoLabel.leadingAnchor.constraint(equalTo: packageTitleContainer.leadingAnchor),
+             trackingNoLabel.topAnchor.constraint(equalTo: packageTitleContainer.topAnchor),
+             trackingNoLabel.bottomAnchor.constraint(equalTo: packageTitleContainer.bottomAnchor)]
         )
         NSLayoutConstraint.activate(
-            [medicalIcon.leadingAnchor.constraint(equalTo: packageNoLabel.trailingAnchor),
-             medicalIcon.centerYAnchor.constraint(equalTo: packageNoLabel.centerYAnchor)]
+            [medicalIcon.leadingAnchor.constraint(equalTo: trackingNoLabel.trailingAnchor),
+             medicalIcon.centerYAnchor.constraint(equalTo: trackingNoLabel.centerYAnchor)]
         )
         NSLayoutConstraint.activate(
-            [packageTypeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: medicalIcon.trailingAnchor),
-             packageTypeLabel.centerYAnchor.constraint(equalTo: packageNoLabel.centerYAnchor),
-             packageTypeLabel.trailingAnchor.constraint(equalTo: packageTitleContainer.trailingAnchor)]
+            [expressTypeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: medicalIcon.trailingAnchor),
+             expressTypeLabel.centerYAnchor.constraint(equalTo: trackingNoLabel.centerYAnchor),
+             expressTypeLabel.trailingAnchor.constraint(equalTo: packageTitleContainer.trailingAnchor)]
         )
     }
     

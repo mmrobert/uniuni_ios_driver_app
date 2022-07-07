@@ -2,15 +2,25 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Package" representedClassName="Package" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
-        <attribute name="date" optional="YES" attributeType="String"/>
-        <attribute name="distance" optional="YES" attributeType="String"/>
+        <attribute name="assign_time" optional="YES" attributeType="String"/>
+        <attribute name="buzz_code" optional="YES" attributeType="String"/>
+        <attribute name="delivery_by" optional="YES" attributeType="String"/>
+        <attribute name="express_type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="failed_handle_type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="goods_type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" optional="YES" attributeType="String"/>
+        <attribute name="lng" optional="YES" attributeType="String"/>
+        <attribute name="mobile" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="routeNo" optional="YES" attributeType="String"/>
-        <attribute name="serialNo" optional="YES" attributeType="String"/>
-        <attribute name="state" optional="YES" attributeType="String"/>
-        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="order_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="order_sn" optional="YES" attributeType="String"/>
+        <attribute name="postscript" optional="YES" attributeType="String"/>
+        <attribute name="route_no" optional="YES" attributeType="String"/>
+        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tracking_no" optional="YES" attributeType="String"/>
+        <attribute name="zipcode" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Package" positionX="-63" positionY="-18" width="128" height="149"/>
+        <element name="Package" positionX="-63" positionY="-18" width="128" height="299"/>
     </elements>
 </model>

@@ -61,6 +61,8 @@ class DeliveryListViewController: UIViewController {
     private var sortTitleLabel: UILabel?
     private var packageSort: PackageSort = .date
     
+    private var currentLocation: (lat: Double, lng: Double) = (40.0, 120.0)
+    
     init(packagesListViewModel: PackagesListViewModel) {
         self.packagesListViewModel = packagesListViewModel
         super.init(nibName: nil, bundle: nil)
@@ -97,6 +99,7 @@ class DeliveryListViewController: UIViewController {
         self.packagesListViewModel.$list
             .sink(receiveValue: { [weak self] list in
                 guard let strongSelf = self else { return }
+                print(list)
                 strongSelf.packagesList = list
                 strongSelf.segmentSelected()
             })
@@ -120,7 +123,7 @@ class DeliveryListViewController: UIViewController {
             }
         }
         
-        self.listToDisplay = self.packagesListViewModel.sort(list: self.listToDisplay, by: self.packageSort)
+        self.listToDisplay = self.packagesListViewModel.sort(list: self.listToDisplay, by: self.packageSort, location: self.currentLocation)
         self.tableView.reloadData()
     }
     
@@ -238,7 +241,7 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellReuseIdentifier, for: indexPath) as! PackageTableViewCell
         let viewModel = self.listToDisplay[indexPath.row]
-        cell.configure(packageViewModel: viewModel)
+        cell.configure(packageViewModel: viewModel, location: self.currentLocation)
         return cell
     }
 }

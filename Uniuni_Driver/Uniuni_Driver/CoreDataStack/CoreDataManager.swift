@@ -46,14 +46,24 @@ class CoreDataManager {
             guard let entity = NSEntityDescription.entity(forEntityName: "Package", in: taskContext) else { return }
             
             let object = NSManagedObject(entity: entity, insertInto: taskContext)
-            object.setValue(package.serialNo, forKeyPath: "serialNo")
-            object.setValue(package.routeNo, forKey: "routeNo")
-            object.setValue(package.name, forKeyPath: "name")
-            object.setValue(package.date, forKeyPath: "date")
-            object.setValue(package.address, forKeyPath: "address")
-            object.setValue(package.distance, forKeyPath: "distance")
-            object.setValue(package.type?.rawValue, forKeyPath: "type")
+            object.setValue(package.order_id, forKeyPath: "order_id")
+            object.setValue(package.order_sn, forKey: "order_sn")
+            object.setValue(package.tracking_no, forKeyPath: "tracking_no")
+            object.setValue(package.goods_type?.rawValue, forKeyPath: "goods_type")
+            object.setValue(package.express_type?.rawValue, forKeyPath: "express_type")
+            object.setValue(package.route_no, forKeyPath: "route_no")
+            object.setValue(package.assign_time, forKeyPath: "assign_time")
+            object.setValue(package.delivery_by, forKeyPath: "delivery_by")
             object.setValue(package.state?.rawValue, forKeyPath: "state")
+            object.setValue(package.name, forKeyPath: "name")
+            object.setValue(package.mobile, forKeyPath: "mobile")
+            object.setValue(package.address, forKeyPath: "address")
+            object.setValue(package.zipcode, forKeyPath: "zipcode")
+            object.setValue(package.lat, forKeyPath: "lat")
+            object.setValue(package.lng, forKeyPath: "lng")
+            object.setValue(package.buzz_code, forKeyPath: "buzz_code")
+            object.setValue(package.postscript, forKeyPath: "postscript")
+            object.setValue(package.failed_handle_type?.rawValue, forKeyPath: "failed_handle_type")
             
             do {
                 try taskContext.save()
@@ -76,16 +86,29 @@ class CoreDataManager {
                 let packs = try taskContext.fetch(fetchRequest)
                 strongSelf.packages = packs.map { object in
                     var pack = PackageDataModel()
-                    pack.serialNo = object.value(forKey: "serialNo") as? String
-                    pack.date = object.value(forKey: "date") as? String
-                    pack.routeNo = object.value(forKey: "routeNo") as? String
+                    pack.order_id = object.value(forKey: "order_id") as? Int
+                    pack.order_sn = object.value(forKey: "order_sn") as? String
+                    pack.tracking_no = object.value(forKey: "tracking_no") as? String
+                    let goodsTypeInt = object.value(forKey: "goods_type") as? Int
+                    pack.goods_type = GoodsType.getTypeFrom(value: goodsTypeInt)
+                    let expressTypeInt = object.value(forKey: "express_type") as? Int
+                    pack.express_type = ExpressType.getTypeFrom(value: expressTypeInt)
+                    pack.route_no = object.value(forKey: "route_no") as? String
+                    pack.assign_time = object.value(forKey: "assign_time") as? String
+                    pack.delivery_by = object.value(forKey: "delivery_by") as? String
+                    let stateInt = object.value(forKey: "state") as? Int
+                    pack.state = PackageState.getStateFrom(value: stateInt)
                     pack.name = object.value(forKey: "name") as? String
+                    pack.mobile = object.value(forKey: "mobile") as? String
                     pack.address = object.value(forKey: "address") as? String
-                    pack.distance = object.value(forKey: "distance") as? String
-                    let typeStr = object.value(forKey: "type") as? String
-                    pack.type = PackageType.getTypeFrom(description: typeStr)
-                    let stateStr = object.value(forKey: "state") as? String
-                    pack.state = PackageState.getStateFrom(description: stateStr)
+                    pack.zipcode = object.value(forKey: "zipcode") as? String
+                    pack.lat = object.value(forKey: "lat") as? String
+                    pack.lng = object.value(forKey: "lng") as? String
+                    pack.buzz_code = object.value(forKey: "buzz_code") as? String
+                    pack.postscript = object.value(forKey: "postscript") as? String
+                    let failedInt = object.value(forKey: "failed_handle_type") as? Int
+                    pack.failed_handle_type = FailedHandleType.getTypeFrom(value: failedInt)
+                    
                     return pack
                 }
             } catch let error as NSError {

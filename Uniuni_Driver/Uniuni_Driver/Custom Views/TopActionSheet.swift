@@ -101,10 +101,6 @@ class TopActionSheet: UIViewController {
         
         for action in viewModel.actions {
             self.actionsStackView.addArrangedSubview(self.createSingleActionView(action: action, theme: theme))
-            /*
-            button.addTarget(self, action: #selector(TopActionSheet.actionTapped(sender:)), for: .touchUpInside)
-            self.actionsStackView.addArrangedSubview(button)
-            */
         }
         let bottomSpace = UIView()
         NSLayoutConstraint.activate([

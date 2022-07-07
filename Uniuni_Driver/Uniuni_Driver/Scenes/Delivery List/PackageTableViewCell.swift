@@ -35,16 +35,17 @@ class PackageTableViewCell: UITableViewCell {
         self.setupUI()
     }
     
-    func configure(packageViewModel: PackageViewModel) {
+    func configure(packageViewModel: PackageViewModel, location: (lat: Double, lng: Double)) {
         let cardViewModel = PackageCardViewModel(
-            packageNo: packageViewModel.serialNo,
-            medicalIcon: UIImage.iconMedicalCross,
-            packageType: packageViewModel.type,
-            routeNo: packageViewModel.routeNo,
+            trackingNo: packageViewModel.tracking_no,
+            goodsType: packageViewModel.goods_type,
+            expressType: packageViewModel.express_type,
+            routeNo: packageViewModel.route_no,
             receiverName: packageViewModel.name,
             receiverAddress: packageViewModel.address,
-            receiverDistance: packageViewModel.distance
+            receiverDistance: packageViewModel.getDistanceFrom(location: location).kmDistance()
         )
+        
         self.cardView.configure(viewModel: cardViewModel)
         
         self.layoutIfNeeded()

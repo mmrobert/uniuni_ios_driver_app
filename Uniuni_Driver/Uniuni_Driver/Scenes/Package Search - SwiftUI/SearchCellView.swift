@@ -16,12 +16,12 @@ struct SearchCellView: View {
     }
     
     var body: some View {
-        Text(package.serialNo ?? "")
+        Text(package.tracking_no ?? "")
     }
 }
 
 struct SearchCellView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchCellView(package: PackageViewModel())
+        SearchCellView(package: PackageViewModel(dataModel: PackageDataModel()))
     }
 }
