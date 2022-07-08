@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>MBXAccessToken</key>
+	<string>pk.eyJ1IjoiamFja3N1bjIyIiwiYSI6ImNsNHc1anR5YzB2N2czamw2ajVrc3g4czEifQ.FSB-BvjIjgnhmVC7iOrHAQ</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -43,7 +43,7 @@ class PackageTableViewCell: UITableViewCell {
             routeNo: packageViewModel.route_no,
             receiverName: packageViewModel.name,
             receiverAddress: packageViewModel.address,
-            receiverDistance: packageViewModel.getDistanceFrom(location: location).kmDistance()
+            receiverDistance: packageViewModel.getDistanceFrom(location: location, distanceUnit: .KM).kmDistance()
         )
         
         self.cardView.configure(viewModel: cardViewModel)
