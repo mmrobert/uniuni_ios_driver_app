@@ -61,7 +61,7 @@ class DeliveryListViewController: UIViewController {
     private var sortTitleLabel: UILabel?
     private var packageSort: PackageSort = .date
     
-    private var currentLocation: (lat: Double, lng: Double) = (40.0, 120.0)
+    private var currentLocation: (lat: Double, lng: Double) = (49.14, -122.98)
     
     init(packagesListViewModel: PackagesListViewModel) {
         self.packagesListViewModel = packagesListViewModel
@@ -162,7 +162,8 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func routeButtonAction() {
-        
+        let mapView = MapViewController()
+        self.navigationController?.pushViewController(mapView, animated: true)
     }
     
     @objc

@@ -17,14 +17,6 @@ class TopActionSheet: UIViewController {
         static let separatorLineHeight: CGFloat = 1
         static let leadingSpacing: CGFloat = 16
         static let verticalSpacing: CGFloat = 8
-        
-        
-        
-        static let trailingSpacing: CGFloat = 15
-        static let topSpacing: CGFloat = 15
-        static let bottomSpacing: CGFloat = 55
-        static let horizontalSpacing: CGFloat = 15
-        static let cancelButtonHeight: CGFloat = 60
     }
     
     struct Theme {

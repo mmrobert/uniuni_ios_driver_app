@@ -17,4 +17,9 @@ extension UIImage {
     static let search: UIImage? = UIImage(named: "icon-search")
     static let sort: UIImage? = UIImage(named: "icon-sort")
     static let iconMedicalCross: UIImage? = UIImage(named: "icon-medical-cross")
+    static let mapPinBlack: UIImage? = UIImage(named: "map-pin-black")
+    static let mapPinOrange: UIImage? = UIImage(named: "map-pin-orange")
+    static let mapPinRed: UIImage? = UIImage(named: "map-pin-red")
+    static let mapPackBlack: UIImage? = UIImage(named: "map-pack-black")
+    static let mapPackOrange: UIImage? = UIImage(named: "map-pack-orange")
 }
