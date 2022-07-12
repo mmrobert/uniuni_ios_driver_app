@@ -24,4 +24,6 @@ extension String {
     static let medicalStr: String = NSLocalizedString("Medical", comment: "")
     static let KMAwayStr: String = NSLocalizedString("KM Away", comment: "")
     static let MIAwayStr: String = NSLocalizedString("MI Away", comment: "")
+    static let parcelDetailsStr: String = NSLocalizedString("Parcel Details", comment: "")
+    static let navigateToServicePointStr: String = NSLocalizedString("Navigate to Service Point", comment: "")
 }

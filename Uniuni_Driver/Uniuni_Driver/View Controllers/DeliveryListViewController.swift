@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import Combine
 import SwiftUI
+import MapKit
 
 class DeliveryListViewController: UIViewController {
     
@@ -51,7 +52,6 @@ class DeliveryListViewController: UIViewController {
     }()
     
     private var packagesListViewModel: PackagesListViewModel
-    
     private var disposables = Set<AnyCancellable>()
     
     private var packagesList: [PackageViewModel] = []
@@ -60,6 +60,8 @@ class DeliveryListViewController: UIViewController {
     
     private var sortTitleLabel: UILabel?
     private var packageSort: PackageSort = .date
+    
+    private let locationManager = CLLocationManager()
     
     private var currentLocation: (lat: Double, lng: Double) = (49.14, -122.98)
     
@@ -84,6 +86,9 @@ class DeliveryListViewController: UIViewController {
         self.setupSegmentedControl()
         self.setupTableView()
         
+        self.locationManager.delegate = self
+        self.checkLocationManager()
+        
         self.observingViewModels()
         
         // fetch packages
@@ -93,6 +98,16 @@ class DeliveryListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    private func checkLocationManager() {
+        let authStatus = locationManager.authorizationStatus
+        if authStatus == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        } else if authStatus == .authorizedWhenInUse {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.startUpdatingLocation()
+        }
     }
     
     private func observingViewModels() {
@@ -162,7 +177,7 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func routeButtonAction() {
-        let mapView = MapViewController()
+        let mapView = MapViewController(packagesListViewModel: PackagesListViewModel())
         self.navigationController?.pushViewController(mapView, animated: true)
     }
     
@@ -244,5 +259,20 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
         let viewModel = self.listToDisplay[indexPath.row]
         cell.configure(packageViewModel: viewModel, location: self.currentLocation)
         return cell
+    }
+}
+
+extension DeliveryListViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let latestLo = locations.first else {
+            return
+        }
+        self.currentLocation = (latestLo.coordinate.latitude, latestLo.coordinate.longitude)
+        self.tableView.reloadData()
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        self.checkLocationManager()
     }
 }

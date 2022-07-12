@@ -13,7 +13,7 @@ class PackageCardViewModel {
     var trackingNo: String?
     var goodsType: GoodsType?
     var expressType: ExpressType?
-    var routeNo: String?
+    var routeNo: Int?
     var receiverName: String?
     var receiverAddress: String?
     var receiverDistance: String?
@@ -21,7 +21,7 @@ class PackageCardViewModel {
     init(trackingNo: String?,
          goodsType: GoodsType?,
          expressType: ExpressType?,
-         routeNo: String?,
+         routeNo: Int?,
          receiverName: String?,
          receiverAddress: String?,
          receiverDistance: String?) {

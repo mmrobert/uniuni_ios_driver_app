@@ -15,7 +15,7 @@ struct PackageViewModel: Identifiable {
     var tracking_no: String?
     var goods_type: GoodsType?
     var express_type: ExpressType?
-    var route_no: String?
+    var route_no: Int?
     var assign_time: String?    // 2021-11-25 13:38:42
     var delivery_by: String?    // 2021-11-28 13:38:42
     var state: PackageState?
@@ -76,26 +76,5 @@ struct PackageViewModel: Identifiable {
     
     private func rad2deg(rad: Double) -> Double {
         return rad * 180.0 / Double.pi
-    }
-}
-
-enum DistanceUnit: String {
-    case KM
-    case MI
-    
-    func getDisplayString() -> String {
-        switch self {
-        case .KM:
-            return "KM"
-        case .MI:
-            return "MI"
-        }
-    }
-    
-    static func getSortFrom(description: String?) -> PackageSort? {
-        guard let description = description else {
-            return nil
-        }
-        return PackageSort(rawValue: description)
     }
 }

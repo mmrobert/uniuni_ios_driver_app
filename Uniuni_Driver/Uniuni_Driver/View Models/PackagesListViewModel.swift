@@ -59,8 +59,8 @@ class PackagesListViewModel: ObservableObject {
             sorted = list.sorted(by: { (lh, rh) -> Bool in
                 let lhExpressType = lh.express_type ?? .regular
                 let rhExpressType = rh.express_type ?? .regular
-                let lhRoute = lh.route_no ?? ""
-                let rhRoute = rh.route_no ?? ""
+                let lhRoute = lh.route_no ?? 0
+                let rhRoute = rh.route_no ?? 0
                 if lhExpressType.rawValue > rhExpressType.rawValue {
                     return true
                 } else if lhExpressType.rawValue < rhExpressType.rawValue {
@@ -96,7 +96,7 @@ class PackagesListViewModel: ObservableObject {
             tracking_no: "11111",
             goods_type: .regular,
             express_type: .express,
-            route_no: "111",
+            route_no: 111,
             assign_time: "",
             delivery_by: "5-1-2022",
             state: .delivering,
@@ -116,7 +116,7 @@ class PackagesListViewModel: ObservableObject {
             tracking_no: "22222",
             goods_type: .regular,
             express_type: .regular,
-            route_no: "222",
+            route_no: 222,
             assign_time: "",
             delivery_by: "5-3-2022",
             state: .delivering,
@@ -136,7 +136,7 @@ class PackagesListViewModel: ObservableObject {
             tracking_no: "33333",
             goods_type: .medical,
             express_type: .express,
-            route_no: "333",
+            route_no: 33,
             assign_time: "",
             delivery_by: "5-4-2022",
             state: .delivering,
@@ -156,7 +156,7 @@ class PackagesListViewModel: ObservableObject {
             tracking_no: "44444",
             goods_type: .medical,
             express_type: .regular,
-            route_no: "444",
+            route_no: 444,
             assign_time: "",
             delivery_by: "7-1-2022",
             state: .undelivered,
@@ -176,7 +176,7 @@ class PackagesListViewModel: ObservableObject {
             tracking_no: "55555",
             goods_type: .regular,
             express_type: .regular,
-            route_no: "555",
+            route_no: 555,
             assign_time: "",
             delivery_by: "9-1-2022",
             state: .undelivered,

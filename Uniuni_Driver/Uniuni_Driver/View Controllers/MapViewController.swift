@@ -7,25 +7,52 @@
 
 import Foundation
 import MapboxMaps
+import Combine
 
 class MapViewController: UIViewController {
     
-    private struct Constants {
-        static let cornerRadius: CGFloat = 12
-        static let navigationBarHeight: CGFloat = 44
-        static let titleHeight: CGFloat = 38
-        static let separatorLineHeight: CGFloat = 1
-        static let leadingSpacing: CGFloat = 16
-        static let verticalSpacing: CGFloat = 8
+    private var mapView: MapView!
+    private var packagesListViewModel: PackagesListViewModel
+    private var disposables = Set<AnyCancellable>()
+    private var pointAnnotationManager: PointAnnotationManager?
+    
+    private var currentLocation: (lat: Double, lng: Double)?
+    
+    private var packagesList: [PackageViewModel] = []
+    
+    private var lastShownPackage: String?   // tracking no
+    
+    private let orangePin = UIImageView(image: UIImage.mapPinOrange)
+    
+    private let cardView: MapPackageCardView = {
+        let view = MapPackageCardView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private var cardViewTopConstraint: NSLayoutConstraint?
+    
+    init(packagesListViewModel: PackagesListViewModel) {
+        self.packagesListViewModel = packagesListViewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
-    var mapView: MapView!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = String.routeStr
         self.setupMapView()
+        self.setupCardView()
+        
         self.setupCurrentLocation()
+        
+        self.observingViewModels()
+        
+        // fetch packages
+        self.packagesListViewModel.fetchPackages()
     }
     
     private func setupMapView() {
@@ -39,8 +66,6 @@ class MapViewController: UIViewController {
             mapView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        generatePointAnnotations(points: [(49.1, -123.0), (49.1, -123.0), (49.1, -123.0)])
     }
     
     private func setupCurrentLocation() {
@@ -48,14 +73,61 @@ class MapViewController: UIViewController {
         mapView.location.options.activityType = .other
         mapView.location.options.puckType = .puck2D()
         mapView.location.locationProvider.startUpdatingLocation()
+    }
+    
+    private func observingViewModels() {
+        self.packagesListViewModel.$list
+            .sink(receiveValue: { [weak self] list in
+                guard let strongSelf = self else { return }
+                print(list)
+                strongSelf.packagesList = list
+                strongSelf.updatePackagesShowing(packagesList: list)
+            })
+            .store(in: &disposables)
+    }
+    
+    private func updatePackagesShowing(packagesList: [PackageViewModel]) {
         
-        mapView.mapboxMap.onNext(.mapLoaded) { [weak self] _ in
-            self?.updateCameraBound(latRegion: (48.85, 49.4), lngRegion: (-123.25, -122.85))
-            guard let loc = self?.mapView.location.latestLocation else {
-                return
-            }
-            self?.locationUpdate(newLocation: loc)
+        guard packagesList.count > 0 else {
+            let defaultLocation = Location(with: CLLocation(latitude: 49.14, longitude: -122.98))
+            let loc = self.mapView.location.latestLocation ?? defaultLocation
+            let cameraOptions = CameraOptions(center: loc.coordinate, zoom: 12.0)
+            self.mapView.camera.fly(to: cameraOptions, duration: 1.0)
+            return
         }
+        
+        let packageRegion = self.findPackageRegion(packagesList: packagesList)
+        
+        self.updateCameraBound(latRegion: packageRegion.latRegion, lngRegion: packageRegion.lngRegion)
+        
+        self.generatePointAnnotations(packagesList: packagesList)
+    }
+    
+    private func findPackageRegion(packagesList: [PackageViewModel]) -> (latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double)) {
+        let lats: [Double] = packagesList.compactMap { pack -> Double? in
+            Double(pack.lat ?? "")
+        }
+        let lngs: [Double] = packagesList.compactMap { pack -> Double? in
+            Double(pack.lng ?? "")
+        }
+        
+        var latMin = lats.min() ?? 49.0
+        var latMax = lats.max() ?? 49.2
+        
+        if latMin == latMax {
+            latMin -= 0.05
+            latMax += 0.05
+        }
+        
+        var lngMin = lngs.min() ?? -123.1
+        var lngMax = lngs.max() ?? -122.9
+        
+        if lngMin == lngMax {
+            lngMin -= 0.05
+            lngMax += 0.05
+        }
+        
+        return ((latMin, latMax), (lngMin, lngMax))
     }
     
     private func updateCameraBound(latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double)) {
@@ -65,47 +137,215 @@ class MapViewController: UIViewController {
             CLLocationCoordinate2DMake(latRegion.max, lngRegion.min),
             CLLocationCoordinate2DMake(latRegion.max, lngRegion.max)
         ]
+        let padding = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
         let camera = mapView.mapboxMap.camera(
             for: coordinates,
-            padding: .zero,
+            padding: padding,
             bearing: nil,
             pitch: nil
         )
         mapView.camera.ease(to: camera, duration: 1.0)
     }
     
-    private func generatePointAnnotations(points: [(lat: Double, lng: Double)]) {
+    private func generatePointAnnotations(packagesList: [PackageViewModel]) {
         
-        let pointAnnotationManager = mapView.annotations.makePointAnnotationManager()
-        pointAnnotationManager.delegate = self
-        
+        self.pointAnnotationManager = mapView.annotations.makePointAnnotationManager(id: "UniPointManager", layerPosition: nil)
+        self.pointAnnotationManager?.delegate = self
         var pointAnnotations: [PointAnnotation] = []
-        var ii = 1
-        for point in points {
-            let pointCoor = CLLocationCoordinate2D(latitude: point.lat, longitude: point.lng)
-            var pointAnnotation = PointAnnotation(coordinate: pointCoor)
-            if let img = UIImage.mapPinBlack {
-                pointAnnotation.image = PointAnnotation.Image(image: img, name: "\(ii)")
-                pointAnnotations.append(pointAnnotation)
-            }
-            ii += 1
+        
+        let notExpress = packagesList.filter {
+            $0.express_type != .express
+        }.sorted {
+            $0.route_no ?? 0 > $1.route_no ?? 0
         }
-        pointAnnotationManager.annotations = pointAnnotations
+        for package in notExpress {
+            guard let latDouble = Double(package.lat ?? ""), let lngDouble = Double(package.lng ?? "") else {
+                continue
+            }
+            
+            let pointCoor = CLLocationCoordinate2D(latitude: latDouble, longitude: lngDouble)
+            var pointAnnotation = PointAnnotation(id: package.tracking_no ?? "", coordinate: pointCoor)
+            pointAnnotation.userInfo = [
+                "trackingNo": package.tracking_no as Any,
+                "expressType": package.express_type as Any,
+                "routeNo": package.route_no as Any,
+                "lat": latDouble,
+                "lng": lngDouble
+            ]
+            let pinBlack = UIImage.mapPinBlack ?? UIImage()
+            pointAnnotation.image = PointAnnotation.Image(image: pinBlack, name: package.tracking_no ?? "")
+            pointAnnotations.append(pointAnnotation)
+        }
+        
+        let express = packagesList.filter {
+            $0.express_type == .express
+        }.sorted {
+            $0.route_no ?? 0 > $1.route_no ?? 0
+        }
+        for package in express {
+            guard let latDouble = Double(package.lat ?? ""), let lngDouble = Double(package.lng ?? "") else {
+                continue
+            }
+            
+            let pointCoor = CLLocationCoordinate2D(latitude: latDouble, longitude: lngDouble)
+            var pointAnnotation = PointAnnotation(id: package.tracking_no ?? "", coordinate: pointCoor)
+            pointAnnotation.userInfo = [
+                "trackingNo": package.tracking_no as Any,
+                "expressType": package.express_type as Any,
+                "routeNo": package.route_no as Any,
+                "lat": latDouble,
+                "lng": lngDouble
+            ]
+            let pinRed = UIImage.mapPinRed ?? UIImage()
+            pointAnnotation.image = PointAnnotation.Image(image: pinRed, name: package.tracking_no ?? "")
+            pointAnnotations.append(pointAnnotation)
+        }
+        self.pointAnnotationManager?.annotations = pointAnnotations
     }
 }
 
 extension MapViewController: AnnotationInteractionDelegate {
     
     func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
+        guard annotations.count > 0 else {
+            return
+        }
+        self.restorePinColor()
+        let expressPackage = annotations.filter { annotation in
+            if let type = annotation.userInfo?["expressType"] as? ExpressType, type == .express {
+                return true
+            } else {
+                return false
+            }
+        }.sorted { (lh, rh) -> Bool in
+            let lhRoute = lh.userInfo?["routeNo"] as? Int ?? 0
+            let rhRoute = rh.userInfo?["routeNo"] as? Int ?? 0
+            return lhRoute < rhRoute
+        }.first
         
-        print("Annotations tapped: \(annotations)")
+        if let expressPackage = expressPackage as? PointAnnotation {
+            self.lastShownPackage = expressPackage.userInfo?["trackingNo"] as? String
+            self.addOrangePin(at: expressPackage.point.coordinates)
+            self.showPackageCard()
+            
+            return
+        }
+        
+        let regularPackage = annotations.sorted { (lh, rh) -> Bool in
+            let lhRoute = lh.userInfo?["routeNo"] as? Int ?? 0
+            let rhRoute = rh.userInfo?["routeNo"] as? Int ?? 0
+            return lhRoute < rhRoute
+        }.first
+        
+        if let regularPackage = regularPackage as? PointAnnotation {
+            self.lastShownPackage = regularPackage.userInfo?["trackingNo"] as? String
+            self.addOrangePin(at: regularPackage.point.coordinates)
+            self.showPackageCard()
+        }
+    }
+    
+    private func showPackageCard() {
+        
+        guard let trackingNo = self.lastShownPackage else {
+            return
+        }
+        let packToShow = self.packagesList.filter {
+            $0.tracking_no == trackingNo
+        }.first
+        guard let packToShow = packToShow else {
+            return
+        }
+        let currentLocation = self.currentLocation ?? (49.14, -122.98)
+        let viewModel = MapPackageCardViewModel(
+            packageViewModel: packToShow,
+            location: currentLocation,
+            buttonTitle: String.parcelDetailsStr
+        )
+        self.cardView.configure(viewModel: viewModel)
+        
+        self.cardViewTopConstraint?.constant = -self.cardView.bounds.height
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            self?.cardView.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    private func restorePinColor() {
+        mapView.viewAnnotations.remove(self.orangePin)
+        /*
+        guard let lastShown = self.lastShownPackage else {
+            return
+        }
+        guard let pAnnos = self.pointAnnotationManager?.annotations, pAnnos.count > 0 else {
+            return
+        }
+        
+        let lastPin = pAnnos.enumerated().filter {
+            $0.1.id == lastShown
+        }.first
+        
+        if let lastPin = lastPin {
+            let pointCoor = lastPin.1.point.coordinates
+            var newPointAnno = PointAnnotation(id: lastPin.1.id, coordinate: pointCoor)
+            newPointAnno.userInfo = lastPin.1.userInfo
+            
+            if let expressType = lastPin.1.userInfo?["expressType"] as? ExpressType, expressType == .express {
+                
+                let pinRed = UIImage.mapPinRed ?? UIImage()
+                newPointAnno.image = PointAnnotation.Image(image: pinRed, name: lastPin.1.id)
+                
+                self.pointAnnotationManager?.annotations.remove(at: lastPin.0)
+                self.pointAnnotationManager?.annotations.insert(newPointAnno, at: lastPin.0)
+                
+            } else if let expressType = lastPin.1.userInfo?["expressType"] as? ExpressType, expressType == .regular {
+                
+                let pinBlack = UIImage.mapPinBlack ?? UIImage()
+                newPointAnno.image = PointAnnotation.Image(image: pinBlack, name: lastPin.1.id)
+                
+                self.pointAnnotationManager?.annotations.remove(at: lastPin.0)
+                self.pointAnnotationManager?.annotations.insert(newPointAnno, at: lastPin.0)
+            }
+        }
+        */
+    }
+    
+    private func addOrangePin(at coordinate: CLLocationCoordinate2D) {
+        let options = ViewAnnotationOptions(
+            geometry: Point(coordinate),
+            width: nil,
+            height: nil,
+            associatedFeatureId: nil,
+            allowOverlap: false,
+            visible: true,
+            anchor: .center,
+            offsetX: nil,
+            offsetY: nil,
+            selected: false
+        )
+        try? mapView.viewAnnotations.add(self.orangePin, options: options)
     }
 }
 
 extension MapViewController: LocationPermissionsDelegate, LocationConsumer {
     
     func locationUpdate(newLocation: Location) {
-        let cameraOptions = CameraOptions(center: newLocation.coordinate)
-        mapView.camera.ease(to: cameraOptions, duration: 1.0)
+        self.currentLocation = (newLocation.coordinate.latitude,
+                                newLocation.coordinate.longitude)
+    }
+}
+
+// card view
+extension MapViewController {
+    
+    private func setupCardView() {
+        self.view.addSubview(cardView)
+        self.cardViewTopConstraint = cardView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+        guard let topConstraint = self.cardViewTopConstraint else {
+            return
+        }
+        NSLayoutConstraint.activate([
+            cardView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            topConstraint,
+            cardView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)]
+        )
     }
 }
