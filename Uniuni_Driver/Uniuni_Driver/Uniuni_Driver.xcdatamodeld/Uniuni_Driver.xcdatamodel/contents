@@ -15,7 +15,7 @@
         <attribute name="order_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="order_sn" optional="YES" attributeType="String"/>
         <attribute name="postscript" optional="YES" attributeType="String"/>
-        <attribute name="route_no" optional="YES" attributeType="String"/>
+        <attribute name="route_no" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tracking_no" optional="YES" attributeType="String"/>
         <attribute name="zipcode" optional="YES" attributeType="String"/>

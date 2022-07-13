@@ -93,7 +93,7 @@ class CoreDataManager {
                     pack.goods_type = GoodsType.getTypeFrom(value: goodsTypeInt)
                     let expressTypeInt = object.value(forKey: "express_type") as? Int
                     pack.express_type = ExpressType.getTypeFrom(value: expressTypeInt)
-                    pack.route_no = object.value(forKey: "route_no") as? String
+                    pack.route_no = object.value(forKey: "route_no") as? Int
                     pack.assign_time = object.value(forKey: "assign_time") as? String
                     pack.delivery_by = object.value(forKey: "delivery_by") as? String
                     let stateInt = object.value(forKey: "state") as? Int

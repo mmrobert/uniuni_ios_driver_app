@@ -11,6 +11,9 @@
 		9286100D4D04690CE7A85F8C /* Pods_Uniuni_DriverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDD98AF93F7FAD0676BDBC8 /* Pods_Uniuni_DriverTests.framework */; };
 		9B02F0542859792800C23165 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B02F0532859792800C23165 /* LoginViewController.swift */; };
 		9B2CBA2E2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9B2CBA2C2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld */; };
+		9B39AB1D287A250C00877EBA /* MapPackageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */; };
+		9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */; };
+		9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */; };
 		9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8C2858DCF5006865AA /* AppDelegate.swift */; };
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
@@ -62,6 +65,9 @@
 		6FDD98AF93F7FAD0676BDBC8 /* Pods_Uniuni_DriverTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uniuni_DriverTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B02F0532859792800C23165 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B2CBA2D2862C3010001FA08 /* Uniuni_Driver.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Uniuni_Driver.xcdatamodel; sourceTree = "<group>"; };
+		9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPackageCardView.swift; sourceTree = "<group>"; };
+		9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPackageCardViewModel.swift; sourceTree = "<group>"; };
+		9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUnit.swift; sourceTree = "<group>"; };
 		9B513C892858DCF5006865AA /* Uniuni_Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uniuni_Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513C8C2858DCF5006865AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B513C8E2858DCF5006865AA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 				9BC2D4ED2867B85800354726 /* PackageCardView.swift */,
 				9BF57B34286B783100372045 /* TopActionSheet.swift */,
 				9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */,
+				9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */,
 			);
 			path = "Custom UIKit Views";
 			sourceTree = "<group>";
@@ -218,6 +225,7 @@
 				9BB33A0D28767A7C003ABD2F /* PackageState.swift */,
 				9BB33A0F28767AAA003ABD2F /* ExpressType.swift */,
 				9BB33A1128767AEF003ABD2F /* FailedHandleType.swift */,
+				9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */,
 			);
 			path = "Data Models";
 			sourceTree = "<group>";
@@ -252,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				9BC2D4F02867B92100354726 /* PackageCardViewModel.swift */,
+				9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */,
 				9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */,
 			);
 			path = "Custom ViewModels";
@@ -492,10 +501,13 @@
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
 				9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */,
 				9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */,
+				9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */,
 				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
+				9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */,
 				9BB33A1428767BC2003ABD2F /* PackageViewModel.swift in Sources */,
 				9BC9F807285E5E5F00376D95 /* PackagesListViewModel.swift in Sources */,
 				9B5189A628772FA5009D91DB /* MapViewController.swift in Sources */,
+				9B39AB1D287A250C00877EBA /* MapPackageCardView.swift in Sources */,
 				9BCA8502286F4C190046C0C2 /* PackageSearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

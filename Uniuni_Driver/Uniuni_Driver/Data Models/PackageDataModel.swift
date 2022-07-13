@@ -13,7 +13,7 @@ struct PackageDataModel {
     var tracking_no: String?
     var goods_type: GoodsType?
     var express_type: ExpressType?
-    var route_no: String?
+    var route_no: Int?
     var assign_time: String?    // 2021-11-25 13:38:42
     var delivery_by: String?    // 2021-11-28 13:38:42
     var state: PackageState?
