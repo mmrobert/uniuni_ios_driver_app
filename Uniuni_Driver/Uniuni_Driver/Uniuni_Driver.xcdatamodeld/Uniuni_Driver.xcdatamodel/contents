@@ -20,7 +20,17 @@
         <attribute name="tracking_no" optional="YES" attributeType="String"/>
         <attribute name="zipcode" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="ServicePoint" representedClassName="ServicePoint" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="biz_code" optional="YES" attributeType="String"/>
+        <attribute name="biz_message" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lng" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
     <elements>
         <element name="Package" positionX="-63" positionY="-18" width="128" height="299"/>
+        <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="134"/>
     </elements>
 </model>

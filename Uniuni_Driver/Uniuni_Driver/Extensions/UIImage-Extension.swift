@@ -20,6 +20,6 @@ extension UIImage {
     static let mapPinBlack: UIImage? = UIImage(named: "map-pin-black")
     static let mapPinOrange: UIImage? = UIImage(named: "map-pin-orange")
     static let mapPinRed: UIImage? = UIImage(named: "map-pin-red")
-    static let mapPackBlack: UIImage? = UIImage(named: "map-pack-black")
-    static let mapPackOrange: UIImage? = UIImage(named: "map-pack-orange")
+    static let mapServiceBlack: UIImage? = UIImage(named: "map-service-black")
+    static let mapServiceOrange: UIImage? = UIImage(named: "map-service-orange")
 }

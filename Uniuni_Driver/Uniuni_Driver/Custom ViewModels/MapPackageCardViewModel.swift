@@ -48,4 +48,15 @@ class MapPackageCardViewModel {
         self.distanceUnit = .KM
         self.buttonTitle = buttonTitle
     }
+    
+    init(serviceViewModel: ServicePointViewModel, location: (lat: Double, lng: Double), buttonTitle: String?) {
+        self.trackingNo = serviceViewModel.biz_data?.name
+        self.goodsType = nil
+        self.expressType = nil
+        self.receiverAddress = serviceViewModel.biz_data?.address
+        self.receiverZipcode = nil
+        self.receiverDistance = serviceViewModel.getDistanceFrom(location: location, distanceUnit: .KM)
+        self.distanceUnit = .KM
+        self.buttonTitle = buttonTitle
+    }
 }

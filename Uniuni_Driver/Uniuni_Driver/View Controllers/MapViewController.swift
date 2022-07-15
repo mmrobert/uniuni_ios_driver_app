@@ -13,16 +13,19 @@ class MapViewController: UIViewController {
     
     private var mapView: MapView!
     private var packagesListViewModel: PackagesListViewModel
+    private var servicesListViewModel: ServicePointsListViewModel
     private var disposables = Set<AnyCancellable>()
     private var pointAnnotationManager: PointAnnotationManager?
     
     private var currentLocation: (lat: Double, lng: Double)?
     
     private var packagesList: [PackageViewModel] = []
+    private var servicesList: [ServicePointViewModel] = []
     
     private var lastShownPackage: String?   // tracking no
     
     private let orangePin = UIImageView(image: UIImage.mapPinOrange)
+    private let orangeServicePoint = UIImageView(image: UIImage.mapServiceOrange)
     
     private let cardView: MapPackageCardView = {
         let view = MapPackageCardView()
@@ -32,8 +35,9 @@ class MapViewController: UIViewController {
     
     private var cardViewTopConstraint: NSLayoutConstraint?
     
-    init(packagesListViewModel: PackagesListViewModel) {
+    init(packagesListViewModel: PackagesListViewModel, servicesListViewModel: ServicePointsListViewModel) {
         self.packagesListViewModel = packagesListViewModel
+        self.servicesListViewModel = servicesListViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,6 +57,8 @@ class MapViewController: UIViewController {
         
         // fetch packages
         self.packagesListViewModel.fetchPackages()
+        self.servicesListViewModel.fetchServicePoints()
+        //self.servicesListViewModel.saveMockServicesList()
     }
     
     private func setupMapView() {
@@ -76,17 +82,17 @@ class MapViewController: UIViewController {
     }
     
     private func observingViewModels() {
-        self.packagesListViewModel.$list
-            .sink(receiveValue: { [weak self] list in
+        Publishers.CombineLatest(self.packagesListViewModel.$list, self.servicesListViewModel.$list)
+            .sink(receiveValue: { [weak self] (packList, serviceList) in
                 guard let strongSelf = self else { return }
-                print(list)
-                strongSelf.packagesList = list
-                strongSelf.updatePackagesShowing(packagesList: list)
+                strongSelf.packagesList = packList
+                strongSelf.servicesList = serviceList
+                strongSelf.updatePinsShowing(packagesList: packList, servicesList: serviceList)
             })
             .store(in: &disposables)
     }
     
-    private func updatePackagesShowing(packagesList: [PackageViewModel]) {
+    private func updatePinsShowing(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {
         
         guard packagesList.count > 0 else {
             let defaultLocation = Location(with: CLLocation(latitude: 49.14, longitude: -122.98))
@@ -100,7 +106,7 @@ class MapViewController: UIViewController {
         
         self.updateCameraBound(latRegion: packageRegion.latRegion, lngRegion: packageRegion.lngRegion)
         
-        self.generatePointAnnotations(packagesList: packagesList)
+        self.generateAnnotations(packagesList: packagesList, servicesList: servicesList)
     }
     
     private func findPackageRegion(packagesList: [PackageViewModel]) -> (latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double)) {
@@ -147,10 +153,15 @@ class MapViewController: UIViewController {
         mapView.camera.ease(to: camera, duration: 1.0)
     }
     
-    private func generatePointAnnotations(packagesList: [PackageViewModel]) {
-        
+    private func generateAnnotations(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {
         self.pointAnnotationManager = mapView.annotations.makePointAnnotationManager(id: "UniPointManager", layerPosition: nil)
         self.pointAnnotationManager?.delegate = self
+        
+        self.pointAnnotationManager?.annotations = self.generatePackageAnnotations(packagesList: packagesList) + self.generateServiceAnnotations(servicesList: servicesList)
+    }
+    
+    private func generatePackageAnnotations(packagesList: [PackageViewModel]) -> [PointAnnotation] {
+        
         var pointAnnotations: [PointAnnotation] = []
         
         let notExpress = packagesList.filter {
@@ -200,7 +211,25 @@ class MapViewController: UIViewController {
             pointAnnotation.image = PointAnnotation.Image(image: pinRed, name: package.tracking_no ?? "")
             pointAnnotations.append(pointAnnotation)
         }
-        self.pointAnnotationManager?.annotations = pointAnnotations
+        return pointAnnotations
+    }
+    
+    private func generateServiceAnnotations(servicesList: [ServicePointViewModel]) -> [PointAnnotation] {
+        
+        var pointAnnotations: [PointAnnotation] = []
+        
+        for service in servicesList {
+            guard let latDouble = service.biz_data?.lat, let lngDouble = service.biz_data?.lng else {
+                continue
+            }
+            
+            let pointCoor = CLLocationCoordinate2D(latitude: latDouble, longitude: lngDouble)
+            var pointAnnotation = PointAnnotation(id: service.biz_data?.name ?? "", coordinate: pointCoor)
+            let serviceBlack = UIImage.mapServiceBlack ?? UIImage()
+            pointAnnotation.image = PointAnnotation.Image(image: serviceBlack, name: service.biz_data?.name ?? "")
+            pointAnnotations.append(pointAnnotation)
+        }
+        return pointAnnotations
     }
 }
 
@@ -211,6 +240,20 @@ extension MapViewController: AnnotationInteractionDelegate {
             return
         }
         self.restorePinColor()
+        let serviceP = annotations.filter { annotation in
+            if annotation.id == "YY99" {
+                return true
+            } else {
+                return false
+            }
+        }.first
+        if let serviceP = serviceP as? PointAnnotation {
+            self.addOrangeServicePoint(at: serviceP.point.coordinates)
+            self.showServicePointCard()
+            return
+        }
+        
+        
         let expressPackage = annotations.filter { annotation in
             if let type = annotation.userInfo?["expressType"] as? ExpressType, type == .express {
                 return true
@@ -269,8 +312,31 @@ extension MapViewController: AnnotationInteractionDelegate {
         }, completion: nil)
     }
     
+    private func showServicePointCard() {
+        
+        let serviceToShow = self.servicesList.filter {
+            $0.biz_data?.name == "YY99"
+        }.first
+        guard let serviceToShow = serviceToShow else {
+            return
+        }
+        let currentLocation = self.currentLocation ?? (49.14, -122.98)
+        let viewModel = MapPackageCardViewModel(
+            serviceViewModel: serviceToShow,
+            location: currentLocation,
+            buttonTitle: String.navigateToServicePointStr
+        )
+        self.cardView.configure(viewModel: viewModel)
+        
+        self.cardViewTopConstraint?.constant = -self.cardView.bounds.height
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            self?.cardView.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
     private func restorePinColor() {
         mapView.viewAnnotations.remove(self.orangePin)
+        mapView.viewAnnotations.remove(self.orangeServicePoint)
         /*
         guard let lastShown = self.lastShownPackage else {
             return
@@ -322,6 +388,22 @@ extension MapViewController: AnnotationInteractionDelegate {
             selected: false
         )
         try? mapView.viewAnnotations.add(self.orangePin, options: options)
+    }
+    
+    private func addOrangeServicePoint(at coordinate: CLLocationCoordinate2D) {
+        let options = ViewAnnotationOptions(
+            geometry: Point(coordinate),
+            width: nil,
+            height: nil,
+            associatedFeatureId: nil,
+            allowOverlap: false,
+            visible: true,
+            anchor: .center,
+            offsetX: nil,
+            offsetY: nil,
+            selected: false
+        )
+        try? mapView.viewAnnotations.add(self.orangeServicePoint, options: options)
     }
 }
 

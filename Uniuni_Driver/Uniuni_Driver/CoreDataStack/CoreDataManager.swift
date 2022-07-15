@@ -16,6 +16,7 @@ class CoreDataManager {
     private init() {}
     
     @Published var packages: [PackageDataModel] = []
+    @Published var services: [ServicePointDataModel] = []
     
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
@@ -113,6 +114,63 @@ class CoreDataManager {
                 }
             } catch let error as NSError {
                 print("Could not fetch packages: \(error)")
+            }
+        }
+    }
+    
+    func saveServicePoint(servicePoint: ServicePointDataModel) {
+
+        let taskContext = newTaskContext()
+        
+        taskContext.perform {
+            guard let entity = NSEntityDescription.entity(forEntityName: "ServicePoint", in: taskContext) else { return }
+            
+            let object = NSManagedObject(entity: entity, insertInto: taskContext)
+            object.setValue(servicePoint.biz_code, forKeyPath: "biz_code")
+            object.setValue(servicePoint.biz_message, forKey: "biz_message")
+            object.setValue(servicePoint.biz_data?.id, forKeyPath: "id")
+            object.setValue(servicePoint.biz_data?.name, forKeyPath: "name")
+            object.setValue(servicePoint.biz_data?.address, forKeyPath: "address")
+            object.setValue(servicePoint.biz_data?.lat, forKeyPath: "lat")
+            object.setValue(servicePoint.biz_data?.lng, forKeyPath: "lng")
+            
+            do {
+                try taskContext.save()
+            } catch let error as NSError {
+                print("Could not save service point: \(error)")
+            }
+        }
+    }
+    
+    func fetchServicePoints() {
+        
+        let taskContext = newTaskContext()
+        
+        taskContext.perform { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "ServicePoint")
+            do {
+                let servicesP = try taskContext.fetch(fetchRequest)
+                strongSelf.services = servicesP.map { object in
+                    var service = ServicePointDataModel()
+                    service.biz_code = object.value(forKey: "biz_code") as? String
+                    service.biz_message = object.value(forKey: "biz_message") as? String
+                    
+                    var bizData = ServicePointDataModel.Biz_Data()
+                    bizData.id = object.value(forKey: "id") as? Int
+                    bizData.name = object.value(forKey: "name") as? String
+                    bizData.address = object.value(forKey: "address") as? String
+                    bizData.lat = object.value(forKey: "lat") as? Double
+                    bizData.lng = object.value(forKey: "lng") as? Double
+                    
+                    service.biz_data = bizData
+                    
+                    return service
+                }
+            } catch let error as NSError {
+                print("Could not fetch service points: \(error)")
             }
         }
     }
