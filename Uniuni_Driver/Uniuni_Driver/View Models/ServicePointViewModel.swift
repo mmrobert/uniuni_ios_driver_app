@@ -17,9 +17,28 @@ struct ServicePointViewModel: Identifiable {
     struct Biz_DataViewModel {
         var id: Int?
         var name: String?
+        var uni_operator_id: Int?
+        var type: Int?
+        var code: String?
         var address: String?
         var lat: Double?
         var lng: Double?
+        var district: Int?
+        var business_hours: String?
+        var unit_number: String?
+        var phone: String?
+        var partner_id: Int?
+        var company: String?
+        var is_active: Int?
+        var warehouse: Int?
+        var premise_type: String?
+        var device: String?
+        var contact: String?
+        var login: String?
+        var password: String?
+        var verification_code: Int?
+        var storage_space: Int?
+        var remark: String?
     }
     
     init(dataModel: ServicePointDataModel) {
@@ -30,9 +49,28 @@ struct ServicePointViewModel: Identifiable {
         
         bizData.id = dataModel.biz_data?.id
         bizData.name = dataModel.biz_data?.name
+        bizData.uni_operator_id = dataModel.biz_data?.uni_operator_id
+        bizData.type = dataModel.biz_data?.type
+        bizData.code = dataModel.biz_data?.code
         bizData.address = dataModel.biz_data?.address
         bizData.lat = dataModel.biz_data?.lat
         bizData.lng = dataModel.biz_data?.lng
+        bizData.district = dataModel.biz_data?.district
+        bizData.business_hours = dataModel.biz_data?.business_hours
+        bizData.unit_number = dataModel.biz_data?.unit_number
+        bizData.phone = dataModel.biz_data?.phone
+        bizData.partner_id = dataModel.biz_data?.partner_id
+        bizData.company = dataModel.biz_data?.company
+        bizData.is_active = dataModel.biz_data?.is_active
+        bizData.warehouse = dataModel.biz_data?.warehouse
+        bizData.premise_type = dataModel.biz_data?.premise_type
+        bizData.device = dataModel.biz_data?.device
+        bizData.contact = dataModel.biz_data?.contact
+        bizData.login = dataModel.biz_data?.login
+        bizData.password = dataModel.biz_data?.password
+        bizData.verification_code = dataModel.biz_data?.verification_code
+        bizData.storage_space = dataModel.biz_data?.storage_space
+        bizData.remark = dataModel.biz_data?.remark
         
         self.biz_data = bizData
     }

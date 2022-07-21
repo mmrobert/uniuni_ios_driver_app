@@ -176,14 +176,8 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func routeButtonAction() {
-        /*
-        let mapView = MapViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
-        self.navigationController?.pushViewController(mapView, animated: true)
-        */
-        
         let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
         self.navigationController?.pushViewController(mapView, animated: true)
-        
     }
     
     @objc

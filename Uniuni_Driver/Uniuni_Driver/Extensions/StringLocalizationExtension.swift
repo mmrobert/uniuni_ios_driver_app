@@ -26,4 +26,13 @@ extension String {
     static let MIAwayStr: String = NSLocalizedString("MI Away", comment: "")
     static let parcelDetailsStr: String = NSLocalizedString("Parcel Details", comment: "")
     static let navigateToServicePointStr: String = NSLocalizedString("Navigate to Service Point", comment: "")
+    static let failedStr: String = NSLocalizedString("Failed", comment: "")
+    static let deliveredStr: String = NSLocalizedString("Delivered", comment: "")
+    static let orderTypeStr: String = NSLocalizedString("Order Type", comment: "")
+    static let assignedTimeStr: String = NSLocalizedString("Assigned Time", comment: "")
+    static let deliveryTypeStr: String = NSLocalizedString("Delivery Type", comment: "")
+    static let deliveryByStr: String = NSLocalizedString("Delivery by", comment: "")
+    static let buzzStr: String = NSLocalizedString("Buzz", comment: "")
+    static let noteStr: String = NSLocalizedString("Note", comment: "")
+    
 }

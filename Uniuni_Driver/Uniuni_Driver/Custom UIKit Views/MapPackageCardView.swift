@@ -144,9 +144,8 @@ class MapPackageCardView: UIView {
     private var theme: MapPackageCardView.Theme?
     private var viewModel: MapPackageCardViewModel?
     
-    convenience init(viewModel: MapPackageCardViewModel? = nil, theme: MapPackageCardView.Theme? = nil) {
+    convenience init(theme: MapPackageCardView.Theme? = nil) {
         self.init(frame: .zero)
-        self.viewModel = viewModel
         self.theme = theme
     }
     
@@ -167,6 +166,11 @@ class MapPackageCardView: UIView {
         self.setupTitleContainer()
         self.setupCenterContainer()
         self.setupButton()
+        
+        guard let theme = self.theme else {
+            return
+        }
+        self.configureTheme(theme: theme)
     }
     
     func configure(theme: MapPackageCardView.Theme? = nil, viewModel: MapPackageCardViewModel) {

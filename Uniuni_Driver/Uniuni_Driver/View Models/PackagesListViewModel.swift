@@ -135,7 +135,7 @@ class PackagesListViewModel: ObservableObject {
             order_sn: "",
             tracking_no: "33333",
             goods_type: .medical,
-            express_type: .express,
+            express_type: .regular,
             route_no: 33,
             assign_time: "",
             delivery_by: "5-4-2022",
@@ -147,6 +147,26 @@ class PackagesListViewModel: ObservableObject {
             lat: "49.27",
             lng: "-122.86",
             buzz_code: "33",
+            postscript: nil,
+            failed_handle_type: nil
+        ))
+        coreDataManager.savePackage(package: PackageDataModel(
+            order_id: 999,
+            order_sn: "",
+            tracking_no: "99999",
+            goods_type: .medical,
+            express_type: .express,
+            route_no: 99,
+            assign_time: "",
+            delivery_by: "5-4-2019",
+            state: .delivering,
+            name: "Charlie Peter",
+            mobile: "",
+            address: "999 Bayview St",
+            zipcode: "99",
+            lat: "49.27",
+            lng: "-122.86",
+            buzz_code: "99",
             postscript: nil,
             failed_handle_type: nil
         ))

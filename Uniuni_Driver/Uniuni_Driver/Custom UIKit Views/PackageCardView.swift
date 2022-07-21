@@ -167,9 +167,8 @@ class PackageCardView: UIView {
     private var theme: PackageCardView.Theme?
     private var viewModel: PackageCardViewModel?
     
-    convenience init(viewModel: PackageCardViewModel? = nil, theme: PackageCardView.Theme? = nil) {
+    convenience init(theme: PackageCardView.Theme? = nil) {
         self.init(frame: .zero)
-        self.viewModel = viewModel
         self.theme = theme
     }
     
@@ -190,6 +189,11 @@ class PackageCardView: UIView {
         self.setupSeparatingLine()
         self.setupRouteInfo()
         self.setupReceiverInfo()
+        
+        guard let theme = self.theme else {
+            return
+        }
+        self.configureTheme(theme: theme)
     }
     
     func configure(theme: PackageCardView.Theme? = nil, viewModel: PackageCardViewModel) {
