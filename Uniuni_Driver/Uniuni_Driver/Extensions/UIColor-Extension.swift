@@ -13,8 +13,11 @@ extension UIColor {
     static let tabbarTint: UIColor? = UIColor(named: "tab-bar-tint")
     static let screenBase: UIColor? = UIColor(named: "screen-base")
     static let highlightedBlue: UIColor? = UIColor(named: "highlighted-blue")
+    static let lightBlue: UIColor? = UIColor(named: "light-blue")
     static let lightBlackText: UIColor? = UIColor(named: "light-black-text")
     static let naviBarButton: UIColor? = UIColor(named: "navi-bar-button")
     static let redBackground: UIColor? = UIColor(named: "red-background")
-    static let lightGray198: UIColor? = UIColor(named: "light-gray")
+    static let lightGray160: UIColor? = UIColor(named: "light-gray-160")
+    static let lightGray198: UIColor? = UIColor(named: "light-gray-198")
+    static let grayHalfTransparent: UIColor? = UIColor(named: "gray-half-transparent")
 }

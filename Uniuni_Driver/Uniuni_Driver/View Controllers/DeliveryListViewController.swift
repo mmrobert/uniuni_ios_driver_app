@@ -114,7 +114,6 @@ class DeliveryListViewController: UIViewController {
         self.packagesListViewModel.$list
             .sink(receiveValue: { [weak self] list in
                 guard let strongSelf = self else { return }
-                print(list)
                 strongSelf.packagesList = list
                 strongSelf.segmentSelected()
             })
@@ -177,7 +176,7 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func routeButtonAction() {
-        let mapView = MapViewController(packagesListViewModel: PackagesListViewModel())
+        let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
         self.navigationController?.pushViewController(mapView, animated: true)
     }
     

@@ -95,6 +95,7 @@ class TopActionSheet: UIViewController {
             self.actionsStackView.addArrangedSubview(self.createSingleActionView(action: action, theme: theme))
         }
         let bottomSpace = UIView()
+        bottomSpace.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bottomSpace.heightAnchor.constraint(equalToConstant: Constants.verticalSpacing)
         ])
