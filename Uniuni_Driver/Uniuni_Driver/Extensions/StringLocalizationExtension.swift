@@ -34,5 +34,23 @@ extension String {
     static let deliveryByStr: String = NSLocalizedString("Delivery by", comment: "")
     static let buzzStr: String = NSLocalizedString("Buzz", comment: "")
     static let noteStr: String = NSLocalizedString("Note", comment: "")
+    static let houseStr: String = NSLocalizedString("House", comment: "")
+    static let townhouseStr: String = NSLocalizedString("Townhouse", comment: "")
+    static let businessStr: String = NSLocalizedString("Business", comment: "")
+    static let apartmentStr: String = NSLocalizedString("Apartment", comment: "")
+    static let chooseMapStr: String = NSLocalizedString("Choose Map", comment: "")
+    static let chooseAnApplicationToStartNavigationStr: String = NSLocalizedString("Choose an application to start navigation", comment: "")
+    static let cancelStr: String = NSLocalizedString("Cancel", comment: "")
+    static let appleMapStr: String = NSLocalizedString("Apple Map", comment: "")
+    static let googleMapStr: String = NSLocalizedString("Google Map", comment: "")
+    static let inAppMapStr: String = NSLocalizedString("In-app Map", comment: "")
+    static let copyAddressStr: String = NSLocalizedString("Copy Address", comment: "")
+    static let setDefaultMapStr: String = NSLocalizedString("Set default map", comment: "")
+    static let doYouWantToSetDefaultMapStr = NSLocalizedString("Do you want to set default map", comment: "")
+    static let noStr: String = NSLocalizedString("No", comment: "")
+    static let yesStr: String = NSLocalizedString("Yes", comment: "")
+    
+    static let markAddressTypeStr: String = NSLocalizedString("Mark Address Type", comment: "")
+    static let pleaseChooseAddressTypeStr: String = NSLocalizedString("Please choose address type", comment: "")
     
 }

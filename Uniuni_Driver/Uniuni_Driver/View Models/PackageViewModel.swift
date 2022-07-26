@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-struct PackageViewModel: Identifiable {
+struct PackageViewModel: Identifiable, Equatable {
     var id = UUID()
     var order_id: Int?
     var order_sn: String?
@@ -22,6 +22,7 @@ struct PackageViewModel: Identifiable {
     var name: String?
     var mobile: String?
     var address: String?
+    var address_type: AddressType?
     var zipcode: String?
     var lat: String?
     var lng: String?
@@ -42,6 +43,7 @@ struct PackageViewModel: Identifiable {
         self.name = dataModel.name
         self.mobile = dataModel.mobile
         self.address = dataModel.address
+        self.address_type = dataModel.address_type
         self.zipcode = dataModel.zipcode
         self.lat = dataModel.lat
         self.lng = dataModel.lng
@@ -76,5 +78,9 @@ struct PackageViewModel: Identifiable {
     
     private func rad2deg(rad: Double) -> Double {
         return rad * 180.0 / Double.pi
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.order_sn == rhs.order_sn
     }
 }

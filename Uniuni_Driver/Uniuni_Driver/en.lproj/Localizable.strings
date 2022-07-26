@@ -32,4 +32,20 @@
 "Assigned Time" = "Assigned Time";
 "Delivery Type" = "Delivery Type";
 "Delivery by" = "Delivery by";
-
+"House" = "House";
+"Townhouse" = "Townhouse";
+"Business" = "Business";
+"Apartment" = "Apartment";
+"Choose Map" = "Choose Map";
+"Choose an application to start navigation" = "Choose an application to start navigation. Default map can be changed in setup";
+"Cancel" = "Cancel";
+"Apple Map" = "Apple Map";
+"Google Map" = "Google Map";
+"In-app Map" = "In-app Map";
+"Copy Address" = "Copy Address";
+"Set default map" = "Set default map";
+"Do you want to set default map" = "Do you want to set %@ as default map for navigation?";
+"No" = "No";
+"Yes" = "Yes";
+"Mark Address Type" = "Mark Address Type";
+"Please choose address type" = "Please choose a type you want this address to marked.";

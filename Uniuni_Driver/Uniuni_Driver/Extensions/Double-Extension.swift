@@ -10,10 +10,10 @@ import Foundation
 extension Double {
     
     func kmDistance() -> String {
-        return String(format: "%.0f", self) + String.KMAwayStr
+        return String(format: "%.1f", self) + String.KMAwayStr
     }
     
     func miDistance() -> String {
-        return String(format: "%.0f", self) + String.MIAwayStr
+        return String(format: "%.1f", self) + String.MIAwayStr
     }
 }

@@ -49,6 +49,7 @@
 		9BCA84FF286F319D0046C0C2 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */; };
 		9BCA8502286F4C190046C0C2 /* PackageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */; };
 		9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA8503286F67990046C0C2 /* SearchCellView.swift */; };
+		9BD4E2C6288CF96000CD4669 /* AddressType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD4E2C5288CF96000CD4669 /* AddressType.swift */; };
 		9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE332862CE29006391D9 /* CoreDataManager.swift */; };
 		9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */; };
 		9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B34286B783100372045 /* TopActionSheet.swift */; };
@@ -123,6 +124,7 @@
 		9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageSearchView.swift; sourceTree = "<group>"; };
 		9BCA8503286F67990046C0C2 /* SearchCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellView.swift; sourceTree = "<group>"; };
+		9BD4E2C5288CF96000CD4669 /* AddressType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressType.swift; sourceTree = "<group>"; };
 		9BE4BE332862CE29006391D9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
 		9BF57B34286B783100372045 /* TopActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheet.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				9BB33A0B28767A4F003ABD2F /* GoodsType.swift */,
 				9BB33A0D28767A7C003ABD2F /* PackageState.swift */,
 				9BB33A0F28767AAA003ABD2F /* ExpressType.swift */,
+				9BD4E2C5288CF96000CD4669 /* AddressType.swift */,
 				9BB33A1128767AEF003ABD2F /* FailedHandleType.swift */,
 				9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */,
 				9B1730A2287E5742005AE7AD /* GeoJsonDataModel.swift */,
@@ -504,6 +507,7 @@
 				9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */,
 				9BC724BA28846A7400229E51 /* MapPackageDetailCardView.swift in Sources */,
 				9B1730A1287E5722005AE7AD /* MapClusterViewController.swift in Sources */,
+				9BD4E2C6288CF96000CD4669 /* AddressType.swift in Sources */,
 				9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */,
 				9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */,
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,

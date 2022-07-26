@@ -144,6 +144,8 @@ class MapPackageCardView: UIView {
     private var theme: MapPackageCardView.Theme?
     private var viewModel: MapPackageCardViewModel?
     
+    var buttonAction: (() -> Void)?
+    
     convenience init(theme: MapPackageCardView.Theme? = nil) {
         self.init(frame: .zero)
         self.theme = theme
@@ -209,6 +211,11 @@ class MapPackageCardView: UIView {
     private func configureTheme(theme: MapPackageCardView.Theme) {
         
     }
+    
+    @objc
+    private func buttonTapped() {
+        self.buttonAction?()
+    }
 }
 
 // UI set up
@@ -271,6 +278,7 @@ extension MapPackageCardView {
     private func setupButton() {
         self.button.layer.cornerRadius = Constants.buttonHeight / 2
         self.button.layer.masksToBounds = true
+        self.button.addTarget(self, action: #selector(MapPackageCardView.buttonTapped), for: .touchUpInside)
         self.addSubview(self.button)
         NSLayoutConstraint.activate(
             [button.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)]

@@ -19,11 +19,11 @@ class LeadingTitleLabel: UIView {
     }
     
     struct Theme {
-        var backgroundColor: UIColor = .white
+        var backgroundColor: UIColor? = .white
         var leadingTitleTextColor: UIColor? = UIColor.lightGray160
-        var leadingTitleTextFont: UIFont = UIFont.systemFont(ofSize: 14)
+        var leadingTitleTextFont: UIFont? = UIFont.systemFont(ofSize: 14)
         var mainTextColor: UIColor? = UIColor.lightGray160
-        var mainTextFont: UIFont = UIFont.systemFont(ofSize: 16)
+        var mainTextFont: UIFont? = UIFont.systemFont(ofSize: 16)
         
         static let `default`: Theme = Theme()
     }
@@ -95,10 +95,11 @@ class LeadingTitleLabel: UIView {
     }
     
     private func configureTheme(theme: LeadingTitleLabel.Theme) {
-        self.titleLabel.font = theme.leadingTitleTextFont
-        self.titleLabel.textColor = theme.leadingTitleTextColor
-        self.mainLabel.font = theme.mainTextFont
-        self.mainLabel.textColor = theme.mainTextColor
+        self.backgroundColor = theme.backgroundColor ?? Theme.default.backgroundColor
+        self.titleLabel.font = theme.leadingTitleTextFont ?? Theme.default.leadingTitleTextFont
+        self.titleLabel.textColor = theme.leadingTitleTextColor ?? Theme.default.leadingTitleTextColor
+        self.mainLabel.font = theme.mainTextFont ?? Theme.default.mainTextFont
+        self.mainLabel.textColor = theme.mainTextColor ?? Theme.default.mainTextColor
     }
 }
 
