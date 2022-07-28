@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		176B0A777EC4C224176EB7B5 /* Pods_Uniuni_Driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 579CA9B23B615B4E81FFB100 /* Pods_Uniuni_Driver.framework */; };
-		9286100D4D04690CE7A85F8C /* Pods_Uniuni_DriverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDD98AF93F7FAD0676BDBC8 /* Pods_Uniuni_DriverTests.framework */; };
+		36F18553B75C67EC7A22BCCE /* Pods_Uniuni_DriverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07026826862CDAE297EC49EE /* Pods_Uniuni_DriverTests.framework */; };
 		9B02F0542859792800C23165 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B02F0532859792800C23165 /* LoginViewController.swift */; };
 		9B1730A1287E5722005AE7AD /* MapClusterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1730A0287E5722005AE7AD /* MapClusterViewController.swift */; };
 		9B1730A3287E5742005AE7AD /* GeoJsonDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1730A2287E5742005AE7AD /* GeoJsonDataModel.swift */; };
@@ -23,6 +22,8 @@
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
+		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
+		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
 		9BB33A0A28767A0D003ABD2F /* PackageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB33A0928767A0D003ABD2F /* PackageDataModel.swift */; };
 		9BB33A0C28767A4F003ABD2F /* GoodsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB33A0B28767A4F003ABD2F /* GoodsType.swift */; };
@@ -54,6 +55,7 @@
 		9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */; };
 		9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B34286B783100372045 /* TopActionSheet.swift */; };
 		9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */; };
+		D66EDD946221471036F74FF6 /* Pods_Uniuni_Driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5CF3EF4D38F764DA1EA477 /* Pods_Uniuni_Driver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,11 +69,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1CC2B85F4CE8235167470B3A /* Pods-Uniuni_DriverTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_DriverTests.release.xcconfig"; path = "Target Support Files/Pods-Uniuni_DriverTests/Pods-Uniuni_DriverTests.release.xcconfig"; sourceTree = "<group>"; };
-		26589CCCDD33DA02F910BD27 /* Pods-Uniuni_Driver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_Driver.release.xcconfig"; path = "Target Support Files/Pods-Uniuni_Driver/Pods-Uniuni_Driver.release.xcconfig"; sourceTree = "<group>"; };
-		278EB061E6C38DAA07878581 /* Pods-Uniuni_Driver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_Driver.debug.xcconfig"; path = "Target Support Files/Pods-Uniuni_Driver/Pods-Uniuni_Driver.debug.xcconfig"; sourceTree = "<group>"; };
-		579CA9B23B615B4E81FFB100 /* Pods_Uniuni_Driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uniuni_Driver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FDD98AF93F7FAD0676BDBC8 /* Pods_Uniuni_DriverTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uniuni_DriverTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01E4D070D0E135850FEA02CF /* Pods-Uniuni_Driver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_Driver.release.xcconfig"; path = "Target Support Files/Pods-Uniuni_Driver/Pods-Uniuni_Driver.release.xcconfig"; sourceTree = "<group>"; };
+		07026826862CDAE297EC49EE /* Pods_Uniuni_DriverTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uniuni_DriverTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E5CF3EF4D38F764DA1EA477 /* Pods_Uniuni_Driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uniuni_Driver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CB7175CFBB55796070E347B /* Pods-Uniuni_Driver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_Driver.debug.xcconfig"; path = "Target Support Files/Pods-Uniuni_Driver/Pods-Uniuni_Driver.debug.xcconfig"; sourceTree = "<group>"; };
+		72E775C975014F191C9617C4 /* Pods-Uniuni_DriverTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_DriverTests.release.xcconfig"; path = "Target Support Files/Pods-Uniuni_DriverTests/Pods-Uniuni_DriverTests.release.xcconfig"; sourceTree = "<group>"; };
 		9B02F0532859792800C23165 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B1730A0287E5722005AE7AD /* MapClusterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapClusterViewController.swift; sourceTree = "<group>"; };
 		9B1730A2287E5742005AE7AD /* GeoJsonDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoJsonDataModel.swift; sourceTree = "<group>"; };
@@ -89,6 +91,8 @@
 		9B513C982858DCF6006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B513C9A2858DCF6006865AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9BB33A0928767A0D003ABD2F /* PackageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageDataModel.swift; sourceTree = "<group>"; };
 		9BB33A0B28767A4F003ABD2F /* GoodsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodsType.swift; sourceTree = "<group>"; };
@@ -129,7 +133,7 @@
 		9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
 		9BF57B34286B783100372045 /* TopActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheet.swift; sourceTree = "<group>"; };
 		9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheetViewModel.swift; sourceTree = "<group>"; };
-		F1DBB92F8EC26E9C275996B2 /* Pods-Uniuni_DriverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_DriverTests.debug.xcconfig"; path = "Target Support Files/Pods-Uniuni_DriverTests/Pods-Uniuni_DriverTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FC9EE59809FA984C70D90CBA /* Pods-Uniuni_DriverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_DriverTests.debug.xcconfig"; path = "Target Support Files/Pods-Uniuni_DriverTests/Pods-Uniuni_DriverTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				176B0A777EC4C224176EB7B5 /* Pods_Uniuni_Driver.framework in Frameworks */,
+				D66EDD946221471036F74FF6 /* Pods_Uniuni_Driver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,18 +149,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9286100D4D04690CE7A85F8C /* Pods_Uniuni_DriverTests.framework in Frameworks */,
+				36F18553B75C67EC7A22BCCE /* Pods_Uniuni_DriverTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		76EAC11A551EAF87FEBFE02A /* Frameworks */ = {
+		60FDFBF0AEE70C9E6B4FCB34 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				579CA9B23B615B4E81FFB100 /* Pods_Uniuni_Driver.framework */,
-				6FDD98AF93F7FAD0676BDBC8 /* Pods_Uniuni_DriverTests.framework */,
+				0E5CF3EF4D38F764DA1EA477 /* Pods_Uniuni_Driver.framework */,
+				07026826862CDAE297EC49EE /* Pods_Uniuni_DriverTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,7 +197,7 @@
 				9B513CA22858DCF6006865AA /* Uniuni_DriverTests */,
 				9B513C8A2858DCF5006865AA /* Products */,
 				E48612006BEB7065588723B7 /* Pods */,
-				76EAC11A551EAF87FEBFE02A /* Frameworks */,
+				60FDFBF0AEE70C9E6B4FCB34 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -241,6 +245,7 @@
 		9BB33A0528767809003ABD2F /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
+				9B92E6AB289238A4007B34EE /* AppConstants.swift */,
 				9BB33A0928767A0D003ABD2F /* PackageDataModel.swift */,
 				9B1730A4287E70F0005AE7AD /* ServicePointDataModel.swift */,
 				9BB33A0B28767A4F003ABD2F /* GoodsType.swift */,
@@ -249,6 +254,7 @@
 				9BD4E2C5288CF96000CD4669 /* AddressType.swift */,
 				9BB33A1128767AEF003ABD2F /* FailedHandleType.swift */,
 				9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */,
+				9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */,
 				9B1730A2287E5742005AE7AD /* GeoJsonDataModel.swift */,
 			);
 			path = "Data Models";
@@ -324,10 +330,10 @@
 		E48612006BEB7065588723B7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				278EB061E6C38DAA07878581 /* Pods-Uniuni_Driver.debug.xcconfig */,
-				26589CCCDD33DA02F910BD27 /* Pods-Uniuni_Driver.release.xcconfig */,
-				F1DBB92F8EC26E9C275996B2 /* Pods-Uniuni_DriverTests.debug.xcconfig */,
-				1CC2B85F4CE8235167470B3A /* Pods-Uniuni_DriverTests.release.xcconfig */,
+				3CB7175CFBB55796070E347B /* Pods-Uniuni_Driver.debug.xcconfig */,
+				01E4D070D0E135850FEA02CF /* Pods-Uniuni_Driver.release.xcconfig */,
+				FC9EE59809FA984C70D90CBA /* Pods-Uniuni_DriverTests.debug.xcconfig */,
+				72E775C975014F191C9617C4 /* Pods-Uniuni_DriverTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -339,11 +345,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B513CB32858DCF6006865AA /* Build configuration list for PBXNativeTarget "Uniuni_Driver" */;
 			buildPhases = (
-				BA707856261EF34C4A97C0EE /* [CP] Check Pods Manifest.lock */,
+				68EAD6B7664D9C1244BAA65D /* [CP] Check Pods Manifest.lock */,
 				9B513C852858DCF5006865AA /* Sources */,
 				9B513C862858DCF5006865AA /* Frameworks */,
 				9B513C872858DCF5006865AA /* Resources */,
-				F861A2EBDA318EEE226D61DA /* [CP] Embed Pods Frameworks */,
+				FF8CCAFA47A023DA6C6D5BEA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -358,7 +364,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B513CB62858DCF6006865AA /* Build configuration list for PBXNativeTarget "Uniuni_DriverTests" */;
 			buildPhases = (
-				22CBA37EFA54F130923042DA /* [CP] Check Pods Manifest.lock */,
+				46D8A75C2D28B62ED126E391 /* [CP] Check Pods Manifest.lock */,
 				9B513C9B2858DCF6006865AA /* Sources */,
 				9B513C9C2858DCF6006865AA /* Frameworks */,
 				9B513C9D2858DCF6006865AA /* Resources */,
@@ -436,7 +442,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		22CBA37EFA54F130923042DA /* [CP] Check Pods Manifest.lock */ = {
+		46D8A75C2D28B62ED126E391 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -458,7 +464,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BA707856261EF34C4A97C0EE /* [CP] Check Pods Manifest.lock */ = {
+		68EAD6B7664D9C1244BAA65D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -480,7 +486,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F861A2EBDA318EEE226D61DA /* [CP] Embed Pods Frameworks */ = {
+		FF8CCAFA47A023DA6C6D5BEA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -529,12 +535,14 @@
 				9BB33A1028767AAA003ABD2F /* ExpressType.swift in Sources */,
 				9BC9F804285E53B300376D95 /* StringLocalizationExtension.swift in Sources */,
 				9BB33A0C28767A4F003ABD2F /* GoodsType.swift in Sources */,
+				9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */,
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
 				9BC724BC28846D8100229E51 /* UnderlinedLabel.swift in Sources */,
 				9BC724BE28846E1300229E51 /* LeadingTitleLabel.swift in Sources */,
 				9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */,
 				9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */,
+				9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */,
 				9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */,
 				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
 				9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */,
@@ -713,7 +721,7 @@
 		};
 		9B513CB42858DCF6006865AA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 278EB061E6C38DAA07878581 /* Pods-Uniuni_Driver.debug.xcconfig */;
+			baseConfigurationReference = 3CB7175CFBB55796070E347B /* Pods-Uniuni_Driver.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -742,7 +750,7 @@
 		};
 		9B513CB52858DCF6006865AA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 26589CCCDD33DA02F910BD27 /* Pods-Uniuni_Driver.release.xcconfig */;
+			baseConfigurationReference = 01E4D070D0E135850FEA02CF /* Pods-Uniuni_Driver.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -771,7 +779,7 @@
 		};
 		9B513CB72858DCF6006865AA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F1DBB92F8EC26E9C275996B2 /* Pods-Uniuni_DriverTests.debug.xcconfig */;
+			baseConfigurationReference = FC9EE59809FA984C70D90CBA /* Pods-Uniuni_DriverTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -791,7 +799,7 @@
 		};
 		9B513CB82858DCF6006865AA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1CC2B85F4CE8235167470B3A /* Pods-Uniuni_DriverTests.release.xcconfig */;
+			baseConfigurationReference = 72E775C975014F191C9617C4 /* Pods-Uniuni_DriverTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

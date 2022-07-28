@@ -130,7 +130,7 @@ class CoreDataManager {
         
         taskContext.perform {
             let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
-            fetchRequest.predicate = NSPredicate(format: "order_id = %@", orderId)
+            fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderId)
             do {
                 let packs = try taskContext.fetch(fetchRequest)
                 if packs.count > 0 {
