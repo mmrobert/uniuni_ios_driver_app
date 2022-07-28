@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Package" representedClassName="Package" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="address_type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="assign_time" optional="YES" attributeType="String"/>
         <attribute name="buzz_code" optional="YES" attributeType="String"/>
         <attribute name="delivery_by" optional="YES" attributeType="String"/>
@@ -49,7 +50,7 @@
         <attribute name="warehouse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="Package" positionX="-63" positionY="-18" width="128" height="299"/>
+        <element name="Package" positionX="-63" positionY="-18" width="128" height="314"/>
         <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="419"/>
     </elements>
 </model>

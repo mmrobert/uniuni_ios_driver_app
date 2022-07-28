@@ -6,6 +6,7 @@ target 'Uniuni_Driver' do
   use_frameworks!
 
   pod 'MapboxMaps', '10.6.0'
+  pod 'MapboxNavigation', '~> 2.6'
 
   target 'Uniuni_DriverTests' do
     inherit! :search_paths

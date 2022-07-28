@@ -20,6 +20,7 @@ struct PackageDataModel {
     var name: String?
     var mobile: String?
     var address: String?
+    var address_type: AddressType?
     var zipcode: String?
     var lat: String?
     var lng: String?
@@ -41,12 +42,37 @@ struct PackageDataModel {
             name: viewModel.name,
             mobile: viewModel.mobile,
             address: viewModel.address,
+            address_type: viewModel.address_type,
             zipcode: viewModel.zipcode,
             lat: viewModel.lat,
             lng: viewModel.lng,
             buzz_code: viewModel.buzz_code,
             postscript: viewModel.postscript,
             failed_handle_type: viewModel.failed_handle_type
+        )
+    }
+    
+    static func dataModelFrom(mapDetailViewModel: MapPackageDetailCardViewModel) -> PackageDataModel {
+        return PackageDataModel(
+            order_id: mapDetailViewModel.orderId,
+            order_sn: mapDetailViewModel.orderSN,
+            tracking_no: mapDetailViewModel.trackingNo,
+            goods_type: mapDetailViewModel.goodsType,
+            express_type: mapDetailViewModel.expressType,
+            route_no: mapDetailViewModel.routeNo,
+            assign_time: mapDetailViewModel.assignedTime,
+            delivery_by: mapDetailViewModel.deliveryBy,
+            state: nil,
+            name: mapDetailViewModel.name,
+            mobile: mapDetailViewModel.phone,
+            address: mapDetailViewModel.address,
+            address_type: mapDetailViewModel.addressType,
+            zipcode: nil,
+            lat: mapDetailViewModel.lat,
+            lng: mapDetailViewModel.lng,
+            buzz_code: mapDetailViewModel.buzz,
+            postscript: mapDetailViewModel.note,
+            failed_handle_type: nil
         )
     }
 }

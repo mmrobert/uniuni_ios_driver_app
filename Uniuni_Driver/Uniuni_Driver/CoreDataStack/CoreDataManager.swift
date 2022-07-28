@@ -59,6 +59,7 @@ class CoreDataManager {
             object.setValue(package.name, forKeyPath: "name")
             object.setValue(package.mobile, forKeyPath: "mobile")
             object.setValue(package.address, forKeyPath: "address")
+            object.setValue(package.address_type?.rawValue, forKeyPath: "address_type")
             object.setValue(package.zipcode, forKeyPath: "zipcode")
             object.setValue(package.lat, forKeyPath: "lat")
             object.setValue(package.lng, forKeyPath: "lng")
@@ -102,6 +103,8 @@ class CoreDataManager {
                     pack.name = object.value(forKey: "name") as? String
                     pack.mobile = object.value(forKey: "mobile") as? String
                     pack.address = object.value(forKey: "address") as? String
+                    let addressTypeInt = object.value(forKey: "address_type") as? Int
+                    pack.address_type = AddressType.getTypeFrom(value: addressTypeInt)
                     pack.zipcode = object.value(forKey: "zipcode") as? String
                     pack.lat = object.value(forKey: "lat") as? String
                     pack.lng = object.value(forKey: "lng") as? String
@@ -114,6 +117,33 @@ class CoreDataManager {
                 }
             } catch let error as NSError {
                 print("Could not fetch packages: \(error)")
+            }
+        }
+    }
+    
+    func updatePackage(package: PackageDataModel) {
+        
+        guard let orderId = package.order_id else {
+            return
+        }
+        let taskContext = newTaskContext()
+        
+        taskContext.perform {
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+            fetchRequest.predicate = NSPredicate(format: "order_id = %@", orderId)
+            do {
+                let packs = try taskContext.fetch(fetchRequest)
+                if packs.count > 0 {
+                    let managedObject = packs[0]
+                    managedObject.setValue(package.address_type?.rawValue, forKeyPath: "address_type")
+                    do {
+                        try taskContext.save()
+                    } catch let error as NSError {
+                        print("Could not save package: \(error)")
+                    }
+                }
+            } catch {
+                print("Could not fetch package: \(error)")
             }
         }
     }

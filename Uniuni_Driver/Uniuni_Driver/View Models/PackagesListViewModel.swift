@@ -38,6 +38,14 @@ class PackagesListViewModel: ObservableObject {
         self.coreDataManager.fetchPackages()
     }
     
+    func updatePackage(pack: PackageViewModel?) {
+        guard let pack = pack else {
+            return
+        }
+        let dataModel = PackageDataModel.dataModelFrom(viewModel: pack)
+        self.coreDataManager.updatePackage(package: dataModel)
+    }
+    
     func sort(list: [PackageViewModel], by: PackageSort, location: (lat: Double, lng: Double)) -> [PackageViewModel] {
         var sorted: [PackageViewModel] = []
         switch by {

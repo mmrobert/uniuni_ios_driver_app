@@ -169,7 +169,8 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func searchButtonAction() {
-        let searchView = PackageSearchView()
+        let searchView = PackageSearchView(naviController: self.navigationController)
+
         let searchVC = UIHostingController(rootView: searchView)
         self.navigationController?.pushViewController(searchVC, animated: true)
     }
@@ -177,6 +178,7 @@ class DeliveryListViewController: UIViewController {
     @objc
     private func routeButtonAction() {
         let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+        mapView.packageToShowDetail = nil
         self.navigationController?.pushViewController(mapView, animated: true)
     }
     
@@ -258,6 +260,13 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
         let viewModel = self.listToDisplay[indexPath.row]
         cell.configure(packageViewModel: viewModel, location: self.currentLocation)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pack = self.listToDisplay[indexPath.row]
+        let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+        mapView.packageToShowDetail = pack
+        self.navigationController?.pushViewController(mapView, animated: true)
     }
 }
 

@@ -10,13 +10,19 @@ import UIKit
 
 class MapPackageDetailCardViewModel {
     
+    var orderSN: String?
+    var orderId: Int?
+    var trackingNo: String?
     var routeNo: Int?
-    var addressType: Int?
+    var addressType: AddressType?
     var name: String?
     var phone: String?
     var address: String?
+    var lat: String?
+    var lng: String?
     var distance: Double?
     var distanceUnit: DistanceUnit?
+    var goodsType: GoodsType?
     var expressType: ExpressType?
     var assignedTime: String?
     var deliveryBy: String?
@@ -25,13 +31,19 @@ class MapPackageDetailCardViewModel {
     var failedButtonTitle: String?
     var deliveredButtonTitle: String?
 
-    init(routeNo: Int?,
-         addressType: Int?,
+    init(orderSN: String?,
+         orderId: Int?,
+         trackingNo: String?,
+         routeNo: Int?,
+         addressType: AddressType?,
          name: String?,
          phone: String?,
          address: String?,
+         lat: String?,
+         lng: String?,
          distance: Double?,
          distanceUnit: DistanceUnit?,
+         goodsType: GoodsType?,
          expressType: ExpressType?,
          assignedTime: String?,
          deliveryBy: String?,
@@ -40,13 +52,19 @@ class MapPackageDetailCardViewModel {
          failedButtonTitle: String?,
          deliveredButtonTitle: String?) {
 
+        self.orderSN = orderSN
+        self.orderId = orderId
+        self.trackingNo = trackingNo
         self.routeNo = routeNo
         self.addressType = addressType
         self.name = name
         self.phone = phone
         self.address = address
+        self.lat = lat
+        self.lng = lng
         self.distance = distance
         self.distanceUnit = distanceUnit
+        self.goodsType = goodsType
         self.expressType = expressType
         self.assignedTime = assignedTime
         self.deliveryBy = deliveryBy
@@ -57,20 +75,24 @@ class MapPackageDetailCardViewModel {
     }
     
     init(packageViewModel: PackageViewModel, location: (lat: Double, lng: Double), failedButtonTitle: String?, deliveredButtonTitle: String?) {
+        self.orderSN = packageViewModel.order_sn
+        self.orderId = packageViewModel.order_id
+        self.trackingNo = packageViewModel.tracking_no
         self.routeNo = packageViewModel.route_no
-        
-        self.addressType = 1
-        
+        self.addressType = packageViewModel.address_type
         self.name = packageViewModel.name
         self.phone = packageViewModel.mobile
         self.address = packageViewModel.address
+        self.lat = packageViewModel.lat
+        self.lng = packageViewModel.lng
         self.distance = packageViewModel.getDistanceFrom(location: location, distanceUnit: .KM)
         self.distanceUnit = .KM
+        self.goodsType = packageViewModel.goods_type
         self.expressType = packageViewModel.express_type
         self.assignedTime = packageViewModel.assign_time
         self.deliveryBy = packageViewModel.delivery_by
         self.buzz = packageViewModel.buzz_code
-        self.note = ""
+        self.note = packageViewModel.postscript
         
         self.failedButtonTitle = failedButtonTitle
         self.deliveredButtonTitle = deliveredButtonTitle

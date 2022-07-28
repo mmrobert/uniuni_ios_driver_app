@@ -9,27 +9,39 @@ import SwiftUI
 
 struct PackageSearchView: View {
     
+    var naviController: UINavigationController?
+    
     @ObservedObject var viewModel = PackagesListViewModel()
     @State private var searchString = ""
-
-        var body: some View {
-            List {
-                ForEach(searchString == "" ? viewModel.list : viewModel.list.filter {
-                    guard let trackingNo = $0.tracking_no else {
-                        return false
-                    }
-                    return trackingNo.contains(searchString)
-                }) {
-                    SearchCellView(package: $0)
+    @State private var selectedPackage: PackageViewModel?
+    
+    var body: some View {
+        List {
+            ForEach(searchString == "" ? viewModel.list : viewModel.list.filter {
+                guard let trackingNo = $0.tracking_no else {
+                    return false
                 }
+                return trackingNo.contains(searchString)
+            }) {
+                SearchCellView(package: $0, selectedPackage: $selectedPackage)
             }
-            .navigationTitle(String.searchStr)
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                viewModel.fetchPackages()
-            }
-            .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
         }
+        .navigationTitle(String.searchStr)
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.fetchPackages()
+        }
+        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+        .onChange(of: selectedPackage) { _ in
+            guard let selectedPackage = self.selectedPackage else {
+                return
+            }
+            self.naviController?.popViewController(animated: false)
+            let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+            mapView.packageToShowDetail = selectedPackage
+            self.naviController?.pushViewController(mapView, animated: true)
+        }
+    }
 }
 
 struct PackageSearchView_Previews: PreviewProvider {

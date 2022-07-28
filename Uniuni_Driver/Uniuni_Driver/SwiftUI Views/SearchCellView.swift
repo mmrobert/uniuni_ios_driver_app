@@ -10,18 +10,29 @@ import SwiftUI
 struct SearchCellView: View {
     
     private var package: PackageViewModel
+    @Binding var selectedPackage: PackageViewModel?
     
-    init(package: PackageViewModel) {
+    init(package: PackageViewModel, selectedPackage: Binding<PackageViewModel?>) {
         self.package = package
+        self._selectedPackage = selectedPackage
     }
     
     var body: some View {
-        Text(package.tracking_no ?? "")
+        HStack {
+            Text(package.tracking_no ?? "")
+        }
+        .onTapGesture {
+            self.selectedPackage = self.package
+        }
     }
 }
 
 struct SearchCellView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchCellView(package: PackageViewModel(dataModel: PackageDataModel()))
+        let binding = Binding<PackageViewModel?>(
+            get: { nil },
+            set: { _ in }
+        )
+        SearchCellView(package: PackageViewModel(dataModel: PackageDataModel()), selectedPackage: binding)
     }
 }
