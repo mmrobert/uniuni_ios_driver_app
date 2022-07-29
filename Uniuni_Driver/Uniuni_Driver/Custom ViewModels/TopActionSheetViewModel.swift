@@ -12,14 +12,14 @@ struct TopActionSheetViewModel {
  
     let title: String
     let actions: [Action]
-    
-    struct Action {
-        var title: String
-        var handler: ((String?) -> Void)?
- 
-        init(title: String, handler: ((String?) -> Void)? = nil) {
-            self.title = title
-            self.handler = handler
-        }
+}
+
+struct Action {
+    var title: String
+    var handler: ((String?) -> Void)?
+
+    init(title: String, handler: ((String?) -> Void)? = nil) {
+        self.title = title
+        self.handler = handler
     }
 }

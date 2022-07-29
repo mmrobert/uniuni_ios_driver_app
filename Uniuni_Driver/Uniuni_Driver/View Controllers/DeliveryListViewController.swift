@@ -185,22 +185,27 @@ class DeliveryListViewController: UIViewController {
     @objc
     private func sortButtonAction() {
         let sortSelection = TopActionSheet()
-        let dateSort = TopActionSheetViewModel.Action(title: String.dateStr) { [weak self] _ in
+        let expressSort = Action(title: String.expressStr) { [weak self] _ in
+            self?.sortTitleLabel?.text = String.expressStr
+            self?.packageSort = .express
+            self?.segmentSelected()
+        }
+        let dateSort = Action(title: String.dateStr) { [weak self] _ in
             self?.sortTitleLabel?.text = String.dateStr
             self?.packageSort = .date
             self?.segmentSelected()
         }
-        let routeSort = TopActionSheetViewModel.Action(title: String.routeStr) { [weak self] _ in
+        let routeSort = Action(title: String.routeStr) { [weak self] _ in
             self?.sortTitleLabel?.text = String.routeStr
             self?.packageSort = .route
             self?.segmentSelected()
         }
-        let distanceSort = TopActionSheetViewModel.Action(title: String.distanceStr) { [weak self] _ in
+        let distanceSort = Action(title: String.distanceStr) { [weak self] _ in
             self?.sortTitleLabel?.text = String.distanceStr
             self?.packageSort = .distance
             self?.segmentSelected()
         }
-        let actions = [dateSort, routeSort, distanceSort]
+        let actions = [expressSort, dateSort, routeSort, distanceSort]
         sortSelection.configure(viewModel: TopActionSheetViewModel(title: String.sortListByStr, actions: actions))
         sortSelection.modalPresentationStyle = .overCurrentContext
         self.present(sortSelection, animated: true)

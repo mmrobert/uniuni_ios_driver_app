@@ -49,5 +49,5 @@
 "Yes" = "Yes";
 "Mark Address Type" = "Mark Address Type";
 "Please choose address type" = "Please choose a type you want this address to marked.";
-
-
+"Google map is not installed" = "Google map is not installed.";
+"OK" = "OK";

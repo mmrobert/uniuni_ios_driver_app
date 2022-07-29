@@ -22,7 +22,6 @@ class MapClusterViewController: UIViewController {
         static let verticalSpacing: CGFloat = 8
         static let segmentedControlHeight: CGFloat = 48
         
-        
         static let featureQueryAreaWidth: CGFloat = 36
         static let mapZoneUpdateDuration: TimeInterval = 1.0
         static let defaultLocation: CLLocation = CLLocation(latitude: 49.2, longitude: -123.0)
@@ -378,9 +377,7 @@ class MapClusterViewController: UIViewController {
         alert.addAction(businessAct)
         alert.addAction(apartmentAct)
         
-        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel) { (UIAlertAction) in
-            print("cheng= cancel")
-        }
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
         
         alert.addAction(cancelAct)
         
@@ -392,43 +389,71 @@ class MapClusterViewController: UIViewController {
     
     private func showNavigationPickup() {
         
+        let mapDefaultInt = UserDefaults.standard.object(forKey: AppConstants.userDefaultsKey_map) as? Int
+        if let mapDefault = AddressNavigationType.getTypeFrom(value: mapDefaultInt) {
+            switch mapDefault {
+            case .appleMap:
+                self.openAppleNavigation()
+            case .googleMap:
+                self.openGoogleNavigation()
+            case .inAppMap:
+                self.openMapboxNavigation()
+            case .copyAddress:
+                break
+            }
+            return
+        }
+        
         let alert = UIAlertController(title: String.chooseMapStr, message: String.chooseAnApplicationToStartNavigationStr, preferredStyle: .actionSheet)
         
         let appleMapAct = UIAlertAction(title: String.appleMapStr, style: .default) { _ in
-            guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
-                return
+            let positiveAction = Action(title: String.yesStr) { _ in
+                UserDefaults.standard.set(AddressNavigationType.appleMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
+                self.openAppleNavigation()
             }
-            guard let url = URL(string: String(format: "http://maps.apple.com/?daddr=%f,%f&dirflg=d", lat, lng)) else {
-                return
+            let negativeAction = Action(title: String.noStr) { _ in
+                self.openAppleNavigation()
             }
-            
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            self.showAlert(
+                title: String.setDefaultMapStr,
+                msg: String(format: String.doYouWantToSetDefaultMapStr, String.appleMapStr),
+                positiveAction: positiveAction,
+                negativeAction: negativeAction
+            )
         }
         let googleMapAct = UIAlertAction(title: String.googleMapStr, style: .default) { _ in
-            guard let baseUrl = URL(string:"comgooglemaps://") else {
-                return
+            let positiveAction = Action(title: String.yesStr) { _ in
+                UserDefaults.standard.set(AddressNavigationType.googleMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
+                self.openGoogleNavigation()
             }
-            guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
-                return
+            let negativeAction = Action(title: String.noStr) { _ in
+                self.openGoogleNavigation()
             }
-            guard let url = URL(string: String(format: "comgooglemaps-x-callback://?saddr=&daddr=%f,%f&directionsmode=driving", lat, lng)) else {
-                return
-            }
-            if UIApplication.shared.canOpenURL(baseUrl) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                NSLog("Can't use comgooglemaps://");
-            }
+            self.showAlert(
+                title: String.setDefaultMapStr,
+                msg: String(format: String.doYouWantToSetDefaultMapStr, String.googleMapStr),
+                positiveAction: positiveAction,
+                negativeAction: negativeAction
+            )
         }
         let inAppMapAct = UIAlertAction(title: String.inAppMapStr, style: .default) { (UIAlertAction) in
-            self.openMapboxNavigation()
+            let positiveAction = Action(title: String.yesStr) { _ in
+                UserDefaults.standard.set(AddressNavigationType.inAppMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
+                self.openMapboxNavigation()
+            }
+            let negativeAction = Action(title: String.noStr) { _ in
+                self.openMapboxNavigation()
+            }
+            self.showAlert(
+                title: String.setDefaultMapStr,
+                msg: String(format: String.doYouWantToSetDefaultMapStr, String.inAppMapStr),
+                positiveAction: positiveAction,
+                negativeAction: negativeAction
+            )
         }
         let copyAddAct = UIAlertAction(title: String.copyAddressStr, style: .default) { (UIAlertAction) in
-            print("cheng= copy")
+            let pasteboard = UIPasteboard.general
+            pasteboard.string = self.packageToShowDetail?.address
         }
         
         alert.addAction(appleMapAct)
@@ -436,9 +461,7 @@ class MapClusterViewController: UIViewController {
         alert.addAction(inAppMapAct)
         alert.addAction(copyAddAct)
         
-        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel) { (UIAlertAction) in
-            print("cheng= cancel")
-        }
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
         
         alert.addAction(cancelAct)
         
@@ -446,6 +469,40 @@ class MapClusterViewController: UIViewController {
         alert.popoverPresentationController?.sourceView = self.view
         
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func openAppleNavigation() {
+        guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
+            return
+        }
+        guard let url = URL(string: String(format: "http://maps.apple.com/?daddr=%f,%f&dirflg=d", lat, lng)) else {
+            return
+        }
+        
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
+    private func openGoogleNavigation() {
+        guard let baseUrl = URL(string:"comgooglemaps://") else {
+            return
+        }
+        guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
+            return
+        }
+        guard let url = URL(string: String(format: "comgooglemaps-x-callback://?saddr=&daddr=%f,%f&directionsmode=driving", lat, lng)) else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(baseUrl) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UserDefaults.standard.removeObject(forKey: AppConstants.userDefaultsKey_map)
+            let positiveAction = Action(title: String.OKStr)
+            self.showAlert(title: nil, msg: String.googleMapIsNotInstalledStr, positiveAction: positiveAction, negativeAction: nil)
+        }
     }
     
     private func openMapboxNavigation() {
@@ -469,10 +526,6 @@ class MapClusterViewController: UIViewController {
                     return
                 }
                 
-                // For demonstration purposes, simulate locations if the Simulate Navigation option is on.
-                // Since first route is retrieved from response `routeIndex` is set to 0.
-                //let navigationService = MapboxNavigationService(routeResponse: response, routeIndex: 0, routeOptions: options, simulating: .always)
-                
                 let credentials = Credentials()
                 let navigationService = MapboxNavigationService(
                     routeResponse: response,
@@ -484,12 +537,34 @@ class MapClusterViewController: UIViewController {
                 let navigationOptions = NavigationOptions(navigationService: navigationService)
                 let navigationViewController = NavigationViewController(for: response, routeIndex: 0, routeOptions: options, navigationOptions: navigationOptions)
                 navigationViewController.modalPresentationStyle = .fullScreen
-                // Render part of the route that has been traversed with full transparency, to give the illusion of a disappearing route.
+                // Render part of the route that has been traversed with full
+                // transparency, to give the illusion of a disappearing route.
                 navigationViewController.routeLineTracksTraversal = true
                 
                 strongSelf.present(navigationViewController, animated: true, completion: nil)
             }
         }
+    }
+    
+    private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+
+        if positiveAction != nil {
+            let positiveHandler: (UIAlertAction) -> Void = { alertAction in
+                positiveAction?.handler?(alertAction.title)
+            }
+            alert.addAction(UIAlertAction(title: positiveAction?.title, style: .default, handler: positiveHandler))
+        }
+        
+        if negativeAction != nil {
+            let negativeHandler: (UIAlertAction) -> Void = { alertAction in
+                negativeAction?.handler?(alertAction.title)
+            }
+            alert.addAction(UIAlertAction(title: negativeAction?.title, style: .cancel, handler: negativeHandler))
+        }
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func addOrangePin(at coordinate: CLLocationCoordinate2D) {

@@ -16,6 +16,7 @@ class TopActionSheet: UIViewController {
         static let titleHeight: CGFloat = 38
         static let separatorLineHeight: CGFloat = 1
         static let leadingSpacing: CGFloat = 16
+        static let bottomSpacing: CGFloat = 18
         static let verticalSpacing: CGFloat = 8
     }
     
@@ -37,6 +38,13 @@ class TopActionSheet: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = Theme.default.backgroundOverlayColor
+        return view
+    }()
+    
+    private lazy var actionsContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = Theme.default.actionsBackgroundColor
         return view
     }()
     
@@ -71,6 +79,7 @@ class TopActionSheet: UIViewController {
         self.view.backgroundColor = Theme.default.backgroundColor
         self.setupBackgroundOverlayView()
         self.setupTitleView()
+        self.setupActionsContainerView()
         self.setupActionsStackView()
     }
 
@@ -94,15 +103,9 @@ class TopActionSheet: UIViewController {
         for action in viewModel.actions {
             self.actionsStackView.addArrangedSubview(self.createSingleActionView(action: action, theme: theme))
         }
-        let bottomSpace = UIView()
-        bottomSpace.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bottomSpace.heightAnchor.constraint(equalToConstant: Constants.verticalSpacing)
-        ])
-        self.actionsStackView.addArrangedSubview(bottomSpace)
     }
     
-    private func createSingleActionView(action: TopActionSheetViewModel.Action, theme: TopActionSheet.Theme?) -> UIView {
+    private func createSingleActionView(action: Action, theme: TopActionSheet.Theme?) -> UIView {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         let separatorLine = UIView()
@@ -180,15 +183,26 @@ extension TopActionSheet {
         ])
     }
     
+    private func setupActionsContainerView() {
+        
+        self.actionsContainerView.layer.cornerRadius = Constants.cornerRadius
+        self.actionsContainerView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        self.view.addSubview(self.actionsContainerView)
+        NSLayoutConstraint.activate([
+            actionsContainerView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            actionsContainerView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
+            actionsContainerView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+    }
+    
     private func setupActionsStackView() {
         
-        self.actionsStackView.layer.cornerRadius = Constants.cornerRadius
-        self.actionsStackView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        self.view.addSubview(self.actionsStackView)
+        self.actionsContainerView.addSubview(self.actionsStackView)
         NSLayoutConstraint.activate([
-            actionsStackView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            actionsStackView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
-            actionsStackView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+            actionsStackView.leadingAnchor.constraint(equalTo: self.actionsContainerView.leadingAnchor),
+            actionsStackView.topAnchor.constraint(equalTo: self.actionsContainerView.topAnchor),
+            actionsStackView.trailingAnchor.constraint(equalTo: self.actionsContainerView.trailingAnchor),
+            actionsStackView.bottomAnchor.constraint(equalTo: actionsContainerView.bottomAnchor, constant: -Constants.bottomSpacing)
         ])
     }
 }

@@ -49,7 +49,7 @@ class PackagesListViewModel: ObservableObject {
     func sort(list: [PackageViewModel], by: PackageSort, location: (lat: Double, lng: Double)) -> [PackageViewModel] {
         var sorted: [PackageViewModel] = []
         switch by {
-        case .date:
+        case .express:
             sorted = list.sorted(by: { (lh, rh) -> Bool in
                 let lhExpressType = lh.express_type ?? .regular
                 let rhExpressType = rh.express_type ?? .regular
@@ -63,35 +63,23 @@ class PackagesListViewModel: ObservableObject {
                     return lhDate < rhDate
                 }
             })
+        case .date:
+            sorted = list.sorted(by: { (lh, rh) -> Bool in
+                let lhDate = lh.delivery_by ?? Date.dateTimeString()
+                let rhDate = rh.delivery_by ?? Date.dateTimeString()
+                return lhDate < rhDate
+            })
         case .route:
             sorted = list.sorted(by: { (lh, rh) -> Bool in
-                let lhExpressType = lh.express_type ?? .regular
-                let rhExpressType = rh.express_type ?? .regular
                 let lhRoute = lh.route_no ?? 0
                 let rhRoute = rh.route_no ?? 0
-                if lhExpressType.rawValue > rhExpressType.rawValue {
-                    return true
-                } else if lhExpressType.rawValue < rhExpressType.rawValue {
-                    return false
-                } else {
-                    return lhRoute < rhRoute
-                }
+                return lhRoute < rhRoute
             })
         case .distance:
             sorted = list.sorted(by: { (lh, rh) -> Bool in
-                let lhExpressType = lh.express_type ?? .regular
-                let rhExpressType = rh.express_type ?? .regular
-                
                 let lhDistance = lh.getDistanceFrom(location: location, distanceUnit: .KM)
                 let rhDistance = rh.getDistanceFrom(location: location, distanceUnit: .KM)
-                
-                if lhExpressType.rawValue > rhExpressType.rawValue {
-                    return true
-                } else if lhExpressType.rawValue < rhExpressType.rawValue {
-                    return false
-                } else {
-                    return lhDistance < rhDistance
-                }
+                return lhDistance < rhDistance
             })
         }
         return sorted
@@ -100,134 +88,143 @@ class PackagesListViewModel: ObservableObject {
     func saveMockPackagesList() {
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 11,
-            order_sn: "",
+            order_sn: "11100",
             tracking_no: "11111",
             goods_type: .regular,
             express_type: .express,
             route_no: 111,
-            assign_time: "",
+            assign_time: "4-1-2022",
             delivery_by: "5-1-2022",
             state: .delivering,
             name: "John Lee",
-            mobile: "",
+            mobile: "11111111",
             address: "1111 Bayview St",
+            address_type: .townhouse,
             zipcode: "11",
             lat: "49.17",
             lng: "-123.11",
             buzz_code: "11",
-            postscript: nil,
-            failed_handle_type: nil
+            postscript: "This pack 11",
+            failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 22,
-            order_sn: "",
+            order_sn: "22200",
             tracking_no: "22222",
             goods_type: .regular,
             express_type: .regular,
             route_no: 222,
-            assign_time: "",
+            assign_time: "4-3-2022",
             delivery_by: "5-3-2022",
             state: .delivering,
             name: "Lucy Su",
-            mobile: "",
+            mobile: "222222222",
             address: "222 Bayview St",
+            address_type: .house,
             zipcode: "22",
             lat: "49.25",
             lng: "-122.78",
-            buzz_code: "22",
-            postscript: nil,
-            failed_handle_type: nil
+            buzz_code: "220",
+            postscript: "This pack 22",
+            failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 33,
-            order_sn: "",
+            order_sn: "33300",
             tracking_no: "33333",
             goods_type: .medical,
             express_type: .regular,
             route_no: 33,
-            assign_time: "",
+            assign_time: "5-1-2022",
             delivery_by: "5-4-2022",
             state: .delivering,
             name: "Charlie John",
-            mobile: "",
+            mobile: "33333333",
             address: "333 Bayview St",
+            address_type: .business,
             zipcode: "33",
             lat: "49.27",
             lng: "-122.86",
             buzz_code: "33",
-            postscript: nil,
-            failed_handle_type: nil
+            postscript: "This pack 33",
+            failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 999,
-            order_sn: "",
+            order_sn: "99900",
             tracking_no: "99999",
             goods_type: .medical,
             express_type: .express,
             route_no: 99,
-            assign_time: "",
+            assign_time: "5-2-2019",
             delivery_by: "5-4-2019",
             state: .delivering,
             name: "Charlie Peter",
-            mobile: "",
+            mobile: "999999999",
             address: "999 Bayview St",
+            address_type: .apartment,
             zipcode: "99",
             lat: "49.27",
             lng: "-122.86",
             buzz_code: "99",
-            postscript: nil,
-            failed_handle_type: nil
+            postscript: "This pack 99",
+            failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 44,
-            order_sn: "",
+            order_sn: "44400",
             tracking_no: "44444",
             goods_type: .medical,
             express_type: .regular,
             route_no: 444,
-            assign_time: "",
+            assign_time: "6-29-2022",
             delivery_by: "7-1-2022",
             state: .undelivered,
             name: "Peter Lee",
-            mobile: "",
+            mobile: "444444444",
             address: "4444 Bayview St",
+            address_type: .house,
             zipcode: "44",
             lat: "49.24",
             lng: "-122.98",
             buzz_code: "44",
-            postscript: nil,
-            failed_handle_type: nil
+            postscript: "This pack 44",
+            failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 55,
-            order_sn: "",
+            order_sn: "555500",
             tracking_no: "55555",
             goods_type: .regular,
             express_type: .regular,
             route_no: 555,
-            assign_time: "",
+            assign_time: "8-29-2022",
             delivery_by: "9-1-2022",
             state: .undelivered,
             name: "Water Lee",
-            mobile: "",
+            mobile: "55555555",
             address: "555 Bayview St",
+            address_type: .business,
             zipcode: "55",
             lat: "49.25",
             lng: "-123.13",
             buzz_code: "55",
-            postscript: nil,
-            failed_handle_type: nil
+            postscript: "This pack 55",
+            failed_handle_type: .wrongAddress
         ))
     }
 }
 
 enum PackageSort: String {
+    case express
     case date
     case route
     case distance
     
     func getDisplayString() -> String {
         switch self {
+        case .express:
+            return String.expressStr
         case .date:
             return String.dateStr
         case .route:
