@@ -54,5 +54,11 @@ extension String {
     static let pleaseChooseAddressTypeStr: String = NSLocalizedString("Please choose address type", comment: "")
     static let googleMapIsNotInstalledStr: String = NSLocalizedString("Google map is not installed", comment: "")
     static let OKStr: String = NSLocalizedString("OK", comment: "")
+    static let phoneNumberStr: String = NSLocalizedString("Phone Number", comment: "")
+    static let callStr: String = NSLocalizedString("Call", comment: "")
+    static let textStr: String = NSLocalizedString("Text", comment: "")
+    
+    static let textLanguageStr: String = NSLocalizedString("Text Language", comment: "")
+    static let chooseALanguageStr: String = NSLocalizedString("Choose a language", comment: "")
     
 }

@@ -29,7 +29,7 @@ struct PackageSearchView: View {
         .navigationTitle(String.searchStr)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            viewModel.fetchPackages()
+            viewModel.fetchPackagesFromCoreData()
         }
         .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: selectedPackage) { _ in
@@ -37,7 +37,10 @@ struct PackageSearchView: View {
                 return
             }
             self.naviController?.popViewController(animated: false)
-            let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+            let mapView = MapClusterViewController(
+                packagesListViewModel: PackagesListViewModel(),
+                servicesListViewModel: ServicePointsListViewModel(),
+                mapViewModel: MapViewModel())
             mapView.packageToShowDetail = selectedPackage
             self.naviController?.pushViewController(mapView, animated: true)
         }

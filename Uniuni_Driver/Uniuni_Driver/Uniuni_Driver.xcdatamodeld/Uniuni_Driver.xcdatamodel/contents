@@ -19,12 +19,11 @@
         <attribute name="route_no" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tracking_no" optional="YES" attributeType="String"/>
+        <attribute name="warehouse_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="zipcode" optional="YES" attributeType="String"/>
     </entity>
     <entity name="ServicePoint" representedClassName="ServicePoint" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
-        <attribute name="biz_code" optional="YES" attributeType="String"/>
-        <attribute name="biz_message" optional="YES" attributeType="String"/>
         <attribute name="business_hours" optional="YES" attributeType="String"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="company" optional="YES" attributeType="String"/>
@@ -50,7 +49,7 @@
         <attribute name="warehouse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="Package" positionX="-63" positionY="-18" width="128" height="314"/>
-        <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="419"/>
+        <element name="Package" positionX="-63" positionY="-18" width="128" height="329"/>
+        <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="389"/>
     </elements>
 </model>

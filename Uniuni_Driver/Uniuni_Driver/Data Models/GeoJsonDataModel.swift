@@ -42,12 +42,12 @@ struct GeoJsonDataModel {
         
         var features: [Feature] = []
         for service in servicesList {
-            let lat = service.biz_data?.lat ?? Constants.defaultLatitude
-            let lng = service.biz_data?.lng ?? Constants.defaultLongitude
+            let lat = service.lat ?? Constants.defaultLatitude
+            let lng = service.lng ?? Constants.defaultLongitude
             let point = Point(CLLocationCoordinate2D(latitude: lat, longitude: lng))
             let geometry: Geometry = .point(point)
             var feature = Feature(geometry: geometry)
-            feature.identifier = FeatureIdentifier(service.biz_data?.name ?? "")
+            feature.identifier = FeatureIdentifier(service.name ?? "")
             feature.properties = ["isService": .boolean(true)]
             features.append(feature)
         }

@@ -258,6 +258,7 @@ class MapPackageDetailCardView: UIView {
     
     var chooseAddressTypeAction: (() -> Void)?
     var navigationAction: (() -> Void)?
+    var longPressAddressAction: (() -> Void)?
     var phoneMsgAction: (() -> Void)?
     
     convenience init(theme: MapPackageDetailCardView.Theme? = nil) {
@@ -327,6 +328,9 @@ class MapPackageDetailCardView: UIView {
         let navigationTap = UITapGestureRecognizer(target: self, action: #selector(MapPackageDetailCardView.navigationCheck))
         self.addressLabel.addGestureRecognizer(navigationTap)
         
+        let addressLongPress = UILongPressGestureRecognizer(target: self, action: #selector(MapPackageDetailCardView.addressLongPressCheck))
+        self.addressLabel.addGestureRecognizer(addressLongPress)
+        
         self.phoneLabel.isUserInteractionEnabled = true
         let phoneTap = UITapGestureRecognizer(target: self, action: #selector(MapPackageDetailCardView.phoneCheck))
         self.phoneLabel.addGestureRecognizer(phoneTap)
@@ -349,6 +353,11 @@ class MapPackageDetailCardView: UIView {
     @objc
     private func navigationCheck() {
         self.navigationAction?()
+    }
+    
+    @objc
+    private func addressLongPressCheck() {
+        self.longPressAddressAction?()
     }
     
     func updateAddressType(addressType: AddressType) {

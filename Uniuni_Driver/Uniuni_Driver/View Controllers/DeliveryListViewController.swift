@@ -92,7 +92,8 @@ class DeliveryListViewController: UIViewController {
         self.observingViewModels()
         
         // fetch packages
-        self.packagesListViewModel.fetchPackages()
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
+        //self.packagesListViewModel.fetchPackagesFromCoreData()
         //self.packagesListViewModel.saveMockPackagesList()
     }
     
@@ -177,7 +178,10 @@ class DeliveryListViewController: UIViewController {
     
     @objc
     private func routeButtonAction() {
-        let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+        let mapView = MapClusterViewController(
+            packagesListViewModel: PackagesListViewModel(),
+            servicesListViewModel: ServicePointsListViewModel(),
+            mapViewModel: MapViewModel())
         mapView.packageToShowDetail = nil
         self.navigationController?.pushViewController(mapView, animated: true)
     }
@@ -269,7 +273,10 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pack = self.listToDisplay[indexPath.row]
-        let mapView = MapClusterViewController(packagesListViewModel: PackagesListViewModel(), servicesListViewModel: ServicePointsListViewModel())
+        let mapView = MapClusterViewController(
+            packagesListViewModel: PackagesListViewModel(),
+            servicesListViewModel: ServicePointsListViewModel(),
+            mapViewModel: MapViewModel())
         mapView.packageToShowDetail = pack
         self.navigationController?.pushViewController(mapView, animated: true)
     }

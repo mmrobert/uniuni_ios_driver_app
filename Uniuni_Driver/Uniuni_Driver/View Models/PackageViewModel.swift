@@ -28,6 +28,7 @@ struct PackageViewModel: Identifiable, Equatable {
     var lng: String?
     var buzz_code: String?
     var postscript: String?
+    var warehouse_id: Int?
     var failed_handle_type: FailedHandleType?
     
     init(dataModel: PackageDataModel) {
@@ -49,6 +50,7 @@ struct PackageViewModel: Identifiable, Equatable {
         self.lng = dataModel.lng
         self.buzz_code = dataModel.buzz_code
         self.postscript = dataModel.postscript
+        self.warehouse_id = dataModel.warehouse_id
         self.failed_handle_type = dataModel.failed_handle_type
     }
     

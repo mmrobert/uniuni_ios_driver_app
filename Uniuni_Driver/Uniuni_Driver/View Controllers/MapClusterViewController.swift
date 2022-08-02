@@ -67,11 +67,19 @@ class MapClusterViewController: UIViewController {
     private var cardViewTopConstraint: NSLayoutConstraint?
     private var detailCardViewTopConstraint: NSLayoutConstraint?
     
-    var packageToShowDetail: PackageViewModel?
+    @Published var packageToShowDetail: PackageViewModel?
+    var serviceToShowDetail: ServicePointViewModel?
+    var mapViewModel: MapViewModel?
     
-    init(packagesListViewModel: PackagesListViewModel, servicesListViewModel: ServicePointsListViewModel) {
+    private var languagesList: [LanguageDataModel] = []
+    
+    init(packagesListViewModel: PackagesListViewModel,
+         servicesListViewModel: ServicePointsListViewModel,
+         mapViewModel: MapViewModel)
+    {
         self.packagesListViewModel = packagesListViewModel
         self.servicesListViewModel = servicesListViewModel
+        self.mapViewModel = mapViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -115,8 +123,9 @@ class MapClusterViewController: UIViewController {
             self?.setupSingleTapAction()
             // fetch packages
             self?.observingViewModels()
-            self?.packagesListViewModel.fetchPackages()
-            self?.servicesListViewModel.fetchServicePoints()
+            self?.packagesListViewModel.fetchPackagesFromCoreData()
+            self?.servicesListViewModel.fetchServicesFromAPI(driverID: 100)
+            //self?.servicesListViewModel.fetchServicePointsFromCoreData()
         }
     }
     
@@ -230,11 +239,11 @@ class MapClusterViewController: UIViewController {
                 self?.restoreViewAnnotationColor()
                 if let isService = (feature.properties?["isService"] as? JSONValue)?.rawValue as? Bool, isService {
                     let service = self?.servicesList.filter {
-                        $0.biz_data?.name == feature.identifier?.rawValue as? String
+                        $0.name == feature.identifier?.rawValue as? String
                     }.first
                     if let service = service {
-                        let lat = service.biz_data?.lat ?? Constants.defaultLocation.coordinate.latitude
-                        let lng = service.biz_data?.lng ?? Constants.defaultLocation.coordinate.longitude
+                        let lat = service.lat ?? Constants.defaultLocation.coordinate.latitude
+                        let lng = service.lng ?? Constants.defaultLocation.coordinate.longitude
                         self?.addOrangeServicePoint(at: CLLocationCoordinate2D(latitude: lat, longitude: lng))
                         self?.showServicePointCard(feature: feature)
                     }
@@ -294,8 +303,9 @@ class MapClusterViewController: UIViewController {
             return
         }
         let serviceToShow = self.servicesList.filter {
-            $0.biz_data?.name == name
+            $0.name == name
         }.first
+        self.serviceToShowDetail = serviceToShow
         guard let serviceToShow = serviceToShow else {
             return
         }
@@ -332,10 +342,13 @@ class MapClusterViewController: UIViewController {
             self.showAddressTypePickup()
         }
         self.detailCardView.navigationAction = {
+            self.navigationAction()
+        }
+        self.detailCardView.longPressAddressAction = {
             self.showNavigationPickup()
         }
         self.detailCardView.phoneMsgAction = {
-            
+            self.showCallTextPickup()
         }
         
         self.detailCardView.configure(viewModel: viewModel)
@@ -343,7 +356,9 @@ class MapClusterViewController: UIViewController {
         self.detailCardViewTopConstraint?.constant = -self.detailCardView.bounds.height
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             self?.detailCardView.layoutIfNeeded()
-        }, completion: nil)
+        }) { _ in
+            self.zoomToDetailPackageLocation()
+        }
     }
     
     private func showAddressTypePickup() {
@@ -353,23 +368,23 @@ class MapClusterViewController: UIViewController {
         let houseAct = UIAlertAction(title: String.houseStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .house)
             self.packageToShowDetail?.address_type = .house
-            self.packagesListViewModel.updatePackage(pack: self.packageToShowDetail)
+            self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
             
         }
         let townhouseAct = UIAlertAction(title: String.townhouseStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .townhouse)
             self.packageToShowDetail?.address_type = .townhouse
-            self.packagesListViewModel.updatePackage(pack: self.packageToShowDetail)
+            self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
         }
         let businessAct = UIAlertAction(title: String.businessStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .business)
             self.packageToShowDetail?.address_type = .business
-            self.packagesListViewModel.updatePackage(pack: self.packageToShowDetail)
+            self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
         }
         let apartmentAct = UIAlertAction(title: String.apartmentStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .apartment)
             self.packageToShowDetail?.address_type = .apartment
-            self.packagesListViewModel.updatePackage(pack: self.packageToShowDetail)
+            self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
         }
         
         alert.addAction(houseAct)
@@ -387,7 +402,7 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func showNavigationPickup() {
+    private func navigationAction() {
         
         let mapDefaultInt = UserDefaults.standard.object(forKey: AppConstants.userDefaultsKey_map) as? Int
         if let mapDefault = AddressNavigationType.getTypeFrom(value: mapDefaultInt) {
@@ -403,6 +418,11 @@ class MapClusterViewController: UIViewController {
             }
             return
         }
+        
+        self.showNavigationPickup()
+    }
+    
+    private func showNavigationPickup() {
         
         let alert = UIAlertController(title: String.chooseMapStr, message: String.chooseAnApplicationToStartNavigationStr, preferredStyle: .actionSheet)
         
@@ -546,6 +566,83 @@ class MapClusterViewController: UIViewController {
         }
     }
     
+    private func showCallTextPickup() {
+        
+        let alert = UIAlertController(title: String.phoneNumberStr, message: self.packageToShowDetail?.mobile, preferredStyle: .actionSheet)
+        
+        let callAct = UIAlertAction(title: String.callStr, style: .default) { _ in
+            self.callPhoneNumber()
+        }
+        let textAct = UIAlertAction(title: String.textStr, style: .default) { _ in
+            self.msgLanguagePickup()
+        }
+        
+        alert.addAction(callAct)
+        alert.addAction(textAct)
+        
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
+        
+        alert.addAction(cancelAct)
+        
+        // for iPad Support
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func callPhoneNumber() {
+        guard let phone = self.packageToShowDetail?.mobile else {
+            return
+        }
+        guard let url = URL(string: "telprompt://\(phone)"),
+            UIApplication.shared.canOpenURL(url) else {
+            return
+        }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    private func msgLanguagePickup() {
+        
+        guard self.languagesList.count > 0 else {
+            return
+        }
+        
+        guard let warehouseID = self.packageToShowDetail?.warehouse_id else {
+            return
+        }
+        
+        let alert = UIAlertController(title: String.textLanguageStr, message: String.chooseALanguageStr, preferredStyle: .actionSheet)
+        
+        for language in self.languagesList {
+            let act = UIAlertAction(title: language.name, style: .default) { _ in
+                self.fetchMsgTemplate(warehouseID: warehouseID, language: language.code)
+            }
+            alert.addAction(act)
+        }
+        
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
+        
+        alert.addAction(cancelAct)
+        
+        // for iPad Support
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func fetchMsgTemplate(warehouseID: Int, language: String?) {
+        
+    }
+    
+    private func zoomToDetailPackageLocation() {
+        guard let lat = Double(self.packageToShowDetail?.lat ?? ""), let lng = Double(self.packageToShowDetail?.lng ?? "") else {
+            return
+        }
+        let latRegion = (lat - 0.03, lat + 0.01)
+        let lngRegion = (lng - 0.01, lng + 0.01)
+        self.updateCameraBound(latRegion: latRegion, lngRegion: lngRegion)
+    }
+    
     private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
         
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
@@ -623,6 +720,20 @@ class MapClusterViewController: UIViewController {
                 strongSelf.updateDataSource(packagesList: packList, servicesList: serviceList)
             })
             .store(in: &disposables)
+        
+        self.$packageToShowDetail
+            .sink(receiveValue: { [weak self] (pack) in
+                guard let warehouseID = pack?.warehouse_id else {
+                    return
+                }
+                self?.mapViewModel?.fetchLanguagesFromAPI(warehouseID: warehouseID)
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$languagesList
+            .sink(receiveValue: { [weak self] (languagesList) in
+                self?.languagesList = languagesList
+            })
+            .store(in: &disposables)
     }
     
     private func findPackageRegion(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {
@@ -634,10 +745,10 @@ class MapClusterViewController: UIViewController {
             Double(pack.lng ?? "")
         }
         let latsService: [Double] = servicesList.compactMap { service -> Double? in
-            service.biz_data?.lat
+            service.lat
         }
         let lngsService: [Double] = servicesList.compactMap { service -> Double? in
-            service.biz_data?.lng
+            service.lng
         }
         let lats = latsPack + latsService
         let lngs = lngsPack + lngsService
