@@ -25,7 +25,34 @@ class ServicePointsListViewModel: ObservableObject {
         }
     }
     
-    func fetchServicePoints() {
+    func fetchServicesFromAPI(driverID: Int) {
+        
+        NetworkService.shared.fetchServiceList(driverID: driverID)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] value in
+                guard let strongSelf = self else { return }
+                switch value {
+                case .failure:
+                    strongSelf.list = []
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] packages in
+                guard let strongSelf = self else { return }
+                guard let biz_data = packages.biz_data else { return }
+                strongSelf.saveServicesToCoreData(services: [biz_data])
+                strongSelf.list = [ServicePointViewModel(dataModel: biz_data)]
+            })
+            .store(in: &disposables)
+    }
+    
+    private func saveServicesToCoreData(services: [ServicePointDataModel]) {
+        for service in services {
+            coreDataManager.saveServicePoint(servicePoint: service)
+        }
+    }
+    
+    func fetchServicePointsFromCoreData() {
         self.coreDataManager.$services
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] services in
@@ -39,17 +66,13 @@ class ServicePointsListViewModel: ObservableObject {
     }
     
     func saveMockServicesList() {
-        let bizData1 = ServicePointDataModel.Biz_Data(
+        let data1 = ServicePointDataModel(
             id: 99,
             name: "YY99",
             address: "2345 Broadway B, Vancouver",
             lat: 49.2,
             lng: -123.0
         )
-        coreDataManager.saveServicePoint(servicePoint: ServicePointDataModel(
-            biz_code: "999",
-            biz_message: "999",
-            biz_data: bizData1
-        ))
+        coreDataManager.saveServicePoint(servicePoint: data1)
     }
 }

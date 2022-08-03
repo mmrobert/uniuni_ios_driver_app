@@ -25,7 +25,56 @@ class PackagesListViewModel: ObservableObject {
         }
     }
     
-    func fetchPackages() {
+    func fetchPackagesFromAPI(driverID: Int) {
+        
+        NetworkService.shared.fetchDeliveringList(driverID: driverID)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] value in
+                guard let strongSelf = self else { return }
+                switch value {
+                case .failure:
+                    strongSelf.list = []
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] packages in
+                guard let strongSelf = self else { return }
+                guard let biz_data = packages.biz_data else { return }
+                strongSelf.savePackagesToCoreData(packs: biz_data)
+                strongSelf.list = strongSelf.list + biz_data.map {
+                    PackageViewModel(dataModel: $0)
+                }
+            })
+            .store(in: &disposables)
+        
+        NetworkService.shared.fetchUndeliveredList(driverID: driverID)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] value in
+                guard let strongSelf = self else { return }
+                switch value {
+                case .failure:
+                    strongSelf.list = []
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] packages in
+                guard let strongSelf = self else { return }
+                guard let biz_data = packages.biz_data else { return }
+                strongSelf.savePackagesToCoreData(packs: biz_data)
+                strongSelf.list = strongSelf.list + biz_data.map {
+                    PackageViewModel(dataModel: $0)
+                }
+            })
+            .store(in: &disposables)
+    }
+    
+    private func savePackagesToCoreData(packs: [PackageDataModel]) {
+        for pack in packs {
+            coreDataManager.savePackage(package: pack)
+        }
+    }
+    
+    func fetchPackagesFromCoreData() {
         self.coreDataManager.$packages
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] packages in
@@ -38,7 +87,7 @@ class PackagesListViewModel: ObservableObject {
         self.coreDataManager.fetchPackages()
     }
     
-    func updatePackage(pack: PackageViewModel?) {
+    func updatePackageForCoreData(pack: PackageViewModel?) {
         guard let pack = pack else {
             return
         }
@@ -105,6 +154,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-123.11",
             buzz_code: "11",
             postscript: "This pack 11",
+            warehouse_id: 1,
             failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -126,6 +176,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-122.78",
             buzz_code: "220",
             postscript: "This pack 22",
+            warehouse_id: 2,
             failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -147,6 +198,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-122.86",
             buzz_code: "33",
             postscript: "This pack 33",
+            warehouse_id: 3,
             failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -168,6 +220,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-122.86",
             buzz_code: "99",
             postscript: "This pack 99",
+            warehouse_id: 9,
             failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -189,6 +242,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-122.98",
             buzz_code: "44",
             postscript: "This pack 44",
+            warehouse_id: 4,
             failed_handle_type: .wrongAddress
         ))
         coreDataManager.savePackage(package: PackageDataModel(
@@ -210,6 +264,7 @@ class PackagesListViewModel: ObservableObject {
             lng: "-123.13",
             buzz_code: "55",
             postscript: "This pack 55",
+            warehouse_id: 5,
             failed_handle_type: .wrongAddress
         ))
     }

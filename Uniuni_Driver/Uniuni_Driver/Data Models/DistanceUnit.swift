@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DistanceUnit: String {
+enum DistanceUnit: String, Codable {
     case KM
     case MI
     

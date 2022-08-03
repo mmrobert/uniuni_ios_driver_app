@@ -51,3 +51,8 @@
 "Please choose address type" = "Please choose a type you want this address to marked.";
 "Google map is not installed" = "Google map is not installed.";
 "OK" = "OK";
+"Phone Number" = "Phone Number";
+"Call" = "Call";
+"Text" = "Text";
+"Text Language" = "Text Language";
+"Choose a language" = "Choose a language you want to use for sending text.";

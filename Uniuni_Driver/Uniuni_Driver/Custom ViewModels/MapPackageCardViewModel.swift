@@ -50,10 +50,10 @@ class MapPackageCardViewModel {
     }
     
     init(serviceViewModel: ServicePointViewModel, location: (lat: Double, lng: Double), buttonTitle: String?) {
-        self.trackingNo = serviceViewModel.biz_data?.name
+        self.trackingNo = serviceViewModel.name
         self.goodsType = nil
         self.expressType = nil
-        self.receiverAddress = serviceViewModel.biz_data?.address
+        self.receiverAddress = serviceViewModel.address
         self.receiverZipcode = nil
         self.receiverDistance = serviceViewModel.getDistanceFrom(location: location, distanceUnit: .KM)
         self.distanceUnit = .KM

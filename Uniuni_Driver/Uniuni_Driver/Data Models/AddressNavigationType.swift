@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AddressNavigationType: Int {
+enum AddressNavigationType: Int, Codable {
     case appleMap = 0
     case googleMap = 1
     case inAppMap = 2

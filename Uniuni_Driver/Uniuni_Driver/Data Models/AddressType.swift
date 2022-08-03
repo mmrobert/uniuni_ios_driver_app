@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AddressType: Int {
+enum AddressType: Int, Codable {
     case house = 0
     case townhouse = 1
     case business = 2

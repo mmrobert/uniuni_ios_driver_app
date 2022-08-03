@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PackageDataModel {
+struct PackageDataModel: Codable {
     var order_id: Int?
     var order_sn: String?
     var tracking_no: String?
@@ -26,6 +26,7 @@ struct PackageDataModel {
     var lng: String?
     var buzz_code: String?
     var postscript: String?
+    var warehouse_id: Int?
     var failed_handle_type: FailedHandleType?
     
     static func dataModelFrom(viewModel: PackageViewModel) -> PackageDataModel {
@@ -48,6 +49,7 @@ struct PackageDataModel {
             lng: viewModel.lng,
             buzz_code: viewModel.buzz_code,
             postscript: viewModel.postscript,
+            warehouse_id: viewModel.warehouse_id,
             failed_handle_type: viewModel.failed_handle_type
         )
     }
@@ -72,6 +74,7 @@ struct PackageDataModel {
             lng: mapDetailViewModel.lng,
             buzz_code: mapDetailViewModel.buzz,
             postscript: mapDetailViewModel.note,
+            warehouse_id: mapDetailViewModel.warehouseID,
             failed_handle_type: nil
         )
     }

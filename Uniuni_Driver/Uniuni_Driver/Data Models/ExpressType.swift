@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ExpressType: Int {
+enum ExpressType: Int, Codable {
     case regular = 0
     case express = 1
     

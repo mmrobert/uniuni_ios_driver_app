@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GoodsType: Int {
+enum GoodsType: Int, Codable {
     case regular = 0
     case medical = 1
     

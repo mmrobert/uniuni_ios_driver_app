@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PackageState: Int {
+enum PackageState: Int, Codable {
     case delivering = 202
     case undelivered = 211
     

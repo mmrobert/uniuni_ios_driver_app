@@ -40,6 +40,10 @@ class CoreDataManager {
     }()
     
     func savePackage(package: PackageDataModel) {
+        
+        if isPackageSaved(package: package) {
+            return
+        }
 
         let taskContext = newTaskContext()
         
@@ -65,6 +69,7 @@ class CoreDataManager {
             object.setValue(package.lng, forKeyPath: "lng")
             object.setValue(package.buzz_code, forKeyPath: "buzz_code")
             object.setValue(package.postscript, forKeyPath: "postscript")
+            object.setValue(package.warehouse_id, forKeyPath: "warehouse_id")
             object.setValue(package.failed_handle_type?.rawValue, forKeyPath: "failed_handle_type")
             
             do {
@@ -110,6 +115,7 @@ class CoreDataManager {
                     pack.lng = object.value(forKey: "lng") as? String
                     pack.buzz_code = object.value(forKey: "buzz_code") as? String
                     pack.postscript = object.value(forKey: "postscript") as? String
+                    pack.warehouse_id = object.value(forKey: "warehouse_id") as? Int
                     let failedInt = object.value(forKey: "failed_handle_type") as? Int
                     pack.failed_handle_type = FailedHandleType.getTypeFrom(value: failedInt)
                     
@@ -148,7 +154,35 @@ class CoreDataManager {
         }
     }
     
+    private func isPackageSaved(package: PackageDataModel) -> Bool {
+        
+        guard let orderId = package.order_id else {
+            return true
+        }
+        
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderId)
+            
+        var packs: [NSManagedObject]?
+        do {
+            packs = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if packs?.count ?? 0 > 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func saveServicePoint(servicePoint: ServicePointDataModel) {
+        
+        if isServiceSaved(service: servicePoint) {
+            return
+        }
 
         let taskContext = newTaskContext()
         
@@ -156,38 +190,60 @@ class CoreDataManager {
             guard let entity = NSEntityDescription.entity(forEntityName: "ServicePoint", in: taskContext) else { return }
             
             let object = NSManagedObject(entity: entity, insertInto: taskContext)
-            object.setValue(servicePoint.biz_code, forKeyPath: "biz_code")
-            object.setValue(servicePoint.biz_message, forKey: "biz_message")
-            object.setValue(servicePoint.biz_data?.id, forKeyPath: "id")
-            object.setValue(servicePoint.biz_data?.name, forKeyPath: "name")
-            object.setValue(servicePoint.biz_data?.uni_operator_id, forKeyPath: "uni_operator_id")
-            object.setValue(servicePoint.biz_data?.type, forKeyPath: "type")
-            object.setValue(servicePoint.biz_data?.code, forKeyPath: "code")
-            object.setValue(servicePoint.biz_data?.address, forKeyPath: "address")
-            object.setValue(servicePoint.biz_data?.lat, forKeyPath: "lat")
-            object.setValue(servicePoint.biz_data?.lng, forKeyPath: "lng")
-            object.setValue(servicePoint.biz_data?.district, forKeyPath: "district")
-            object.setValue(servicePoint.biz_data?.business_hours, forKeyPath: "business_hours")
-            object.setValue(servicePoint.biz_data?.unit_number, forKeyPath: "unit_number")
-            object.setValue(servicePoint.biz_data?.phone, forKeyPath: "phone")
-            object.setValue(servicePoint.biz_data?.partner_id, forKeyPath: "partner_id")
-            object.setValue(servicePoint.biz_data?.company, forKeyPath: "company")
-            object.setValue(servicePoint.biz_data?.is_active, forKeyPath: "is_active")
-            object.setValue(servicePoint.biz_data?.warehouse, forKeyPath: "warehouse")
-            object.setValue(servicePoint.biz_data?.premise_type, forKeyPath: "premise_type")
-            object.setValue(servicePoint.biz_data?.device, forKeyPath: "device")
-            object.setValue(servicePoint.biz_data?.contact, forKeyPath: "contact")
-            object.setValue(servicePoint.biz_data?.login, forKeyPath: "login")
-            object.setValue(servicePoint.biz_data?.password, forKeyPath: "password")
-            object.setValue(servicePoint.biz_data?.verification_code, forKeyPath: "verification_code")
-            object.setValue(servicePoint.biz_data?.storage_space, forKeyPath: "storage_space")
-            object.setValue(servicePoint.biz_data?.remark, forKeyPath: "remark")
+            object.setValue(servicePoint.id, forKeyPath: "id")
+            object.setValue(servicePoint.name, forKeyPath: "name")
+            object.setValue(servicePoint.uni_operator_id, forKeyPath: "uni_operator_id")
+            object.setValue(servicePoint.type, forKeyPath: "type")
+            object.setValue(servicePoint.code, forKeyPath: "code")
+            object.setValue(servicePoint.address, forKeyPath: "address")
+            object.setValue(servicePoint.lat, forKeyPath: "lat")
+            object.setValue(servicePoint.lng, forKeyPath: "lng")
+            object.setValue(servicePoint.district, forKeyPath: "district")
+            object.setValue(servicePoint.business_hours, forKeyPath: "business_hours")
+            object.setValue(servicePoint.unit_number, forKeyPath: "unit_number")
+            object.setValue(servicePoint.phone, forKeyPath: "phone")
+            object.setValue(servicePoint.partner_id, forKeyPath: "partner_id")
+            object.setValue(servicePoint.company, forKeyPath: "company")
+            object.setValue(servicePoint.is_active, forKeyPath: "is_active")
+            object.setValue(servicePoint.warehouse, forKeyPath: "warehouse")
+            object.setValue(servicePoint.premise_type, forKeyPath: "premise_type")
+            object.setValue(servicePoint.device, forKeyPath: "device")
+            object.setValue(servicePoint.contact, forKeyPath: "contact")
+            object.setValue(servicePoint.login, forKeyPath: "login")
+            object.setValue(servicePoint.password, forKeyPath: "password")
+            object.setValue(servicePoint.verification_code, forKeyPath: "verification_code")
+            object.setValue(servicePoint.storage_space, forKeyPath: "storage_space")
+            object.setValue(servicePoint.remark, forKeyPath: "remark")
             
             do {
                 try taskContext.save()
             } catch let error as NSError {
                 print("Could not save service point: \(error)")
             }
+        }
+    }
+    
+    private func isServiceSaved(service: ServicePointDataModel) -> Bool {
+        
+        guard let id = service.id else {
+            return true
+        }
+        
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "ServicePoint")
+        fetchRequest.predicate = NSPredicate(format: "id = %i", id)
+            
+        var services: [NSManagedObject]?
+        do {
+            services = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if services?.count ?? 0 > 0 {
+            return true
+        } else {
+            return false
         }
     }
     
@@ -204,36 +260,31 @@ class CoreDataManager {
                 let servicesP = try taskContext.fetch(fetchRequest)
                 strongSelf.services = servicesP.map { object in
                     var service = ServicePointDataModel()
-                    service.biz_code = object.value(forKey: "biz_code") as? String
-                    service.biz_message = object.value(forKey: "biz_message") as? String
                     
-                    var bizData = ServicePointDataModel.Biz_Data()
-                    bizData.id = object.value(forKey: "id") as? Int
-                    bizData.name = object.value(forKey: "name") as? String
-                    bizData.uni_operator_id = object.value(forKey: "uni_operator_id") as? Int
-                    bizData.type = object.value(forKey: "type") as? Int
-                    bizData.code = object.value(forKey: "code") as? String
-                    bizData.address = object.value(forKey: "address") as? String
-                    bizData.lat = object.value(forKey: "lat") as? Double
-                    bizData.lng = object.value(forKey: "lng") as? Double
-                    bizData.district = object.value(forKey: "district") as? Int
-                    bizData.business_hours = object.value(forKey: "business_hours") as? String
-                    bizData.unit_number = object.value(forKey: "unit_number") as? String
-                    bizData.phone = object.value(forKey: "phone") as? String
-                    bizData.partner_id = object.value(forKey: "partner_id") as? Int
-                    bizData.company = object.value(forKey: "company") as? String
-                    bizData.is_active = object.value(forKey: "is_active") as? Int
-                    bizData.warehouse = object.value(forKey: "warehouse") as? Int
-                    bizData.premise_type = object.value(forKey: "premise_type") as? String
-                    bizData.device = object.value(forKey: "device") as? String
-                    bizData.contact = object.value(forKey: "contact") as? String
-                    bizData.login = object.value(forKey: "login") as? String
-                    bizData.password = object.value(forKey: "password") as? String
-                    bizData.verification_code = object.value(forKey: "verification_code") as? Int
-                    bizData.storage_space = object.value(forKey: "storage_space") as? Int
-                    bizData.remark = object.value(forKey: "remark") as? String
-                    
-                    service.biz_data = bizData
+                    service.id = object.value(forKey: "id") as? Int
+                    service.name = object.value(forKey: "name") as? String
+                    service.uni_operator_id = object.value(forKey: "uni_operator_id") as? Int
+                    service.type = object.value(forKey: "type") as? Int
+                    service.code = object.value(forKey: "code") as? String
+                    service.address = object.value(forKey: "address") as? String
+                    service.lat = object.value(forKey: "lat") as? Double
+                    service.lng = object.value(forKey: "lng") as? Double
+                    service.district = object.value(forKey: "district") as? Int
+                    service.business_hours = object.value(forKey: "business_hours") as? String
+                    service.unit_number = object.value(forKey: "unit_number") as? String
+                    service.phone = object.value(forKey: "phone") as? String
+                    service.partner_id = object.value(forKey: "partner_id") as? Int
+                    service.company = object.value(forKey: "company") as? String
+                    service.is_active = object.value(forKey: "is_active") as? Int
+                    service.warehouse = object.value(forKey: "warehouse") as? Int
+                    service.premise_type = object.value(forKey: "premise_type") as? String
+                    service.device = object.value(forKey: "device") as? String
+                    service.contact = object.value(forKey: "contact") as? String
+                    service.login = object.value(forKey: "login") as? String
+                    service.password = object.value(forKey: "password") as? String
+                    service.verification_code = object.value(forKey: "verification_code") as? Int
+                    service.storage_space = object.value(forKey: "storage_space") as? Int
+                    service.remark = object.value(forKey: "remark") as? String
                     
                     return service
                 }

@@ -7,13 +7,16 @@
 
 import Foundation
 
-enum FailedHandleType: Int {
+enum FailedHandleType: Int, Codable {
     case wrongAddress = 0
+    case damaged = 1
     
     func getDisplayString() -> String {
         switch self {
         case .wrongAddress:
             return String.wrongAddressStr
+        case .damaged:
+            return ""
         }
     }
     
