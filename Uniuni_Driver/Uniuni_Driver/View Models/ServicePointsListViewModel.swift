@@ -13,6 +13,7 @@ class ServicePointsListViewModel: ObservableObject {
     let coreDataManager = CoreDataManager.shared
     
     @Published var list: [ServicePointViewModel] = []
+    @Published var networkError: NetworkRequestError?
     
     private var disposables = Set<AnyCancellable>()
     
@@ -32,7 +33,8 @@ class ServicePointsListViewModel: ObservableObject {
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
                 switch value {
-                case .failure:
+                case .failure(let error):
+                    strongSelf.networkError = error
                     strongSelf.list = []
                 case .finished:
                     break

@@ -47,6 +47,7 @@
 "Do you want to set default map" = "Do you want to set %@ as default map for navigation?";
 "No" = "No";
 "Yes" = "Yes";
+"Delivery Attempt" = "Delivery Attempt";
 "Mark Address Type" = "Mark Address Type";
 "Please choose address type" = "Please choose a type you want this address to marked.";
 "Google map is not installed" = "Google map is not installed.";
@@ -56,3 +57,17 @@
 "Text" = "Text";
 "Text Language" = "Text Language";
 "Choose a language" = "Choose a language you want to use for sending text.";
+"returned" = "Return";
+"Drop off" = "Drop off";
+"Address type not updated" = "Address type not updated.";
+"Text Template" = "Text Template";
+"Choose a template you want to use" = "Choose a template you want to use.";
+"Wrong URL" = "Wrong URL";
+"Bad internet connection" = "Bad internet connection.";
+"Sent" = "Sent";
+"Network Failure" = "Network Failure";
+"please check your network and retry" = "Network failure, please check your network and retry.";
+"Failed Sending Message" = "Failed Sending Message";
+"Fail to send a message" = "Fail to send a message, please try again.";
+"Retry" = "Retry";
+"Delivery attempt value" = "%@ out of %@";

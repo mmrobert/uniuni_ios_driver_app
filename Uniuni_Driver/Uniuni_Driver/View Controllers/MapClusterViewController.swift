@@ -61,6 +61,7 @@ class MapClusterViewController: UIViewController {
     private let detailCardView: MapPackageDetailCardView = {
         let view = MapPackageDetailCardView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layoutIfNeeded()
         return view
     }()
     
@@ -72,6 +73,9 @@ class MapClusterViewController: UIViewController {
     var mapViewModel: MapViewModel?
     
     private var languagesList: [LanguageDataModel] = []
+    private var msgTemplatesList: [MessageTemplateDataModel] = []
+    
+    private var templateID: Int?
     
     init(packagesListViewModel: PackagesListViewModel,
          servicesListViewModel: ServicePointsListViewModel,
@@ -123,6 +127,7 @@ class MapClusterViewController: UIViewController {
             self?.setupSingleTapAction()
             // fetch packages
             self?.observingViewModels()
+            self?.observingError()
             self?.packagesListViewModel.fetchPackagesFromCoreData()
             self?.servicesListViewModel.fetchServicesFromAPI(driverID: 100)
             //self?.servicesListViewModel.fetchServicePointsFromCoreData()
@@ -316,6 +321,13 @@ class MapClusterViewController: UIViewController {
             location: location,
             buttonTitle: String.navigateToServicePointStr
         )
+        self.cardView.buttonAction = {
+            let locationLat = self.currentLocation.coordinate.latitude
+            let locationLng = self.currentLocation.coordinate.longitude
+            let lat = self.serviceToShowDetail?.lat ?? locationLat
+            let lng = self.serviceToShowDetail?.lng ?? locationLng
+            self.navigationAction(lat: lat, lng: lng)
+        }
         self.cardView.configure(viewModel: viewModel)
         
         self.cardViewTopConstraint?.constant = -self.cardView.bounds.height
@@ -342,10 +354,18 @@ class MapClusterViewController: UIViewController {
             self.showAddressTypePickup()
         }
         self.detailCardView.navigationAction = {
-            self.navigationAction()
+            let locationLat = self.currentLocation.coordinate.latitude
+            let locationLng = self.currentLocation.coordinate.longitude
+            let lat = Double(self.packageToShowDetail?.lat ?? "") ?? locationLat
+            let lng = Double(self.packageToShowDetail?.lng ?? "") ?? locationLng
+            self.navigationAction(lat: lat, lng: lng)
         }
         self.detailCardView.longPressAddressAction = {
-            self.showNavigationPickup()
+            let locationLat = self.currentLocation.coordinate.latitude
+            let locationLng = self.currentLocation.coordinate.longitude
+            let lat = Double(self.packageToShowDetail?.lat ?? "") ?? locationLat
+            let lng = Double(self.packageToShowDetail?.lng ?? "") ?? locationLng
+            self.showNavigationPickup(lat: lat, lng: lng)
         }
         self.detailCardView.phoneMsgAction = {
             self.showCallTextPickup()
@@ -369,22 +389,25 @@ class MapClusterViewController: UIViewController {
             self.detailCardView.updateAddressType(addressType: .house)
             self.packageToShowDetail?.address_type = .house
             self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
-            
+            self.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: self.packageToShowDetail?.order_sn ?? "", addressType: AddressType.house.rawValue)
         }
         let townhouseAct = UIAlertAction(title: String.townhouseStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .townhouse)
             self.packageToShowDetail?.address_type = .townhouse
             self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
+            self.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: self.packageToShowDetail?.order_sn ?? "", addressType: AddressType.townhouse.rawValue)
         }
         let businessAct = UIAlertAction(title: String.businessStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .business)
             self.packageToShowDetail?.address_type = .business
             self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
+            self.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: self.packageToShowDetail?.order_sn ?? "", addressType: AddressType.business.rawValue)
         }
         let apartmentAct = UIAlertAction(title: String.apartmentStr, style: .default) { _ in
             self.detailCardView.updateAddressType(addressType: .apartment)
             self.packageToShowDetail?.address_type = .apartment
             self.packagesListViewModel.updatePackageForCoreData(pack: self.packageToShowDetail)
+            self.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: self.packageToShowDetail?.order_sn ?? "", addressType: AddressType.apartment.rawValue)
         }
         
         alert.addAction(houseAct)
@@ -402,37 +425,37 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func navigationAction() {
+    private func navigationAction(lat: Double, lng: Double) {
         
         let mapDefaultInt = UserDefaults.standard.object(forKey: AppConstants.userDefaultsKey_map) as? Int
         if let mapDefault = AddressNavigationType.getTypeFrom(value: mapDefaultInt) {
             switch mapDefault {
             case .appleMap:
-                self.openAppleNavigation()
+                self.openAppleNavigation(lat: lat, lng: lng)
             case .googleMap:
-                self.openGoogleNavigation()
+                self.openGoogleNavigation(lat: lat, lng: lng)
             case .inAppMap:
-                self.openMapboxNavigation()
+                self.openMapboxNavigation(lat: lat, lng: lng)
             case .copyAddress:
                 break
             }
             return
         }
         
-        self.showNavigationPickup()
+        self.showNavigationPickup(lat: lat, lng: lng)
     }
     
-    private func showNavigationPickup() {
+    private func showNavigationPickup(lat: Double, lng: Double) {
         
         let alert = UIAlertController(title: String.chooseMapStr, message: String.chooseAnApplicationToStartNavigationStr, preferredStyle: .actionSheet)
         
         let appleMapAct = UIAlertAction(title: String.appleMapStr, style: .default) { _ in
             let positiveAction = Action(title: String.yesStr) { _ in
                 UserDefaults.standard.set(AddressNavigationType.appleMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
-                self.openAppleNavigation()
+                self.openAppleNavigation(lat: lat, lng: lng)
             }
             let negativeAction = Action(title: String.noStr) { _ in
-                self.openAppleNavigation()
+                self.openAppleNavigation(lat: lat, lng: lng)
             }
             self.showAlert(
                 title: String.setDefaultMapStr,
@@ -444,10 +467,10 @@ class MapClusterViewController: UIViewController {
         let googleMapAct = UIAlertAction(title: String.googleMapStr, style: .default) { _ in
             let positiveAction = Action(title: String.yesStr) { _ in
                 UserDefaults.standard.set(AddressNavigationType.googleMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
-                self.openGoogleNavigation()
+                self.openGoogleNavigation(lat: lat, lng: lng)
             }
             let negativeAction = Action(title: String.noStr) { _ in
-                self.openGoogleNavigation()
+                self.openGoogleNavigation(lat: lat, lng: lng)
             }
             self.showAlert(
                 title: String.setDefaultMapStr,
@@ -459,10 +482,10 @@ class MapClusterViewController: UIViewController {
         let inAppMapAct = UIAlertAction(title: String.inAppMapStr, style: .default) { (UIAlertAction) in
             let positiveAction = Action(title: String.yesStr) { _ in
                 UserDefaults.standard.set(AddressNavigationType.inAppMap.rawValue, forKey: AppConstants.userDefaultsKey_map)
-                self.openMapboxNavigation()
+                self.openMapboxNavigation(lat: lat, lng: lng)
             }
             let negativeAction = Action(title: String.noStr) { _ in
-                self.openMapboxNavigation()
+                self.openMapboxNavigation(lat: lat, lng: lng)
             }
             self.showAlert(
                 title: String.setDefaultMapStr,
@@ -491,10 +514,8 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func openAppleNavigation() {
-        guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
-            return
-        }
+    private func openAppleNavigation(lat: Double, lng: Double) {
+        
         guard let url = URL(string: String(format: "http://maps.apple.com/?daddr=%f,%f&dirflg=d", lat, lng)) else {
             return
         }
@@ -506,11 +527,8 @@ class MapClusterViewController: UIViewController {
         }
     }
     
-    private func openGoogleNavigation() {
+    private func openGoogleNavigation(lat: Double, lng: Double) {
         guard let baseUrl = URL(string:"comgooglemaps://") else {
-            return
-        }
-        guard let lat = self.packageToShowDetail?.lat, let lng = self.packageToShowDetail?.lng else {
             return
         }
         guard let url = URL(string: String(format: "comgooglemaps-x-callback://?saddr=&daddr=%f,%f&directionsmode=driving", lat, lng)) else {
@@ -525,11 +543,7 @@ class MapClusterViewController: UIViewController {
         }
     }
     
-    private func openMapboxNavigation() {
-        
-        guard let lat = Double(self.packageToShowDetail?.lat ?? ""), let lng = Double(self.packageToShowDetail?.lng ?? "") else {
-            return
-        }
+    private func openMapboxNavigation(lat: Double, lng: Double) {
         
         let origin = self.currentLocation.coordinate
         //CLLocationCoordinate2DMake(37.77440680146262, -122.43539772352648)
@@ -615,7 +629,7 @@ class MapClusterViewController: UIViewController {
         
         for language in self.languagesList {
             let act = UIAlertAction(title: language.name, style: .default) { _ in
-                self.fetchMsgTemplate(warehouseID: warehouseID, language: language.code)
+                self.fetchMsgTemplatesList(warehouseID: warehouseID, language: language.code)
             }
             alert.addAction(act)
         }
@@ -630,8 +644,39 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func fetchMsgTemplate(warehouseID: Int, language: String?) {
+    private func fetchMsgTemplatesList(warehouseID: Int, language: String?) {
+        guard let language = language, !language.isEmpty else {
+            return
+        }
+        self.mapViewModel?.fetchMsgTemplatesListFromAPI(warehouseID: warehouseID, language: language)
+    }
+    
+    private func sendMsgPickup() {
+        guard self.msgTemplatesList.count > 0 else {
+            return
+        }
         
+        let alert = UIAlertController(title: String.textTemplateStr, message: String.chooseATemplateYouWantToUseStr, preferredStyle: .actionSheet)
+        
+        for template in self.msgTemplatesList {
+            let act = UIAlertAction(title: template.title, style: .default) { _ in
+                guard let orderID = self.packageToShowDetail?.order_id, let templateID = template.id else {
+                    return
+                }
+                self.templateID = templateID
+                self.mapViewModel?.sendMsgFromAPI(orderID: orderID, templateID: templateID)
+            }
+            alert.addAction(act)
+        }
+        
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
+        
+        alert.addAction(cancelAct)
+        
+        // for iPad Support
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func zoomToDetailPackageLocation() {
@@ -732,6 +777,87 @@ class MapClusterViewController: UIViewController {
         self.mapViewModel?.$languagesList
             .sink(receiveValue: { [weak self] (languagesList) in
                 self?.languagesList = languagesList
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$msgTemplatesList
+            .sink(receiveValue: { [weak self] (templatesList) in
+                self?.msgTemplatesList = templatesList
+                self?.sendMsgPickup()
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$responseSendMsg
+            .sink(receiveValue: { [weak self] (response) in
+                guard response != nil else {
+                    return
+                }
+                let alert = CustomImageAlert.makeAlert(title: String.sentStr, image: UIImage.circledCheckmark)
+                
+                self?.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
+                    alert.dismiss(animated: true, completion: nil)
+                }
+            })
+            .store(in: &disposables)
+    }
+    
+    private func observingError() {
+        self.servicesListViewModel.$networkError
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] err in
+                guard let strongSelf = self else { return }
+                guard let err = err else {
+                    return
+                }
+                switch err {
+                case .invalidURL( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                case .netConnection( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                default:
+                    break
+                }
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$errorUpdateAddressType
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] err in
+                guard let strongSelf = self else { return }
+                guard let err = err, !err.isEmpty else {
+                    return
+                }
+                let positiveAction = Action(title: String.OKStr)
+                strongSelf.showAlert(title: err, msg: nil, positiveAction: positiveAction, negativeAction: nil)
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$errorSendMsg
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] err in
+                guard let strongSelf = self else { return }
+                guard let err = err else {
+                    return
+                }
+                switch err {
+                case .invalidURL( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                case .netConnection( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                case .failStatusCode( _):
+                    let positiveAction = Action(title: String.retryStr) { _ in
+                        guard let orderID = strongSelf.packageToShowDetail?.order_id, let templateID = strongSelf.templateID else {
+                            return
+                        }
+                        strongSelf.mapViewModel?.errorSendMsg = nil
+                        strongSelf.mapViewModel?.sendMsgFromAPI(orderID: orderID, templateID: templateID)
+                    }
+                    let negativeAction = Action(title: String.cancelStr)
+                    strongSelf.showAlert(title: String.failedSendingMessageStr, msg: String.failToSendAMessageStr, positiveAction: positiveAction, negativeAction: negativeAction)
+                default:
+                    break
+                }
             })
             .store(in: &disposables)
     }

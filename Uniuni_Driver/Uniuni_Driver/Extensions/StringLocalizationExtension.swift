@@ -49,7 +49,7 @@ extension String {
     static let doYouWantToSetDefaultMapStr = NSLocalizedString("Do you want to set default map", comment: "")
     static let noStr: String = NSLocalizedString("No", comment: "")
     static let yesStr: String = NSLocalizedString("Yes", comment: "")
-    
+    static let deliveryAttemptStr: String = NSLocalizedString("Delivery Attempt", comment: "")
     static let markAddressTypeStr: String = NSLocalizedString("Mark Address Type", comment: "")
     static let pleaseChooseAddressTypeStr: String = NSLocalizedString("Please choose address type", comment: "")
     static let googleMapIsNotInstalledStr: String = NSLocalizedString("Google map is not installed", comment: "")
@@ -57,8 +57,20 @@ extension String {
     static let phoneNumberStr: String = NSLocalizedString("Phone Number", comment: "")
     static let callStr: String = NSLocalizedString("Call", comment: "")
     static let textStr: String = NSLocalizedString("Text", comment: "")
-    
     static let textLanguageStr: String = NSLocalizedString("Text Language", comment: "")
     static let chooseALanguageStr: String = NSLocalizedString("Choose a language", comment: "")
-    
+    static let returnedStr: String = NSLocalizedString("returned", comment: "")
+    static let dropOffStr: String = NSLocalizedString("Drop off", comment: "")
+    static let addressTypeNotUpdatedStr: String = NSLocalizedString("Address type not updated", comment: "")
+    static let textTemplateStr: String = NSLocalizedString("Text Template", comment: "")
+    static let chooseATemplateYouWantToUseStr: String = NSLocalizedString("Choose a template you want to use", comment: "")
+    static let wrongURLStr: String = NSLocalizedString("Wrong URL", comment: "")
+    static let badInternetConnectionStr: String = NSLocalizedString("Bad internet connection", comment: "")
+    static let sentStr: String = NSLocalizedString("Sent", comment: "")
+    static let networkFailureStr: String = NSLocalizedString("Network Failure", comment: "")
+    static let pleaseCheckYourNetworkAndRetryStr: String = NSLocalizedString("please check your network and retry", comment: "")
+    static let failedSendingMessageStr: String = NSLocalizedString("Failed Sending Message", comment: "")
+    static let failToSendAMessageStr: String = NSLocalizedString("Fail to send a message", comment: "")
+    static let retryStr: String = NSLocalizedString("Retry", comment: "")
+    static let deliveryAttemptValueStr = NSLocalizedString("Delivery attempt value", comment: "")
 }

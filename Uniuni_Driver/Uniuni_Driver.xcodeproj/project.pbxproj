@@ -23,6 +23,8 @@
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
 		9B513C962858DCF6006865AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C952858DCF6006865AA /* Assets.xcassets */; };
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
+		9B5B8F72289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */; };
+		9B5B8F74289ED3B000CEA6BC /* CustomImageAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F73289ED3B000CEA6BC /* CustomImageAlert.swift */; };
 		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
 		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
@@ -59,6 +61,8 @@
 		9BD86CBD2895FD4A00228432 /* ServicePointDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CBC2895FD4A00228432 /* ServicePointDataModel.swift */; };
 		9BD86CBF289638FF00228432 /* LanguagesListDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CBE289638FF00228432 /* LanguagesListDataModel.swift */; };
 		9BD86CC12896D97300228432 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CC02896D97300228432 /* MapViewModel.swift */; };
+		9BD86CC3289A280900228432 /* MessageTemplatesListDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CC2289A280900228432 /* MessageTemplatesListDataModel.swift */; };
+		9BD86CC5289AC20600228432 /* GeneralHttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */; };
 		9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE332862CE29006391D9 /* CoreDataManager.swift */; };
 		9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */; };
 		9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B34286B783100372045 /* TopActionSheet.swift */; };
@@ -100,6 +104,8 @@
 		9B513C982858DCF6006865AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B513C9A2858DCF6006865AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAddressTypeResponse.swift; sourceTree = "<group>"; };
+		9B5B8F73289ED3B000CEA6BC /* CustomImageAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageAlert.swift; sourceTree = "<group>"; };
 		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
@@ -145,6 +151,8 @@
 		9BD86CBC2895FD4A00228432 /* ServicePointDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicePointDataModel.swift; sourceTree = "<group>"; };
 		9BD86CBE289638FF00228432 /* LanguagesListDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagesListDataModel.swift; sourceTree = "<group>"; };
 		9BD86CC02896D97300228432 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		9BD86CC2289A280900228432 /* MessageTemplatesListDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTemplatesListDataModel.swift; sourceTree = "<group>"; };
+		9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHttpResponse.swift; sourceTree = "<group>"; };
 		9BE4BE332862CE29006391D9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
 		9BF57B34286B783100372045 /* TopActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheet.swift; sourceTree = "<group>"; };
@@ -197,6 +205,7 @@
 			children = (
 				9BC2D4ED2867B85800354726 /* PackageCardView.swift */,
 				9BF57B34286B783100372045 /* TopActionSheet.swift */,
+				9B5B8F73289ED3B000CEA6BC /* CustomImageAlert.swift */,
 				9BCA84FE286F319D0046C0C2 /* PaddingLabel.swift */,
 				9BC724BB28846D8100229E51 /* UnderlinedLabel.swift */,
 				9BC724BD28846E1300229E51 /* LeadingTitleLabel.swift */,
@@ -277,6 +286,9 @@
 				9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */,
 				9B1730A2287E5742005AE7AD /* GeoJsonDataModel.swift */,
 				9BD86CBE289638FF00228432 /* LanguagesListDataModel.swift */,
+				9BD86CC2289A280900228432 /* MessageTemplatesListDataModel.swift */,
+				9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */,
+				9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */,
 			);
 			path = "Data Models";
 			sourceTree = "<group>";
@@ -544,6 +556,7 @@
 			files = (
 				9B4ED765289421B800B4C93C /* AppConfigurator.swift in Sources */,
 				9BD86CBF289638FF00228432 /* LanguagesListDataModel.swift in Sources */,
+				9BD86CC5289AC20600228432 /* GeneralHttpResponse.swift in Sources */,
 				9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */,
 				9BC724BA28846A7400229E51 /* MapPackageDetailCardView.swift in Sources */,
 				9B1730A1287E5722005AE7AD /* MapClusterViewController.swift in Sources */,
@@ -555,10 +568,12 @@
 				9B1730A9287E7909005AE7AD /* ServicePointViewModel.swift in Sources */,
 				9BB33A1228767AEF003ABD2F /* FailedHandleType.swift in Sources */,
 				9BB33A0A28767A0D003ABD2F /* PackageDataModel.swift in Sources */,
+				9B5B8F72289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift in Sources */,
 				9B02F0542859792800C23165 /* LoginViewController.swift in Sources */,
 				9BD86CB92895890200228432 /* NetworkService.swift in Sources */,
 				9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */,
 				9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */,
+				9BD86CC3289A280900228432 /* MessageTemplatesListDataModel.swift in Sources */,
 				9BC2D4F328680AE800354726 /* PackageTableViewCell.swift in Sources */,
 				9BD86CBD2895FD4A00228432 /* ServicePointDataModel.swift in Sources */,
 				9B2CBA2E2862C3010001FA08 /* Uniuni_Driver.xcdatamodeld in Sources */,
@@ -571,6 +586,7 @@
 				9B1730A3287E5742005AE7AD /* GeoJsonDataModel.swift in Sources */,
 				9BB7522A285A1B0E003618F6 /* TabbarController.swift in Sources */,
 				9BB33A1028767AAA003ABD2F /* ExpressType.swift in Sources */,
+				9B5B8F74289ED3B000CEA6BC /* CustomImageAlert.swift in Sources */,
 				9BC9F804285E53B300376D95 /* StringLocalizationExtension.swift in Sources */,
 				9BB33A0C28767A4F003ABD2F /* GoodsType.swift in Sources */,
 				9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */,

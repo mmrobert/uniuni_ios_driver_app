@@ -21,11 +21,16 @@ enum NetworkAPIs {
     case fetchDeliveringList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchUndeliveredList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchServiceList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case updateAddressType(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchLanguageList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case fetchMsgTemplates(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case sendMessage(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     
     // MARK: - base URL
     var baseURL: String {
         switch self {
+        case .updateAddressType( _, _, _):
+            return "https://app.test.uniexpress.org"
         default:
             return AppConfigurator.shared.baseURL
         }
@@ -40,8 +45,14 @@ enum NetworkAPIs {
             return .get
         case .fetchServiceList( _, _, _):
             return .get
+        case .updateAddressType( _, _, _):
+            return .post
         case .fetchLanguageList( _, _, _):
             return .get
+        case .fetchMsgTemplates( _, _, _):
+            return .get
+        case .sendMessage( _, _, _):
+            return .post
         }
     }
     
@@ -62,6 +73,8 @@ enum NetworkAPIs {
             } else {
                 return "/dropoff/assignment/service_point"
             }
+        case .updateAddressType( _, _, _):
+            return "/location/deliveredaddress"
         case .fetchLanguageList(let pathParas, _, _):
             if let pathParas = pathParas {
                 var pathStr = ""
@@ -72,6 +85,18 @@ enum NetworkAPIs {
             } else {
                 return "/masterdata/message/languages"
             }
+        case .fetchMsgTemplates(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/masterdata/message/templates" + pathStr
+            } else {
+                return "/masterdata/message/templates"
+            }
+        case .sendMessage( _, _, _):
+            return "/delivery/message"
         }
     }
     
@@ -102,7 +127,31 @@ enum NetworkAPIs {
             } else {
                 return nil
             }
+        case .updateAddressType( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
         case .fetchLanguageList( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .fetchMsgTemplates( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .sendMessage( _, let queryParas, _):
             if let query = queryParas {
                 return query.map({
                     URLQueryItem(name: $0.key, value: $0.value)
@@ -122,7 +171,13 @@ enum NetworkAPIs {
             return bodyParas
         case .fetchServiceList( _, _, let bodyParas):
             return bodyParas
+        case .updateAddressType( _, _, let bodyParas):
+            return bodyParas
         case .fetchLanguageList( _, _, let bodyParas):
+            return bodyParas
+        case .fetchMsgTemplates( _, _, let bodyParas):
+            return bodyParas
+        case .sendMessage( _, _, let bodyParas):
             return bodyParas
         }
     }
@@ -131,13 +186,17 @@ enum NetworkAPIs {
     func makeURLRequest() throws -> URLRequest {
         
         let fullPath = baseURL + path
-        guard var urlComponent = URLComponents(string: fullPath) else { throw NetworkRequestError.invalidURL(description: "Wrong URL: \(fullPath)") }
+        guard var urlComponent = URLComponents(string: fullPath) else {
+            throw NetworkRequestError.invalidURL(description: "\(fullPath)")
+        }
         
         if let query = queryItems {
             urlComponent.queryItems = query
         }
         
-        guard let url = urlComponent.url else { throw NetworkRequestError.invalidURL(description: "Wrong URL: \(fullPath)") }
+        guard let url = urlComponent.url else {
+            throw NetworkRequestError.invalidURL(description: "\(fullPath)")
+        }
         var urlRequest = URLRequest(url: url)
         
         // HTTP Method
@@ -154,8 +213,8 @@ enum NetworkAPIs {
             let body = body.compactMapValues { $0 }
             do {
                 urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-            } catch let error {
-                throw NetworkRequestError.bodyToJSON(description: "Body serialization error: \(error.localizedDescription)")
+            } catch _ {
+                throw NetworkRequestError.bodyToJSON(description: "Body parameters serialization error for URL: \(fullPath)")
             }
         }
         return urlRequest
@@ -167,18 +226,25 @@ enum NetworkAPIs {
             .mapError { error in
                 NetworkRequestError.netConnection(description: error.localizedDescription)
             }
-            .flatMap(maxPublishers: .max(1)) { response in
-                decode(response.data)
+            .tryMap { element in
+                let httpResponse = element.response as? HTTPURLResponse
+                if let httpResponse = httpResponse, httpResponse.statusCode == 200 {
+                    return element.data
+                } else if let statusCode = httpResponse?.statusCode {
+                    throw NetworkRequestError.failStatusCode(description: "Status code: \(statusCode)")
+                } else {
+                    throw NetworkRequestError.other(description: "")
+                }
             }
-            .eraseToAnyPublisher()
-    }
-    
-    private func decode<T>(_ data: Data) -> AnyPublisher<T, NetworkRequestError> where T: Decodable {
-        let decoder = JSONDecoder()
-        return Just(data)
-            .decode(type: T.self, decoder: decoder)
+            .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
-                NetworkRequestError.parsingResponseData(description: error.localizedDescription)
+                if error is Swift.DecodingError {
+                    return NetworkRequestError.parsingResponseData(description: error.localizedDescription)
+                } else if let err = error as? NetworkRequestError {
+                    return err
+                } else {
+                    return NetworkRequestError.other(description: error.localizedDescription)
+                }
             }
             .eraseToAnyPublisher()
     }

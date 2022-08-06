@@ -101,4 +101,8 @@ class MapPackageDetailCardViewModel {
         self.failedButtonTitle = failedButtonTitle
         self.deliveredButtonTitle = deliveredButtonTitle
     }
+    
+    func getDeliveryAttemptValue() -> String {
+        String(format: String.deliveryAttemptValueStr, "1", "3")
+    }
 }

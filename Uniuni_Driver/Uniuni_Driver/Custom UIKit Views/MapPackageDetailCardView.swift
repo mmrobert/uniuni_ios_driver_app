@@ -190,6 +190,13 @@ class MapPackageDetailCardView: UIView {
         return label
     }()
     
+    private lazy var deliveryAttemptLabel: LeadingTitleLabel = {
+        let label = LeadingTitleLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        return label
+    }()
+    
     private lazy var deliveryByLabel: LeadingTitleLabel = {
         let label = LeadingTitleLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -313,12 +320,13 @@ class MapPackageDetailCardView: UIView {
         self.phoneLabel.text = viewModel.phone
         self.addressLabel.text = viewModel.address
         self.distanceLabel.text = viewModel.distance?.kmDistance()
-        self.orderTypeLabel.configure(theme: nil, leadingTitle: String.orderTypeStr + ":", mainText: viewModel.goodsType?.getDisplayString(), textToRight: true)
-        self.assignedTimeLabel.configure(theme: nil, leadingTitle: String.assignedTimeStr + ":", mainText: viewModel.assignedTime, textToRight: true)
-        self.deliveryTypeLabel.configure(theme: nil, leadingTitle: String.deliveryTypeStr + ":", mainText: viewModel.expressType?.getDisplayString(), textToRight: true)
-        self.deliveryByLabel.configure(theme: nil, leadingTitle: String.deliveryByStr + ":", mainText: viewModel.deliveryBy, textToRight: true)
-        self.buzzLabel.configure(theme: nil, leadingTitle: String.buzzStr + ":", mainText: viewModel.buzz, textToRight: true)
-        self.noteLabel.configure(theme: nil, leadingTitle: String.noteStr + ":", mainText: viewModel.note, textToRight: true)
+        self.orderTypeLabel.configure(theme: nil, leadingTitle: String.orderTypeStr + ":", mainText: viewModel.goodsType?.getDisplayString(), textToRight: false)
+        self.assignedTimeLabel.configure(theme: nil, leadingTitle: String.assignedTimeStr + ":", mainText: viewModel.assignedTime, textToRight: false)
+        self.deliveryTypeLabel.configure(theme: nil, leadingTitle: String.deliveryTypeStr + ":", mainText: viewModel.expressType?.getDisplayString(), textToRight: false)
+        self.deliveryAttemptLabel.configure(theme: nil, leadingTitle: String.deliveryAttemptStr, mainText: viewModel.getDeliveryAttemptValue(), textToRight: false)
+        self.deliveryByLabel.configure(theme: nil, leadingTitle: String.deliveryByStr + ":", mainText: viewModel.deliveryBy, textToRight: false)
+        self.buzzLabel.configure(theme: nil, leadingTitle: String.buzzStr + ":", mainText: viewModel.buzz, textToRight: false)
+        self.noteLabel.configure(theme: nil, leadingTitle: String.noteStr + ":", mainText: viewModel.note, textToRight: false)
         self.failedButton.setTitle(viewModel.failedButtonTitle, for: .normal)
         self.deliveredButton.setTitle(viewModel.deliveredButtonTitle, for: .normal)
         
@@ -447,6 +455,7 @@ extension MapPackageDetailCardView {
         self.packDetailContainer1.addArrangedSubview(orderTypeLabel)
         self.packDetailContainer1.addArrangedSubview(assignedTimeLabel)
         self.packDetailContainer1.addArrangedSubview(deliveryTypeLabel)
+        self.packDetailContainer1.addArrangedSubview(deliveryAttemptLabel)
         self.packDetailContainer1.addArrangedSubview(deliveryByLabel)
     }
     
