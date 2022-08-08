@@ -73,4 +73,16 @@ extension String {
     static let failToSendAMessageStr: String = NSLocalizedString("Fail to send a message", comment: "")
     static let retryStr: String = NSLocalizedString("Retry", comment: "")
     static let deliveryAttemptValueStr = NSLocalizedString("Delivery attempt value", comment: "")
+    static let orderInformationStr = NSLocalizedString("Order Information", comment: "")
+    static let customerInformationStr = NSLocalizedString("Customer Information", comment: "")
+    static let customerNotesStr = NSLocalizedString("Customer Notes", comment: "")
+    static let photosStr = NSLocalizedString("Photos", comment: "")
+    static let take2PhotosStr = NSLocalizedString("Take 2 photos", comment: "")
+    static let completeStr = NSLocalizedString("Complete", comment: "")
+    static let orderNoStr = NSLocalizedString("Order No", comment: "")
+    static let trackingNoStr = NSLocalizedString("Tracking No", comment: "")
+    static let routeNoStr = NSLocalizedString("Route No", comment: "")
+    static let nameStr = NSLocalizedString("Name", comment: "")
+    static let addressStr = NSLocalizedString("Address", comment: "")
+    
 }

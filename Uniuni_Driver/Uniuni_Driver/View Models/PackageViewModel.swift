@@ -82,6 +82,10 @@ struct PackageViewModel: Identifiable, Equatable {
         return rad * 180.0 / Double.pi
     }
     
+    func getDeliveryAttemptValue() -> String {
+        String(format: String.deliveryAttemptValueStr, "1", "3")
+    }
+    
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.order_sn == rhs.order_sn
     }

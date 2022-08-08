@@ -25,6 +25,9 @@
 		9B513C992858DCF6006865AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B513C972858DCF6006865AA /* LaunchScreen.storyboard */; };
 		9B5B8F72289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */; };
 		9B5B8F74289ED3B000CEA6BC /* CustomImageAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F73289ED3B000CEA6BC /* CustomImageAlert.swift */; };
+		9B5B8F7828A00D1900CEA6BC /* CompleteDeliveryNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */; };
+		9B5B8F7A28A018FB00CEA6BC /* CompletePackageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */; };
+		9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */; };
 		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
 		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
@@ -106,6 +109,9 @@
 		9B513C9F2858DCF6006865AA /* Uniuni_DriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Uniuni_DriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAddressTypeResponse.swift; sourceTree = "<group>"; };
 		9B5B8F73289ED3B000CEA6BC /* CustomImageAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageAlert.swift; sourceTree = "<group>"; };
+		9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteDeliveryNavigator.swift; sourceTree = "<group>"; };
+		9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletePackageDetailView.swift; sourceTree = "<group>"; };
+		9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextView.swift; sourceTree = "<group>"; };
 		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
@@ -196,6 +202,7 @@
 				9BB75229285A1B0E003618F6 /* TabbarController.swift */,
 				9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */,
 				9B1730A0287E5722005AE7AD /* MapClusterViewController.swift */,
+				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -298,6 +305,8 @@
 			children = (
 				9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */,
 				9BCA8503286F67990046C0C2 /* SearchCellView.swift */,
+				9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */,
+				9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */,
 			);
 			path = "SwiftUI Views";
 			sourceTree = "<group>";
@@ -560,11 +569,13 @@
 				9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */,
 				9BC724BA28846A7400229E51 /* MapPackageDetailCardView.swift in Sources */,
 				9B1730A1287E5722005AE7AD /* MapClusterViewController.swift in Sources */,
+				9B5B8F7828A00D1900CEA6BC /* CompleteDeliveryNavigator.swift in Sources */,
 				9BD4E2C6288CF96000CD4669 /* AddressType.swift in Sources */,
 				9BD86CB7289584B700228432 /* NetworkRequestError.swift in Sources */,
 				9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */,
 				9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */,
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,
+				9B5B8F7A28A018FB00CEA6BC /* CompletePackageDetailView.swift in Sources */,
 				9B1730A9287E7909005AE7AD /* ServicePointViewModel.swift in Sources */,
 				9BB33A1228767AEF003ABD2F /* FailedHandleType.swift in Sources */,
 				9BB33A0A28767A0D003ABD2F /* PackageDataModel.swift in Sources */,
@@ -600,6 +611,7 @@
 				9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */,
 				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
 				9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */,
+				9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */,
 				9BC724C028848C4400229E51 /* MapPackageDetailCardViewModel.swift in Sources */,
 				9BB33A1428767BC2003ABD2F /* PackageViewModel.swift in Sources */,
 				9BC9F807285E5E5F00376D95 /* PackagesListViewModel.swift in Sources */,
