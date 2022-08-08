@@ -71,3 +71,14 @@
 "Fail to send a message" = "Fail to send a message, please try again.";
 "Retry" = "Retry";
 "Delivery attempt value" = "%@ out of %@";
+"Order Information" = "Order Information";
+"Customer Information" = "Customer Information";
+"Customer Notes" = "Customer Notes";
+"Photos" = "Photos";
+"Take 2 photos" = "Take 2 photos (shipping label and the location).";
+"Complete" = "Complete";
+"Order No" = "Order No.";
+"Tracking No" = "Tracking No.";
+"Route No" = "Route No.";
+"Name" = "Name";
+"Address" = "Address";

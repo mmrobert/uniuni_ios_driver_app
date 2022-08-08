@@ -268,6 +268,9 @@ class MapPackageDetailCardView: UIView {
     var longPressAddressAction: (() -> Void)?
     var phoneMsgAction: (() -> Void)?
     
+    var deliveredAction: (() -> Void)?
+    var failedAction: (() -> Void)?
+    
     convenience init(theme: MapPackageDetailCardView.Theme? = nil) {
         self.init(frame: .zero)
         self.theme = theme
@@ -332,6 +335,9 @@ class MapPackageDetailCardView: UIView {
         
         self.addressTypeButton.addTarget(self, action: #selector(MapPackageDetailCardView.toChooseAddressType), for: .touchUpInside)
         
+        self.deliveredButton.addTarget(self, action: #selector(MapPackageDetailCardView.deliveredTapped), for: .touchUpInside)
+        self.failedButton.addTarget(self, action: #selector(MapPackageDetailCardView.failedTapped), for: .touchUpInside)
+        
         self.addressLabel.isUserInteractionEnabled = true
         let navigationTap = UITapGestureRecognizer(target: self, action: #selector(MapPackageDetailCardView.navigationCheck))
         self.addressLabel.addGestureRecognizer(navigationTap)
@@ -366,6 +372,16 @@ class MapPackageDetailCardView: UIView {
     @objc
     private func addressLongPressCheck() {
         self.longPressAddressAction?()
+    }
+    
+    @objc
+    private func deliveredTapped() {
+        self.deliveredAction?()
+    }
+    
+    @objc
+    private func failedTapped() {
+        self.failedAction?()
     }
     
     func updateAddressType(addressType: AddressType) {
@@ -464,7 +480,8 @@ extension MapPackageDetailCardView {
         NSLayoutConstraint.activate(
             [packDetailContainer2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
              packDetailContainer2.topAnchor.constraint(equalTo: packDetailContainer1.bottomAnchor, constant: 6),
-             packDetailContainer2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing)]
+             packDetailContainer2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
+             packDetailContainer2.heightAnchor.constraint(greaterThanOrEqualToConstant: 46)]
         )
         self.packDetailContainer2.addArrangedSubview(buzzLabel)
         self.packDetailContainer2.addArrangedSubview(noteLabel)

@@ -202,8 +202,9 @@ enum NetworkAPIs {
         // HTTP Method
         urlRequest.httpMethod = method.rawValue
         
+        let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
         // Headers
-        let bearer = "Bearer \(AppConstants.token)"
+        let bearer = "Bearer \(tempToken)"
         urlRequest.setValue(bearer, forHTTPHeaderField: "Authorization")
         urlRequest.setValue("application/json", forHTTPHeaderField: "accept")
         urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")

@@ -275,7 +275,6 @@ class MapClusterViewController: UIViewController {
         let packToShow = self.packagesList.filter {
             $0.tracking_no == trackingNo
         }.first
-        self.packageToShowDetail = packToShow
         guard let packToShow = packToShow else {
             return
         }
@@ -291,6 +290,7 @@ class MapClusterViewController: UIViewController {
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.cardView.layoutIfNeeded()
             }) { _ in
+                self.packageToShowDetail = packToShow
                 self.showDetailPackageCard()
             }
         }
@@ -369,6 +369,18 @@ class MapClusterViewController: UIViewController {
         }
         self.detailCardView.phoneMsgAction = {
             self.showCallTextPickup()
+        }
+        
+        self.detailCardView.deliveredAction = {
+            guard let vm = self.packageToShowDetail else {
+                return
+            }
+            let completeNavi = CompleteDeliveryNavigator(packageViewModel: vm)
+            completeNavi.presentDeliveryDetail(presenter: self)
+        }
+        
+        self.detailCardView.failedAction = {
+            print("to do")
         }
         
         self.detailCardView.configure(viewModel: viewModel)
