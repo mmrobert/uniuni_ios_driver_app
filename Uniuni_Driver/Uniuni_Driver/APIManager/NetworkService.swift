@@ -69,9 +69,57 @@ class NetworkService: NetworkServiceProvider {
         }
     }
     
+    func updateAddressType(driverID: Int, orderSN: String, addressType: Int) -> AnyPublisher<UpdateAddressTypeResponse, NetworkRequestError> {
+        let bodyParas = ["order_sn": orderSN, "addr_type": addressType, "operator": driverID] as [String:Any]
+        let router = NetworkAPIs.updateAddressType(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
     func fetchLanguageList(warehouseID: Int) -> AnyPublisher<LanguagesListDataModel, NetworkRequestError> {
         let pathParas = [String(warehouseID)]
         let router = NetworkAPIs.fetchLanguageList(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func fetchMsgTemplates(warehouseID: Int, language: String) -> AnyPublisher<MessageTemplatesListDataModel, NetworkRequestError> {
+        let pathParas = [String(warehouseID), language]
+        let router = NetworkAPIs.fetchMsgTemplates(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func sendMessage(orderID: Int, templateID: Int) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
+        let bodyParas = ["order_id": orderID, "template_id": templateID]
+        let router = NetworkAPIs.sendMessage(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
         do {
             let netRequest = try router.makeURLRequest()
             return router.fetchJSON(request: netRequest)

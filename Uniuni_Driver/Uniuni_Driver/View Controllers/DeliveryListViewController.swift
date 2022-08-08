@@ -90,6 +90,7 @@ class DeliveryListViewController: UIViewController {
         self.checkLocationManager()
         
         self.observingViewModels()
+        self.observingError()
         
         // fetch packages
         self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
@@ -117,6 +118,28 @@ class DeliveryListViewController: UIViewController {
                 guard let strongSelf = self else { return }
                 strongSelf.packagesList = list
                 strongSelf.segmentSelected()
+            })
+            .store(in: &disposables)
+    }
+    
+    private func observingError() {
+        self.packagesListViewModel.$networkError
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] err in
+                guard let strongSelf = self else { return }
+                guard let err = err else {
+                    return
+                }
+                switch err {
+                case .invalidURL( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                case .netConnection( _):
+                    let positiveAction = Action(title: String.OKStr)
+                    strongSelf.showAlert(title: String.networkFailureStr, msg: String.pleaseCheckYourNetworkAndRetryStr, positiveAction: positiveAction, negativeAction: nil)
+                default:
+                    break
+                }
             })
             .store(in: &disposables)
     }
@@ -213,6 +236,27 @@ class DeliveryListViewController: UIViewController {
         sortSelection.configure(viewModel: TopActionSheetViewModel(title: String.sortListByStr, actions: actions))
         sortSelection.modalPresentationStyle = .overCurrentContext
         self.present(sortSelection, animated: true)
+    }
+    
+    private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+
+        if positiveAction != nil {
+            let positiveHandler: (UIAlertAction) -> Void = { alertAction in
+                positiveAction?.handler?(alertAction.title)
+            }
+            alert.addAction(UIAlertAction(title: positiveAction?.title, style: .default, handler: positiveHandler))
+        }
+        
+        if negativeAction != nil {
+            let negativeHandler: (UIAlertAction) -> Void = { alertAction in
+                negativeAction?.handler?(alertAction.title)
+            }
+            alert.addAction(UIAlertAction(title: negativeAction?.title, style: .cancel, handler: negativeHandler))
+        }
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

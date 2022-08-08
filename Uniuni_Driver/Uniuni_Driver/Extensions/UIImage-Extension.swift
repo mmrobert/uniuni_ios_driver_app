@@ -22,4 +22,6 @@ extension UIImage {
     static let mapPinRed: UIImage? = UIImage(named: "map-pin-red")
     static let mapServiceBlack: UIImage? = UIImage(named: "map-service-black")
     static let mapServiceOrange: UIImage? = UIImage(named: "map-service-orange")
+    static let circledCheckmark: UIImage? = UIImage(named: "circled-checkmark")
+    
 }

@@ -8,15 +8,15 @@
 import Foundation
 
 enum FailedHandleType: Int, Codable {
-    case wrongAddress = 0
-    case damaged = 1
+    case returned = 0
+    case drop_off = 1
     
     func getDisplayString() -> String {
         switch self {
-        case .wrongAddress:
-            return String.wrongAddressStr
-        case .damaged:
-            return ""
+        case .returned:
+            return String.returnedStr
+        case .drop_off:
+            return String.dropOffStr
         }
     }
     

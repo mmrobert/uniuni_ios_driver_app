@@ -13,6 +13,7 @@ class PackagesListViewModel: ObservableObject {
     let coreDataManager = CoreDataManager.shared
     
     @Published var list: [PackageViewModel] = []
+    @Published var networkError: NetworkRequestError?
     
     private var disposables = Set<AnyCancellable>()
     
@@ -32,7 +33,8 @@ class PackagesListViewModel: ObservableObject {
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
                 switch value {
-                case .failure:
+                case .failure(let error):
+                    strongSelf.networkError = error
                     strongSelf.list = []
                 case .finished:
                     break
@@ -52,7 +54,8 @@ class PackagesListViewModel: ObservableObject {
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
                 switch value {
-                case .failure:
+                case .failure(let error):
+                    strongSelf.networkError = error
                     strongSelf.list = []
                 case .finished:
                     break
@@ -155,7 +158,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "11",
             postscript: "This pack 11",
             warehouse_id: 1,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .returned
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 22,
@@ -177,7 +180,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "220",
             postscript: "This pack 22",
             warehouse_id: 2,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .returned
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 33,
@@ -199,7 +202,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "33",
             postscript: "This pack 33",
             warehouse_id: 3,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .returned
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 999,
@@ -221,7 +224,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "99",
             postscript: "This pack 99",
             warehouse_id: 9,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .drop_off
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 44,
@@ -243,7 +246,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "44",
             postscript: "This pack 44",
             warehouse_id: 4,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .drop_off
         ))
         coreDataManager.savePackage(package: PackageDataModel(
             order_id: 55,
@@ -265,7 +268,7 @@ class PackagesListViewModel: ObservableObject {
             buzz_code: "55",
             postscript: "This pack 55",
             warehouse_id: 5,
-            failed_handle_type: .wrongAddress
+            failed_handle_type: .returned
         ))
     }
 }
