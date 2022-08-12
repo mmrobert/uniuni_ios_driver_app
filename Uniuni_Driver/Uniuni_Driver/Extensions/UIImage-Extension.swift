@@ -24,5 +24,14 @@ extension UIImage {
     static let mapServiceOrange: UIImage? = UIImage(named: "map-service-orange")
     static let circledCheckmark: UIImage? = UIImage(named: "circled-checkmark")
     static let camera: UIImage? = UIImage(named: "icon-camera")
+    static let iconBack: UIImage? = UIImage(named: "icon-back")
+    static let cameraToggle: UIImage? = UIImage(named: "camera-toggle")
+    static let cross: UIImage? = UIImage(named: "cross")
+    static let flashAuto: UIImage? = UIImage(named: "flash-auto")
+    static let flashLock: UIImage? = UIImage(named: "flash-lock")
+    static let flashOpen: UIImage? = UIImage(named: "flash-open")
+    static let gallary: UIImage? = UIImage(named: "gallary")
+    static let cameraClick: UIImage? = UIImage(named: "camera-click")
+    
     
 }

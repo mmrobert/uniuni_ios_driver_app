@@ -12,9 +12,9 @@ import SwiftUI
 class CompleteDeliveryNavigator: ObservableObject {
     
     private var naviController = UINavigationController()
+    private var topController: UIViewController?
     private var packageViewModel: PackageViewModel
-    @Published var image1: UIImage?
-    @Published var image2: UIImage?
+    @Published var photos: [UIImage] = []
     
     init(packageViewModel: PackageViewModel) {
         self.packageViewModel = packageViewModel
@@ -26,14 +26,19 @@ class CompleteDeliveryNavigator: ObservableObject {
     
     func presentDeliveryDetail(presenter: UIViewController) {
         let contentView = CompletePackageDetailView(navigator: self)
-        naviController.viewControllers = [UIHostingController(rootView: contentView)]
+        let top = UIHostingController(rootView: contentView)
+        naviController.viewControllers = [top]
+        self.topController = top
         naviController.modalPresentationStyle = .automatic
         naviController.modalTransitionStyle = .crossDissolve
         presenter.present(naviController, animated: true)
     }
     
-    func pushImagePickerController() {
-        
+    func presentTakePhotoViewController() {
+        let takePhoto = TakePhotosViewController(navigator: self)
+        takePhoto.modalPresentationStyle = .fullScreen
+        takePhoto.modalTransitionStyle = .crossDissolve
+        topController?.present(takePhoto, animated: true)
     }
     
     func dismissNavigator() {

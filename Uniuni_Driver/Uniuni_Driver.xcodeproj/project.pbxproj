@@ -28,6 +28,8 @@
 		9B5B8F7828A00D1900CEA6BC /* CompleteDeliveryNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */; };
 		9B5B8F7A28A018FB00CEA6BC /* CompletePackageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */; };
 		9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */; };
+		9B5B8F7E28A36FB900CEA6BC /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */; };
+		9B5B8F8028A407FC00CEA6BC /* TakePhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */; };
 		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
 		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
@@ -112,6 +114,8 @@
 		9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteDeliveryNavigator.swift; sourceTree = "<group>"; };
 		9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletePackageDetailView.swift; sourceTree = "<group>"; };
 		9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextView.swift; sourceTree = "<group>"; };
+		9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePhotosViewController.swift; sourceTree = "<group>"; };
 		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
@@ -203,6 +207,7 @@
 				9BC9F80D285EBE0B00376D95 /* DeliveryListViewController.swift */,
 				9B1730A0287E5722005AE7AD /* MapClusterViewController.swift */,
 				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
+				9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -218,6 +223,7 @@
 				9BC724BD28846E1300229E51 /* LeadingTitleLabel.swift */,
 				9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */,
 				9BC724B928846A7400229E51 /* MapPackageDetailCardView.swift */,
+				9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */,
 			);
 			path = "Custom UIKit Views";
 			sourceTree = "<group>";
@@ -584,6 +590,7 @@
 				9BD86CB92895890200228432 /* NetworkService.swift in Sources */,
 				9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */,
 				9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */,
+				9B5B8F7E28A36FB900CEA6BC /* CameraPreviewView.swift in Sources */,
 				9BD86CC3289A280900228432 /* MessageTemplatesListDataModel.swift in Sources */,
 				9BC2D4F328680AE800354726 /* PackageTableViewCell.swift in Sources */,
 				9BD86CBD2895FD4A00228432 /* ServicePointDataModel.swift in Sources */,
@@ -616,6 +623,7 @@
 				9BB33A1428767BC2003ABD2F /* PackageViewModel.swift in Sources */,
 				9BC9F807285E5E5F00376D95 /* PackagesListViewModel.swift in Sources */,
 				9B1730A5287E70F0005AE7AD /* ServicePointsListDataModel.swift in Sources */,
+				9B5B8F8028A407FC00CEA6BC /* TakePhotosViewController.swift in Sources */,
 				9B39AB1D287A250C00877EBA /* MapPackageCardView.swift in Sources */,
 				9BD86CC12896D97300228432 /* MapViewModel.swift in Sources */,
 				9B1730A7287E78BC005AE7AD /* ServicePointsListViewModel.swift in Sources */,
