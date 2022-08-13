@@ -3,7 +3,6 @@
   Uniuni_Driver
 
   Created by Boqian Cheng on 2022-06-17.
-  
 */
 
 "Delivery" = "Delivery";
@@ -82,3 +81,9 @@
 "Route No" = "Route No.";
 "Name" = "Name";
 "Address" = "Address";
+"App has no permission to use the camera" = "App has no permission to use the camera, please change privacy settings";
+"Unable to capture media" = "Unable to capture media.";
+"First Photo" = "First Photo";
+"Second Photo" = "Second Photo";
+"Retake" = "Retake";
+"Use" = "Use";

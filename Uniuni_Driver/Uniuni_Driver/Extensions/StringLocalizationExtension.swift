@@ -84,5 +84,12 @@ extension String {
     static let routeNoStr = NSLocalizedString("Route No", comment: "")
     static let nameStr = NSLocalizedString("Name", comment: "")
     static let addressStr = NSLocalizedString("Address", comment: "")
+    static let AppHasNoPermissionToUseTheCameraStr = NSLocalizedString("App has no permission to use the camera", comment: "")
+    static let unableToCaptureMediaStr = NSLocalizedString("App has no permission to use the camera", comment: "")
+    static let firstPhotoStr = NSLocalizedString("First Photo", comment: "")
+    static let secondPhotoStr = NSLocalizedString("Second Photo", comment: "")
     
+    
+    static let retakeStr = NSLocalizedString("Retake", comment: "")
+    static let useStr = NSLocalizedString("Use", comment: "")
 }

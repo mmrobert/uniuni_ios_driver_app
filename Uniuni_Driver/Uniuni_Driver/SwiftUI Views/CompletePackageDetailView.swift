@@ -76,37 +76,42 @@ struct CompletePackageDetailView: View {
             }
             VStack {
                 HStack {
-                    if let image1 = navigator.image1 {
-                        Image(uiImage: image1)
-                            .resizable()
-                            .frame(width: 110, height: 110)
-                    } else {
+                    if navigator.photos.count == 0 {
                         Image("icon-camera")
                             .resizable()
                             .frame(width: 110, height: 110)
                             .onTapGesture {
-                                self.navigator.pushImagePickerController()
+                                self.navigator.presentTakePhotoViewController()
                             }
-                    }
-                    if let image2 = navigator.image2 {
-                        Image(uiImage: image2)
+                    } else if navigator.photos.count == 1 {
+                        Image(uiImage: navigator.photos[0])
                             .resizable()
                             .frame(width: 110, height: 110)
-                    } else {
                         Image("icon-camera")
+                            .resizable()
+                            .frame(width: 110, height: 110)
+                            .onTapGesture {
+                                self.navigator.presentTakePhotoViewController()
+                            }
+                    } else if navigator.photos.count == 2 {
+                        Image(uiImage: navigator.photos[0])
+                            .resizable()
+                            .frame(width: 110, height: 110)
+                        Image(uiImage: navigator.photos[1])
                             .resizable()
                             .frame(width: 110, height: 110)
                     }
                     Spacer()
                 }
-                HStack(alignment: .center) {
-                    Button(String.completeStr) {
-                        self.navigator.dismissNavigator()
-                    }
-                    .background(Color(UIColor.tabbarTint ?? .gray))
-                    .foregroundColor(.white)
+                Button(String.completeStr) {
+                    self.navigator.dismissNavigator()
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, minHeight: 46)
+                .background(Color(UIColor.tabbarTint ?? .gray))
+                .font(.system(size: 18))
+                .foregroundColor(.white)
+                .cornerRadius(23)
+                .padding()
             }
             Spacer()
         }
@@ -114,7 +119,7 @@ struct CompletePackageDetailView: View {
         .navigationBarItems(leading: Button {
             self.navigator.dismissNavigator()
         } label: {
-            Image(systemName: "pencil")
+            Image("icon-back")
         })
     }
 }
