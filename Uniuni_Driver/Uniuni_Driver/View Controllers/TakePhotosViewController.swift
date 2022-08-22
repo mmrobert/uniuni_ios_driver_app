@@ -11,7 +11,19 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-class TakePhotosViewController: UIViewController {
+protocol TakePhotosViewControllerNavigator: ObservableObject {
+    var photoTaken: UIImage? { get set}
+    var photos: [UIImage] { get set }
+    var photoTakingFlow: PhotoTakingFlow { get set }
+    func presentTakePhotoViewController()
+    func presentPhotoPickerViewController()
+    func presentPhotoReviewViewController()
+    func dismissPhotoTaking(animated: Bool, completion: (() -> Void)?)
+    func dismissPhotoReview(animated: Bool, completion: (() -> Void)?)
+    
+}
+
+class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptureDelegate where Navigator: TakePhotosViewControllerNavigator {
     
     enum SessionSetupResult {
         case success
@@ -42,7 +54,7 @@ class TakePhotosViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
-        label.font = UIFont.systemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: 22)
         label.textColor = UIColor.white
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -111,11 +123,13 @@ class TakePhotosViewController: UIViewController {
         position: .unspecified
     )
     
+    private var cameraFlashMode: CameraFlashMode = .auto
+    
     private var photoImage: UIImage?
     
-    private var navigator: CompleteDeliveryNavigator
+    private var navigator: Navigator
     
-    init(navigator: CompleteDeliveryNavigator) {
+    init(navigator: Navigator) {
         self.navigator = navigator
         super.init(nibName: nil, bundle: nil)
     }
@@ -143,7 +157,8 @@ class TakePhotosViewController: UIViewController {
         self.closeButton.addTarget(self, action: #selector(TakePhotosViewController.dismissSelf), for: .touchUpInside)
         self.takePhotoButton.addTarget(self, action: #selector(TakePhotosViewController.capturePhoto(_:)), for: .touchUpInside)
         self.cameraToggleButton.addTarget(self, action: #selector(TakePhotosViewController.changeCamera(_:)), for: .touchUpInside)
-        self.flashButton.addTarget(self, action: #selector(TakePhotosViewController.changeFlash(_:)), for: .touchUpInside)
+        self.flashButton.addTarget(self, action: #selector(TakePhotosViewController.changeFlash), for: .touchUpInside)
+        self.galleryButton.addTarget(self, action: #selector(TakePhotosViewController.pickPhotoFromGallery), for: .touchUpInside)
     }
     
     private func checkCameraPermission() {
@@ -372,8 +387,9 @@ class TakePhotosViewController: UIViewController {
     }
     
     @objc
-    private func changeFlash(_ flashButton: UIButton) {
-        self.flashButton.setImage(UIImage.flashLock, for: .normal)
+    private func changeFlash() {
+        self.cameraFlashMode = self.cameraFlashMode.nextMode()
+        self.flashButton.setImage(self.cameraFlashMode.flashModeButtonImage(), for: .normal)
     }
     
     @objc
@@ -459,7 +475,7 @@ class TakePhotosViewController: UIViewController {
             }
             
             if self.videoDeviceInput.device.isFlashAvailable {
-                photoSettings.flashMode = .auto
+                photoSettings.flashMode = self.cameraFlashMode.deviceFlashMode()
             }
             
             photoSettings.isHighResolutionPhotoEnabled = true
@@ -470,6 +486,11 @@ class TakePhotosViewController: UIViewController {
             photoSettings.photoQualityPrioritization = .quality
             self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
+    }
+    
+    @objc
+    private func pickPhotoFromGallery() {
+        self.navigator.presentPhotoPickerViewController()
     }
     
     private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
@@ -496,6 +517,27 @@ class TakePhotosViewController: UIViewController {
     @objc
     private func dismissSelf() {
         self.dismiss(animated: true)
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+
+        if let error = error {
+            print("Error capturing photo: \(error)")
+            return
+        } else {
+            guard let data = photo.fileDataRepresentation() else {
+                return
+            }
+            self.photoImage = UIImage(data: data)
+            self.navigator.photoTaken = self.photoImage
+            
+            switch self.navigator.photoTakingFlow {
+            case .taking:
+                self.navigator.presentPhotoReviewViewController()
+            case .review(_):
+                self.navigator.dismissPhotoTaking(animated: true, completion: nil)
+            }
+        }
     }
 }
 
@@ -534,17 +576,17 @@ extension TakePhotosViewController {
             [closeButton.leadingAnchor.constraint(equalTo: topContainer.leadingAnchor, constant: 30),
              closeButton.widthAnchor.constraint(equalToConstant: 25),
              closeButton.heightAnchor.constraint(equalToConstant: 29),
-             closeButton.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor)]
+             closeButton.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor, constant: 20)]
         )
         NSLayoutConstraint.activate(
             [titleLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
-             titleLabel.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor)]
+             titleLabel.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor, constant: 20)]
         )
         NSLayoutConstraint.activate(
             [flashButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 10),
              flashButton.widthAnchor.constraint(equalToConstant: 25),
              flashButton.heightAnchor.constraint(equalToConstant: 29),
-             flashButton.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor),
+             flashButton.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor, constant: 20),
              flashButton.trailingAnchor.constraint(equalTo: topContainer.trailingAnchor, constant: -30)]
         )
         
@@ -568,25 +610,6 @@ extension TakePhotosViewController {
              cameraToggleButton.centerYAnchor.constraint(equalTo: bottomContainer.centerYAnchor),
              cameraToggleButton.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor, constant: -22)]
         )
-    }
-}
-
-extension TakePhotosViewController: AVCapturePhotoCaptureDelegate {
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-
-        if let error = error {
-            print("Error capturing photo: \(error)")
-            return
-        } else {
-            guard let data = photo.fileDataRepresentation() else {
-                return
-            }
-            self.photoImage = UIImage(data: data)
-            if let image = self.photoImage {
-                self.navigator.photos.append(image)
-            }
-        }
     }
 }
 
@@ -624,4 +647,48 @@ extension AVCaptureDevice.DiscoverySession {
         
         return uniqueDevicePositions.count
     }
+}
+
+enum CameraFlashMode {
+    case auto
+    case on
+    case off
+    
+    func nextMode() -> CameraFlashMode {
+        switch self {
+        case .auto:
+            return .on
+        case .on:
+            return .off
+        case .off:
+            return .auto
+        }
+    }
+    
+    func flashModeButtonImage() -> UIImage? {
+        switch self {
+        case .auto:
+            return UIImage.flashAuto
+        case .on:
+            return UIImage.flashOpen
+        case .off:
+            return UIImage.flashLock
+        }
+    }
+    
+    func deviceFlashMode() -> AVCaptureDevice.FlashMode {
+        switch self {
+        case .auto:
+            return AVCaptureDevice.FlashMode.auto
+        case .on:
+            return AVCaptureDevice.FlashMode.on
+        case .off:
+            return AVCaptureDevice.FlashMode.off
+        }
+    }
+}
+
+enum PhotoTakingFlow {
+    case taking
+    case review(Int)
 }

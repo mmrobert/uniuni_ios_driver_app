@@ -59,7 +59,7 @@ class DeliveryListViewController: UIViewController {
     private var listToDisplay: [PackageViewModel] = []
     
     private var sortTitleLabel: UILabel?
-    private var packageSort: PackageSort = .date
+    private var packageSort: PackageSort = .route
     
     private let locationManager = CLLocationManager()
     
@@ -174,7 +174,7 @@ class DeliveryListViewController: UIViewController {
         let searchBtn = UIBarButtonItem(image: UIImage.search, style: .plain, target: self, action: #selector(DeliveryListViewController.searchButtonAction))
         let routeBtn = UIBarButtonItem(image: UIImage.route, style: .plain, target: self, action: #selector(DeliveryListViewController.routeButtonAction))
         let sortTitle = UILabel()
-        sortTitle.text = String.dateStr
+        sortTitle.text = self.packageSort.getDisplayString()
         let sortImage = UIImageView(image: UIImage.sort)
         let sortBtnView = UIStackView(arrangedSubviews: [sortTitle, sortImage])
         sortBtnView.axis = .horizontal

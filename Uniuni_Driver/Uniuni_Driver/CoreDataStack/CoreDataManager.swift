@@ -18,6 +18,8 @@ class CoreDataManager {
     @Published var packages: [PackageDataModel] = []
     @Published var services: [ServicePointDataModel] = []
     
+    @Published var saveError: CoreDataError?
+    
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
         
@@ -294,6 +296,60 @@ class CoreDataManager {
         }
     }
     
+    func saveFailedUploaded(orderID: Int, deliveryResult: Int, podImages: [Data], failedReason: Int?) {
+        
+        if isFailedUploadedSaved(orderID: orderID) {
+            return
+        }
+
+        let taskContext = newTaskContext()
+        
+        taskContext.perform {
+            guard let entity = NSEntityDescription.entity(forEntityName: "FailedUploaded", in: taskContext) else { return }
+            
+            let object = NSManagedObject(entity: entity, insertInto: taskContext)
+            object.setValue(orderID, forKeyPath: "order_id")
+            object.setValue(deliveryResult, forKeyPath: "delivery_result")
+            object.setValue(failedReason, forKeyPath: "failed_reason")
+            if podImages.count == 1 {
+                object.setValue(podImages[0], forKeyPath: "image1")
+            } else if podImages.count > 1 {
+                object.setValue(podImages[0], forKeyPath: "image1")
+                object.setValue(podImages[1], forKeyPath: "image2")
+            }
+            
+            do {
+                try taskContext.save()
+            } catch let error as NSError {
+                self.saveError = CoreDataError.save
+                print("Could not save: \(error)")
+            }
+            if self.saveError == nil {
+                self.saveError = nil
+            }
+        }
+    }
+    
+    private func isFailedUploadedSaved(orderID: Int) -> Bool {
+        
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
+            
+        var failedUploaded: [NSManagedObject]?
+        do {
+            failedUploaded = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if failedUploaded?.count ?? 0 > 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     /// Creates and configures a private queue context.
     private func newTaskContext() -> NSManagedObjectContext {
         let taskContext = container.newBackgroundContext()
@@ -301,4 +357,9 @@ class CoreDataManager {
         taskContext.automaticallyMergesChangesFromParent = true
         return taskContext
     }
+}
+
+enum CoreDataError: Error {
+    case save
+    case fetch
 }

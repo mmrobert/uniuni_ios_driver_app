@@ -30,9 +30,16 @@
 		9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */; };
 		9B5B8F7E28A36FB900CEA6BC /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */; };
 		9B5B8F8028A407FC00CEA6BC /* TakePhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */; };
+		9B6B33C628ACAB250036293E /* SpinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33C528ACAB250036293E /* SpinnerViewController.swift */; };
+		9B6B33C828AD35550036293E /* ViewHidenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33C728AD35550036293E /* ViewHidenModifier.swift */; };
+		9B6B33CA28B082010036293E /* PopupSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33C928B082010036293E /* PopupSwiftUIView.swift */; };
+		9B6B33CC28B1E57E0036293E /* RedeliveryHistoryDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33CB28B1E57E0036293E /* RedeliveryHistoryDataModel.swift */; };
+		9B6B33CE28B296580036293E /* FailedDeliveryNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */; };
+		9B6B33D028B2975E0036293E /* FailedPackageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33CF28B2975E0036293E /* FailedPackageDetailView.swift */; };
 		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
 		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
+		9BAE07E928A80A2E00167795 /* PhotoReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAE07E828A80A2D00167795 /* PhotoReviewView.swift */; };
 		9BB33A0A28767A0D003ABD2F /* PackageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB33A0928767A0D003ABD2F /* PackageDataModel.swift */; };
 		9BB33A0C28767A4F003ABD2F /* GoodsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB33A0B28767A4F003ABD2F /* GoodsType.swift */; };
 		9BB33A0E28767A7C003ABD2F /* PackageState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB33A0D28767A7C003ABD2F /* PackageState.swift */; };
@@ -116,9 +123,16 @@
 		9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextView.swift; sourceTree = "<group>"; };
 		9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePhotosViewController.swift; sourceTree = "<group>"; };
+		9B6B33C528ACAB250036293E /* SpinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerViewController.swift; sourceTree = "<group>"; };
+		9B6B33C728AD35550036293E /* ViewHidenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHidenModifier.swift; sourceTree = "<group>"; };
+		9B6B33C928B082010036293E /* PopupSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSwiftUIView.swift; sourceTree = "<group>"; };
+		9B6B33CB28B1E57E0036293E /* RedeliveryHistoryDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeliveryHistoryDataModel.swift; sourceTree = "<group>"; };
+		9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedDeliveryNavigator.swift; sourceTree = "<group>"; };
+		9B6B33CF28B2975E0036293E /* FailedPackageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedPackageDetailView.swift; sourceTree = "<group>"; };
 		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
+		9BAE07E828A80A2D00167795 /* PhotoReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoReviewView.swift; sourceTree = "<group>"; };
 		9BB33A0928767A0D003ABD2F /* PackageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageDataModel.swift; sourceTree = "<group>"; };
 		9BB33A0B28767A4F003ABD2F /* GoodsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodsType.swift; sourceTree = "<group>"; };
 		9BB33A0D28767A7C003ABD2F /* PackageState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageState.swift; sourceTree = "<group>"; };
@@ -208,6 +222,7 @@
 				9B1730A0287E5722005AE7AD /* MapClusterViewController.swift */,
 				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
 				9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */,
+				9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -224,6 +239,7 @@
 				9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */,
 				9BC724B928846A7400229E51 /* MapPackageDetailCardView.swift */,
 				9B5B8F7D28A36FB900CEA6BC /* CameraPreviewView.swift */,
+				9B6B33C528ACAB250036293E /* SpinnerViewController.swift */,
 			);
 			path = "Custom UIKit Views";
 			sourceTree = "<group>";
@@ -302,6 +318,7 @@
 				9BD86CC2289A280900228432 /* MessageTemplatesListDataModel.swift */,
 				9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */,
 				9B5B8F71289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift */,
+				9B6B33CB28B1E57E0036293E /* RedeliveryHistoryDataModel.swift */,
 			);
 			path = "Data Models";
 			sourceTree = "<group>";
@@ -312,7 +329,11 @@
 				9BCA8501286F4C190046C0C2 /* PackageSearchView.swift */,
 				9BCA8503286F67990046C0C2 /* SearchCellView.swift */,
 				9B5B8F7928A018FB00CEA6BC /* CompletePackageDetailView.swift */,
+				9B6B33CF28B2975E0036293E /* FailedPackageDetailView.swift */,
 				9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */,
+				9BAE07E828A80A2D00167795 /* PhotoReviewView.swift */,
+				9B6B33C728AD35550036293E /* ViewHidenModifier.swift */,
+				9B6B33C928B082010036293E /* PopupSwiftUIView.swift */,
 			);
 			path = "SwiftUI Views";
 			sourceTree = "<group>";
@@ -580,7 +601,9 @@
 				9BD86CB7289584B700228432 /* NetworkRequestError.swift in Sources */,
 				9BCA8504286F67990046C0C2 /* SearchCellView.swift in Sources */,
 				9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */,
+				9B6B33CA28B082010036293E /* PopupSwiftUIView.swift in Sources */,
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,
+				9B6B33D028B2975E0036293E /* FailedPackageDetailView.swift in Sources */,
 				9B5B8F7A28A018FB00CEA6BC /* CompletePackageDetailView.swift in Sources */,
 				9B1730A9287E7909005AE7AD /* ServicePointViewModel.swift in Sources */,
 				9BB33A1228767AEF003ABD2F /* FailedHandleType.swift in Sources */,
@@ -588,6 +611,7 @@
 				9B5B8F72289C8CE500CEA6BC /* UpdateAddressTypeResponse.swift in Sources */,
 				9B02F0542859792800C23165 /* LoginViewController.swift in Sources */,
 				9BD86CB92895890200228432 /* NetworkService.swift in Sources */,
+				9B6B33CE28B296580036293E /* FailedDeliveryNavigator.swift in Sources */,
 				9BC9F802285E515400376D95 /* UIImage-Extension.swift in Sources */,
 				9BC9F800285E509900376D95 /* UIColor-Extension.swift in Sources */,
 				9B5B8F7E28A36FB900CEA6BC /* CameraPreviewView.swift in Sources */,
@@ -613,8 +637,10 @@
 				9BC724BC28846D8100229E51 /* UnderlinedLabel.swift in Sources */,
 				9BC724BE28846E1300229E51 /* LeadingTitleLabel.swift in Sources */,
 				9BC2D4F12867B92100354726 /* PackageCardViewModel.swift in Sources */,
+				9B6B33C828AD35550036293E /* ViewHidenModifier.swift in Sources */,
 				9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */,
 				9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */,
+				9B6B33C628ACAB250036293E /* SpinnerViewController.swift in Sources */,
 				9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */,
 				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
 				9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */,
@@ -626,6 +652,8 @@
 				9B5B8F8028A407FC00CEA6BC /* TakePhotosViewController.swift in Sources */,
 				9B39AB1D287A250C00877EBA /* MapPackageCardView.swift in Sources */,
 				9BD86CC12896D97300228432 /* MapViewModel.swift in Sources */,
+				9BAE07E928A80A2E00167795 /* PhotoReviewView.swift in Sources */,
+				9B6B33CC28B1E57E0036293E /* RedeliveryHistoryDataModel.swift in Sources */,
 				9B1730A7287E78BC005AE7AD /* ServicePointsListViewModel.swift in Sources */,
 				9BCA8502286F4C190046C0C2 /* PackageSearchView.swift in Sources */,
 				9BD86CBB2895B4AC00228432 /* PackagesListDataModel.swift in Sources */,
@@ -803,12 +831,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3L9Z83YP6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Uniuni_Driver/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location will be showing on the map.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take photos for confirmation.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Get the user location for navigation purposes.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -832,12 +863,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3L9Z83YP6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Uniuni_Driver/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location will be showing on the map.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take photos for confirmation.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Get the user location for navigation purposes.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

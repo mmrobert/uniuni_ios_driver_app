@@ -132,4 +132,39 @@ class NetworkService: NetworkServiceProvider {
             }
         }
     }
+    
+    func completeDelivery(orderID: Int, deliveryResult: Int, podImages: [Data], failedReason: Int?) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
+        let bodyParas = ["order_id": orderID,
+                         "delivery_result": deliveryResult,
+                         "pod_images": podImages,
+                         "failed_reason": failedReason as Any] as [String:Any]
+        let router = NetworkAPIs.completeDelivery(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func reDeliveryHistory(driverID: Int, orderID: Int) -> AnyPublisher<RedeliveryHistoryDataModel, NetworkRequestError> {
+        let pathParas = [String(driverID), String(orderID)]
+        let router = NetworkAPIs.reDeliveryHistory(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
 }
