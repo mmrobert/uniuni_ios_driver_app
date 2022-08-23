@@ -105,14 +105,14 @@ class PackagesListViewModel: ObservableObject {
             sorted = list.sorted(by: { (lh, rh) -> Bool in
                 let lhExpressType = lh.express_type ?? .regular
                 let rhExpressType = rh.express_type ?? .regular
-                let lhDate = lh.delivery_by ?? Date.dateTimeString()
-                let rhDate = rh.delivery_by ?? Date.dateTimeString()
+                let lhRoute = lh.route_no ?? 0
+                let rhRoute = rh.route_no ?? 0
                 if lhExpressType.rawValue > rhExpressType.rawValue {
                     return true
                 } else if lhExpressType.rawValue < rhExpressType.rawValue {
                     return false
                 } else {
-                    return lhDate < rhDate
+                    return lhRoute < rhRoute
                 }
             })
         case .date:

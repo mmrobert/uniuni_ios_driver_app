@@ -88,8 +88,23 @@ extension String {
     static let unableToCaptureMediaStr = NSLocalizedString("App has no permission to use the camera", comment: "")
     static let firstPhotoStr = NSLocalizedString("First Photo", comment: "")
     static let secondPhotoStr = NSLocalizedString("Second Photo", comment: "")
-    
-    
     static let retakeStr = NSLocalizedString("Retake", comment: "")
     static let useStr = NSLocalizedString("Use", comment: "")
+    static let noPhotoToReviewStr = NSLocalizedString("No Photo to Review", comment: "")
+    static let completedStr = NSLocalizedString("Completed", comment: "")
+    static let uploadingFailedStr = NSLocalizedString("Uploading Failed", comment: "")
+    static let completeDeliveryPleaseCheckYourNetworkStr = NSLocalizedString("complete delivery please check your network", comment: "")
+    static let saveAndLeaveStr = NSLocalizedString("Save and Leave", comment: "")
+    static let savingFailedStr = NSLocalizedString("Saving Failed", comment: "")
+    static let notEnoughStorageSpaceStr = NSLocalizedString("Not enough storage space", comment: "")
+    static let reasonOfFailStr = NSLocalizedString("Reason of Fail", comment: "")
+    static let chooseAReasonOfFailingDeliveryStr = NSLocalizedString("Choose a reason of failing delivery", comment: "")
+    static let failToContactCustomerStr = NSLocalizedString("Fail to Contact Customer", comment: "")
+    static let POBoxStr = NSLocalizedString("P.O.Box", comment: "")
+    static let redeliveryStr = NSLocalizedString("Redelivery", comment: "")
+    static let attemptFailedStr = NSLocalizedString("Attempt Failed", comment: "")
+    static let yourTwoAttemptsAreTooCloseStr = NSLocalizedString("Your two attempts are too close", comment: "")
+    static let failedReasonStr = NSLocalizedString("Failed Reason", comment: "")
+    
+    
 }

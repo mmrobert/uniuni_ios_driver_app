@@ -1,26 +1,30 @@
 //
-//  CompleteDeliveryNavigator.swift
+//  FailedDeliveryNavigator.swift
 //  Uniuni_Driver
 //
-//  Created by Boqian Cheng on 2022-08-07.
+//  Created by Boqian Cheng on 2022-08-21.
 //
 
+import Foundation
 import UIKit
 import Combine
 import SwiftUI
 import PhotosUI
 
-class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
+class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
     
     private struct Constants {
         static let bizMsgSuccess = "DELIVERY.SUBMIT.SUCCESS"
     }
     
+    private var packageViewModel: PackageViewModel
+    private var failedReason: FailedReasonDelivery
+    
     private var naviController = UINavigationController()
-    private var deliveryDetailViewController: UIViewController?
+    private var failedDetailViewController: UIViewController?
     private var photoTakingViewController: UIViewController?
     private var photoReviewHostViewController: UIViewController?
-    private var packageViewModel: PackageViewModel
+    
     @Published var photos: [UIImage] = []
     @Published var photoTaken: UIImage?
     @Published var photoTakingFlow: PhotoTakingFlow = .taking
@@ -31,39 +35,25 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
     @Published var showingProgressView: Bool = false
     @Published var showingSuccessfulAlert: Bool = false
     @Published var showingNetworkErrorAlert: Bool = false
-    @Published var showingSaveErrorAlert: Bool = false
     
-    init(packageViewModel: PackageViewModel) {
+    init(packageViewModel: PackageViewModel, failedReason: FailedReasonDelivery) {
         self.packageViewModel = packageViewModel
-        CoreDataManager.shared.$saveError
-            .receive(on: DispatchQueue.main)
-            .dropFirst()
-            .sink(receiveValue: { [weak self] error in
-                guard let strongSelf = self else { return }
-                if let err = error {
-                    switch err {
-                    case .save:
-                        strongSelf.showingBackground = true
-                        strongSelf.showingSaveErrorAlert = true
-                    case .fetch:
-                        break
-                    }
-                } else {
-                    self?.dismissNavigator()
-                }
-            })
-            .store(in: &disposables)
+        self.failedReason = failedReason
     }
     
     func getPackageViewModel() -> PackageViewModel {
         self.packageViewModel
     }
     
-    func presentDeliveryDetail(presenter: UIViewController) {
-        let contentView = CompletePackageDetailView(navigator: self)
+    func getFailedReason() -> FailedReasonDelivery {
+        self.failedReason
+    }
+    
+    func presentFailedDetail(presenter: UIViewController) {
+        let contentView = FailedPackageDetailView(navigator: self)
         let host = UIHostingController(rootView: contentView)
         naviController.viewControllers = [host]
-        self.deliveryDetailViewController = host
+        self.failedDetailViewController = host
         naviController.modalPresentationStyle = .automatic
         naviController.modalTransitionStyle = .crossDissolve
         presenter.present(naviController, animated: true)
@@ -88,7 +78,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         
         switch self.photoTakingFlow {
         case .taking:
-            self.deliveryDetailViewController?.present(takePhoto, animated: true)
+            self.failedDetailViewController?.present(takePhoto, animated: true)
         case .review(_):
             self.photoReviewHostViewController?.present(takePhoto, animated: true)
         }
@@ -105,7 +95,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         case .taking:
             self.photoTakingViewController?.present(host, animated: true)
         case .review(_):
-            self.deliveryDetailViewController?.present(host, animated: true)
+            self.failedDetailViewController?.present(host, animated: true)
         }
     }
     
@@ -131,7 +121,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 1)?.jpegData(compressionQuality: 1)
         }
         NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
             .receive(on: DispatchQueue.main)
@@ -141,25 +131,30 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
                 case .failure(let error):
                     switch error {
                     case .invalidURL( _):
-                        strongSelf.showingNetworkErrorAlert = true
+                        print("cheng= inv-u")
+                        self?.showingNetworkErrorAlert = true
                     case .netConnection( _):
-                        strongSelf.showingNetworkErrorAlert = true
-                    case .failStatusCode( _):
-                        strongSelf.showingNetworkErrorAlert = true
+                        print("cheng= net")
+                        self?.showingNetworkErrorAlert = true
+                    case .failStatusCode(let des):
+                        print("cheng= f-s \(des)")
+                        self?.showingNetworkErrorAlert = true
                     default:
                         break
                     }
                     strongSelf.showingProgressView = false
                 case .finished:
+                    print("cheng= finish")
                     strongSelf.showingProgressView = false
                 }
             }, receiveValue: { [weak self] response in
                 guard let strongSelf = self else { return }
-                if response.biz_code?.lowercased() == Constants.bizMsgSuccess.lowercased() {
+                if response.biz_message?.lowercased() == Constants.bizMsgSuccess.lowercased() {
+                    print("cheng= success")
                     strongSelf.showingSuccessfulAlert = true
                 } else {
+                    print("cheng= failed")
                     strongSelf.showingSuccessfulAlert = false
-                    strongSelf.showingNetworkErrorAlert = true
                 }
                 strongSelf.showingProgressView = false
             })
@@ -171,7 +166,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 1.0)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 1)?.jpegData(compressionQuality: 1)
         }
         CoreDataManager.shared.saveFailedUploaded(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
     }
@@ -189,11 +184,11 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
     }
     
     deinit {
-        print("🍎 CompleteDeliveryNavigator - deinit")
+        print("🍎 FailedDeliveryNavigator - deinit")
     }
 }
 
-extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
+extension FailedDeliveryNavigator: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
@@ -238,3 +233,22 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
     }
 }
 
+enum FailedReasonDelivery {
+    case redelivery
+    case failedContactCustomer
+    case wrongAddress
+    case poBox
+    
+    func displayString() -> String {
+        switch self {
+        case .redelivery:
+            return String.redeliveryStr
+        case .failedContactCustomer:
+            return String.failToContactCustomerStr
+        case .wrongAddress:
+            return String.wrongAddressStr
+        case .poBox:
+            return String.POBoxStr
+        }
+    }
+}

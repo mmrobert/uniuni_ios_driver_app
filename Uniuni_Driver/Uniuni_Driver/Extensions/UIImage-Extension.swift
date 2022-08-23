@@ -33,5 +33,28 @@ extension UIImage {
     static let gallary: UIImage? = UIImage(named: "gallary")
     static let cameraClick: UIImage? = UIImage(named: "camera-click")
     
-    
+    func compressImageTo(expectedSizeInMB: Double) -> UIImage? {
+        
+        let sizeInBytes = Int(expectedSizeInMB * 1024 * 1024)
+        var compressingQuality: CGFloat = 1.0
+        var needCompress:Bool = true
+        guard var imageData = self.jpegData(compressionQuality: compressingQuality) else {
+            return nil
+        }
+        while needCompress && compressingQuality > 0.0 {
+            if let data = self.jpegData(compressionQuality: compressingQuality) {
+                if data.count < sizeInBytes {
+                    needCompress = false
+                    imageData = data
+                } else {
+                    compressingQuality -= 0.1
+                }
+            }
+        }
+        if (imageData.count < sizeInBytes) {
+            return UIImage(data: imageData)
+        } else {
+            return nil
+        }
+    }
 }

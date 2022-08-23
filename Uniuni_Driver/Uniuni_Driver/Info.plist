@@ -2,24 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>This app uses the camera to take photos for confirmation.</string>
-	<key>TargetName</key>
-	<string>$(TARGET_NAME)</string>
-	<key>MBXAccessToken</key>
-	<string>pk.eyJ1IjoiamFja3N1bjIyIiwiYSI6ImNsNHc1anR5YzB2N2czamw2ajVrc3g4czEifQ.FSB-BvjIjgnhmVC7iOrHAQ</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Get the user location for navigation purposes.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>location</string>
-	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>
 		<string>comgooglemaps-x-callback</string>
 	</array>
+	<key>MBXAccessToken</key>
+	<string>pk.eyJ1IjoiamFja3N1bjIyIiwiYSI6ImNsNHc1anR5YzB2N2czamw2ajVrc3g4czEifQ.FSB-BvjIjgnhmVC7iOrHAQ</string>
+	<key>TargetName</key>
+	<string>$(TARGET_NAME)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -37,5 +28,10 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>location</string>
+	</array>
 </dict>
 </plist>

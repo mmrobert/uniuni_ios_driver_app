@@ -19,7 +19,7 @@
 "Wrong Address" = "Wrong Address";
 "Regular" = "Regular";
 "Express" = "Express";
-"Medical" = "Medical";
+"Medical" = "Medication";
 "KM Away" = "KM Away";
 "MI Away" = "MI Away";
 "Parcel Details" = "Parcel Details";
@@ -77,6 +77,7 @@
 "Photos" = "Photos";
 "Take 2 photos" = "Take 2 photos (shipping label and the location).";
 "Complete" = "Complete";
+"Completed" = "Completed";
 "Order No" = "Order No.";
 "Tracking No" = "Tracking No.";
 "Route No" = "Route No.";
@@ -88,3 +89,17 @@
 "Second Photo" = "Second Photo";
 "Retake" = "Retake";
 "Use" = "Use";
+"No Photo to Review" = "No Photo to Review";
+"Uploading Failed" = "Uploading Failed";
+"complete delivery please check your network" = "Network failure, please check your network and retry. Orders that failed uploading can be saved to Failed Orders feature.";
+"Save and Leave" = "Save and Leave";
+"Saving Failed" = "Saving Failed";
+"Not enough storage space" = "Not enough storage space. Please retry after getting more storage space.";
+"Reason of Fail" = "Reason of Fail";
+"Choose a reason of failing delivery" = "Choose a reason of failing delivery.";
+"Fail to Contact Customer" = "Fail to Contact Customer";
+"P.O.Box" = "P.O.Box";
+"Redelivery" = "Redelivery";
+"Attempt Failed" = "Attempt Failed";
+"Your two attempts are too close" = "Your two attempts are too close. Please try to redelivery this parcel one hour later.";
+"Failed Reason" = "Failed Reason";

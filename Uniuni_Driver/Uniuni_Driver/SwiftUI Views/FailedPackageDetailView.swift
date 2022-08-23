@@ -1,23 +1,28 @@
 //
-//  CompletePackageDetailView.swift
+//  FailedPackageDetailView.swift
 //  Uniuni_Driver
 //
-//  Created by Boqian Cheng on 2022-08-07.
+//  Created by Boqian Cheng on 2022-08-21.
 //
 
+import Foundation
 import SwiftUI
 import MapboxDirections
 
-struct CompletePackageDetailView: View {
+struct FailedPackageDetailView: View {
     
-    @ObservedObject private var navigator: CompleteDeliveryNavigator
+    @ObservedObject private var navigator: FailedDeliveryNavigator
     @State private var scrollViewContentSize: CGSize = .zero
     
     var packageViewModel: PackageViewModel {
         navigator.getPackageViewModel()
     }
     
-    init(navigator: CompleteDeliveryNavigator) {
+    var failedReason: FailedReasonDelivery {
+        navigator.getFailedReason()
+    }
+    
+    init(navigator: FailedDeliveryNavigator) {
         self.navigator = navigator
     }
     
@@ -42,6 +47,7 @@ struct CompletePackageDetailView: View {
                             TitleTextView(title: String.deliveryTypeStr, text: packageViewModel.express_type?.getDisplayString())
                             TitleTextView(title: String.deliveryAttemptStr, text: packageViewModel.getDeliveryAttemptValue())
                             TitleTextView(title: String.deliveryByStr, text: packageViewModel.delivery_by)
+                            TitleTextView(title: String.failedReasonStr, text: failedReason.displayString(), titleColor: .black, textColor: Color("light-blue"))
                         }
                         HStack {
                             Text(String.customerInformationStr)
@@ -66,19 +72,6 @@ struct CompletePackageDetailView: View {
                             TitleTextView(title: String.buzzStr, text: packageViewModel.buzz_code)
                             TitleTextView(title: String.noteStr, text: packageViewModel.postscript)
                         }
-                        HStack {
-                            Text(String.photosStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        HStack {
-                            Text(String.take2PhotosStr)
-                                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                .foregroundColor(.gray)
-                            Spacer()
-                        }
                     }
                     .background(
                         GeometryReader { geo -> Color in
@@ -91,58 +84,84 @@ struct CompletePackageDetailView: View {
                 }
                 .frame(maxHeight: scrollViewContentSize.height)
                 VStack {
-                    HStack(spacing: 6) {
-                        if navigator.photos.count == 0 {
-                            Image("icon-camera")
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .background(Color("screen-base"))
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                        } else if navigator.photos.count == 1 {
-                            Image(uiImage: navigator.photos[0])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                            Image("icon-camera")
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .background(Color("screen-base"))
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                        } else if navigator.photos.count == 2 {
-                            Image(uiImage: navigator.photos[0])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoReviewFlow(index: 0)
-                                }
-                            Image(uiImage: navigator.photos[1])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoReviewFlow(index: 1)
-                                }
+                    switch failedReason {
+                    case .failedContactCustomer, .redelivery:
+                        HStack(spacing: 6) {
+                            if navigator.photos.count == 0 {
+                                Image("icon-camera")
+                                    .resizable()
+                                    .frame(width: 110, height: 110)
+                                    .background(Color("screen-base"))
+                                    .onTapGesture {
+                                        self.navigator.startPhotoTakingFlow()
+                                    }
+                            } else if navigator.photos.count == 1 {
+                                Image(uiImage: navigator.photos[0])
+                                    .resizable()
+                                    .frame(width: 110, height: 110)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoTakingFlow()
+                                    }
+                                Image("icon-camera")
+                                    .resizable()
+                                    .frame(width: 110, height: 110)
+                                    .background(Color("screen-base"))
+                                    .onTapGesture {
+                                        self.navigator.startPhotoTakingFlow()
+                                    }
+                            } else if navigator.photos.count == 2 {
+                                Image(uiImage: navigator.photos[0])
+                                    .resizable()
+                                    .frame(width: 110, height: 110)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoReviewFlow(index: 0)
+                                    }
+                                Image(uiImage: navigator.photos[1])
+                                    .resizable()
+                                    .frame(width: 110, height: 110)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoReviewFlow(index: 1)
+                                    }
+                            }
+                            Spacer()
                         }
-                        Spacer()
+                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                    case .wrongAddress, .poBox:
+                        VStack {
+                            Color(uiColor: .clear)
+                                .frame(width: 100, height: 30)
+                        }
                     }
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                    Button(String.completeStr) {
-                        self.navigator.showingBackground = true
-                        self.navigator.showingProgressView = true
-                        self.navigator.successfulDelivery()
+                }
+                Spacer()
+                VStack {
+                    switch failedReason {
+                    case .failedContactCustomer, .redelivery:
+                        Button(String.completeStr) {
+                            self.navigator.showingBackground = true
+                            self.navigator.showingProgressView = true
+                            self.navigator.successfulDelivery()
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 46)
+                        .background(Color("tab-bar-tint"))
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .cornerRadius(23)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                        .disabled(self.navigator.photos.count < 2)
+                    case .wrongAddress, .poBox:
+                        Button(String.completeStr) {
+                            self.navigator.showingBackground = true
+                            self.navigator.showingProgressView = true
+                            self.navigator.successfulDelivery()
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 46)
+                        .background(Color("tab-bar-tint"))
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .cornerRadius(23)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 46)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(23)
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                    .disabled(self.navigator.photos.count < 2)
                 }
             }
             VStack {
@@ -158,7 +177,7 @@ struct CompletePackageDetailView: View {
             }
             .isHidden(!self.navigator.showingProgressView)
         }
-        .navigationBarTitle(String.deliveredStr)
+        .navigationBarTitle(String.failedStr)
         .navigationBarItems(leading: Button {
             self.navigator.dismissNavigator()
         } label: {
@@ -198,24 +217,11 @@ struct CompletePackageDetailView: View {
         }, message: {
             Text(String.completeDeliveryPleaseCheckYourNetworkStr)
         })
-        .alert(String.savingFailedStr, isPresented: $navigator.showingSaveErrorAlert, actions: {
-            Button(String.retryStr, role: nil, action: {
-                self.navigator.showingSaveErrorAlert = false
-                self.navigator.saveFailedUploadedToCoreData()
-                self.navigator.showingBackground = false
-            })
-            Button(String.cancelStr, role: .cancel, action: {
-                self.navigator.showingBackground = false
-                self.navigator.showingSaveErrorAlert = false
-            })
-        }, message: {
-            Text(String.notEnoughStorageSpaceStr)
-        })
     }
 }
 
-struct CompletePackageDetailView_Previews: PreviewProvider {
+struct FailedPackageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        CompletePackageDetailView(navigator: CompleteDeliveryNavigator(packageViewModel: PackageViewModel(dataModel: PackageDataModel())))
+        FailedPackageDetailView(navigator: FailedDeliveryNavigator(packageViewModel: PackageViewModel(dataModel: PackageDataModel()), failedReason: .wrongAddress))
     }
 }

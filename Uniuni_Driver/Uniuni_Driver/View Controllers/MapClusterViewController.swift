@@ -109,6 +109,7 @@ class MapClusterViewController: UIViewController {
     
     private func setupMapView() {
         
+        self.view.backgroundColor = .white
         mapView = MapView(frame: .zero)
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
@@ -145,6 +146,7 @@ class MapClusterViewController: UIViewController {
         mapView.location.delegate = self
         mapView.location.options.activityType = .other
         mapView.location.options.puckType = .puck2D()
+        mapView.location.addLocationConsumer(newConsumer: self)
         mapView.location.locationProvider.startUpdatingLocation()
     }
     
@@ -182,6 +184,7 @@ class MapClusterViewController: UIViewController {
             options: queryOptions
         ) { [weak solidView, weak self] tappedQueryResult in
             guard let feature = try? tappedQueryResult.get().first?.feature else {
+                self?.hidePackageCard()
                 return
             }
             if let pointCount = (feature.properties?["point_count"] as? JSONValue)?.rawValue as? Double, pointCount > 0 {
@@ -302,6 +305,15 @@ class MapClusterViewController: UIViewController {
         }, completion: nil)
     }
     
+    private func hidePackageCard() {
+        
+        self.restoreViewAnnotationColor()
+        self.cardViewTopConstraint?.constant = 0
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            self?.cardView.layoutIfNeeded()
+        }) { _ in }
+    }
+    
     private func showServicePointCard(feature: Feature) {
         
         guard let name = feature.identifier?.rawValue as? String else {
@@ -342,6 +354,7 @@ class MapClusterViewController: UIViewController {
         guard let packageToShow = self.packageToShowDetail else {
             return
         }
+        self.updateDataSource(packagesList: [packageToShow], servicesList: [])
         let location = (self.currentLocation.coordinate.latitude,
                         self.currentLocation.coordinate.longitude)
         let viewModel = MapPackageDetailCardViewModel(
@@ -380,7 +393,10 @@ class MapClusterViewController: UIViewController {
         }
         
         self.detailCardView.failedAction = {
-            print("to do")
+            guard let orderID = self.packageToShowDetail?.order_id else {
+                return
+            }
+            self.mapViewModel?.reDeliveryHistory(driverID: 100, orderID: orderID)
         }
         
         self.detailCardView.configure(viewModel: viewModel)
@@ -558,7 +574,6 @@ class MapClusterViewController: UIViewController {
     private func openMapboxNavigation(lat: Double, lng: Double) {
         
         let origin = self.currentLocation.coordinate
-        //CLLocationCoordinate2DMake(37.77440680146262, -122.43539772352648)
         let destination = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         
         let options = NavigationRouteOptions(coordinates: [origin, destination])
@@ -691,6 +706,49 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func showReasonOfFailPickup(redelivery: Bool) {
+        
+        let alert = UIAlertController(title: String.reasonOfFailStr, message: String.chooseAReasonOfFailingDeliveryStr, preferredStyle: .actionSheet)
+        
+        if redelivery {
+            let redeliveryAct = UIAlertAction(title: String.redeliveryStr, style: .default) { _ in
+                // to do
+            }
+            alert.addAction(redeliveryAct)
+        } else {
+            let contactAct = UIAlertAction(title: String.failToContactCustomerStr, style: .default) { _ in
+                // to do
+            }
+            alert.addAction(contactAct)
+        }
+        
+        let wrongAddAct = UIAlertAction(title: String.wrongAddressStr, style: .default) { _ in
+            guard let vm = self.packageToShowDetail else {
+                return
+            }
+            let failedNavi = FailedDeliveryNavigator(packageViewModel: vm, failedReason: .wrongAddress)
+            failedNavi.presentFailedDetail(presenter: self)
+        }
+        let poboxAct = UIAlertAction(title: String.POBoxStr, style: .default) { _ in
+            guard let vm = self.packageToShowDetail else {
+                return
+            }
+            let failedNavi = FailedDeliveryNavigator(packageViewModel: vm, failedReason: .poBox)
+            failedNavi.presentFailedDetail(presenter: self)
+        }
+        alert.addAction(wrongAddAct)
+        alert.addAction(poboxAct)
+        
+        let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
+        
+        alert.addAction(cancelAct)
+        
+        // for iPad Support
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func zoomToDetailPackageLocation() {
         guard let lat = Double(self.packageToShowDetail?.lat ?? ""), let lng = Double(self.packageToShowDetail?.lng ?? "") else {
             return
@@ -808,6 +866,23 @@ class MapClusterViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
                     alert.dismiss(animated: true, completion: nil)
                 }
+            })
+            .store(in: &disposables)
+        
+        self.mapViewModel?.$showingAlertWithRedelivery
+            .sink(receiveValue: { [weak self] (response) in
+                guard let response = response, response else {
+                    return
+                }
+                self?.showReasonOfFailPickup(redelivery: true)
+            })
+            .store(in: &disposables)
+        self.mapViewModel?.$showingAlertWithoutRedelivery
+            .sink(receiveValue: { [weak self] (response) in
+                guard let response = response, response else {
+                    return
+                }
+                self?.showReasonOfFailPickup(redelivery: false)
             })
             .store(in: &disposables)
     }

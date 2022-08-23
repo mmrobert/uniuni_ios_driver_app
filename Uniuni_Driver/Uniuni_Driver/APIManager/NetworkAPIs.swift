@@ -25,6 +25,8 @@ enum NetworkAPIs {
     case fetchLanguageList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchMsgTemplates(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case sendMessage(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case completeDelivery(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case reDeliveryHistory(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     
     // MARK: - base URL
     var baseURL: String {
@@ -53,6 +55,10 @@ enum NetworkAPIs {
             return .get
         case .sendMessage( _, _, _):
             return .post
+        case .completeDelivery( _, _, _):
+            return .post
+        case .reDeliveryHistory( _, _, _):
+            return .get
         }
     }
     
@@ -97,6 +103,18 @@ enum NetworkAPIs {
             }
         case .sendMessage( _, _, _):
             return "/delivery/message"
+        case .completeDelivery( _, _, _):
+            return "/delivery"
+        case .reDeliveryHistory(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/retry/brief" + pathStr
+            } else {
+                return "/delivery/retry/brief"
+            }
         }
     }
     
@@ -159,6 +177,22 @@ enum NetworkAPIs {
             } else {
                 return nil
             }
+        case .completeDelivery( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .reDeliveryHistory( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
         }
     }
     
@@ -178,6 +212,10 @@ enum NetworkAPIs {
         case .fetchMsgTemplates( _, _, let bodyParas):
             return bodyParas
         case .sendMessage( _, _, let bodyParas):
+            return bodyParas
+        case .completeDelivery( _, _, let bodyParas):
+            return bodyParas
+        case .reDeliveryHistory( _, _, let bodyParas):
             return bodyParas
         }
     }
@@ -202,20 +240,30 @@ enum NetworkAPIs {
         // HTTP Method
         urlRequest.httpMethod = method.rawValue
         
-        let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
+        let tempToken = AppConstants.token
+        //let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
         // Headers
         let bearer = "Bearer \(tempToken)"
         urlRequest.setValue(bearer, forHTTPHeaderField: "Authorization")
         urlRequest.setValue("application/json", forHTTPHeaderField: "accept")
-        urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
-        
-        // body parameters
-        if let body = bodyParameters {
-            let body = body.compactMapValues { $0 }
-            do {
-                urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-            } catch _ {
-                throw NetworkRequestError.bodyToJSON(description: "Body parameters serialization error for URL: \(fullPath)")
+        switch self {
+        case .completeDelivery( _, _, let bodyParas):
+            if var paras = bodyParas {
+                let boundary = "Boundary-\(UUID().uuidString)"
+                urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+                let images = paras.removeValue(forKey: "pod_images")
+                urlRequest.httpBody = self.createFormData(boundary: boundary, paras: paras, imagesKey: "pod_images[]", images: images as? [Any])
+            }
+        default:
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            // body parameters
+            if let body = bodyParameters {
+                let body = body.compactMapValues { $0 }
+                do {
+                    urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+                } catch _ {
+                    throw NetworkRequestError.bodyToJSON(description: "Body parameters serialization error for URL: \(fullPath)")
+                }
             }
         }
         return urlRequest
@@ -248,5 +296,33 @@ enum NetworkAPIs {
                 }
             }
             .eraseToAnyPublisher()
+    }
+    
+    private func createFormData(boundary: String, paras: [String:Any?]?, imagesKey: String, images: [Any]?) -> Data {
+        var body = Data()
+        let boundaryPrefix = "--\(boundary)\r\n"
+        let imgType = "image/jpeg"
+        if let paras = paras {
+            for (key, value) in paras {
+                if let value = value {
+                    body.append(boundaryPrefix.data(using: .utf8) ?? Data())
+                    body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8) ?? Data())
+                    body.append("\(value)\r\n".data(using: .utf8) ?? Data())
+                }
+            }
+        }
+        if let images = images as? [Data], images.count > 0 {
+            var fileName: String
+            for (ind, img) in images.enumerated() {
+                fileName = "image\(ind).jpg"
+                body.append(boundaryPrefix.data(using: .utf8) ?? Data())
+                body.append("Content-Disposition: form-data; name=\"\(imagesKey)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8) ?? Data())
+                body.append("Content-Type: \(imgType)\r\n\r\n".data(using: .utf8) ?? Data())
+                body.append(img)
+                body.append("\r\n".data(using: .utf8) ?? Data())
+            }
+            body.append("--\(boundary)--\r\n".data(using: .utf8) ?? Data())
+        }
+        return body
     }
 }
