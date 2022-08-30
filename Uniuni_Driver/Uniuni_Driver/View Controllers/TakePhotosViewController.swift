@@ -254,6 +254,21 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        switch self.navigator.photoTakingFlow {
+        case .taking:
+            if self.navigator.photos.count == 0 {
+                self.titleLabel.text = String.firstPhotoStr
+            } else {
+                self.titleLabel.text = String.secondPhotoStr
+            }
+        case .review(let index):
+            if index == 0 {
+                self.titleLabel.text = String.firstPhotoStr
+            } else {
+                self.titleLabel.text = String.secondPhotoStr
+            }
+        }
+        
         sessionQueue.async {
             switch self.setupResult {
             case .success:
@@ -538,6 +553,10 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                 self.navigator.dismissPhotoTaking(animated: true, completion: nil)
             }
         }
+    }
+    
+    deinit {
+        print("🍎 TakePhotosViewController - deinit")
     }
 }
 

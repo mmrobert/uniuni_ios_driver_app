@@ -35,7 +35,7 @@ struct TitleTextView: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                 .foregroundColor(textColor)
                 .lineLimit(nil)
-                .multilineTextAlignment(.leading)
+                .multilineTextAlignment(.trailing)
         }
     }
 }

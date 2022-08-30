@@ -20,4 +20,7 @@ extension UIColor {
     static let lightGray160: UIColor? = UIColor(named: "light-gray-160")
     static let lightGray198: UIColor? = UIColor(named: "light-gray-198")
     static let grayHalfTransparent: UIColor? = UIColor(named: "gray-half-transparent")
+    static let lightRed: UIColor? = UIColor(named: "light-red")
+    static let blackTransparent04: UIColor? = UIColor(named: "black-transparent-0.4")
+    static let whiteTransparent06: UIColor? = UIColor(named: "white-transparent-0.6")
 }

@@ -16,10 +16,11 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         static let bizMsgSuccess = "DELIVERY.SUBMIT.SUCCESS"
     }
     
-    private var naviController = UINavigationController()
-    private var deliveryDetailViewController: UIViewController?
-    private var photoTakingViewController: UIViewController?
-    private var photoReviewHostViewController: UIViewController?
+    private weak var presenter: UIViewController?
+    
+    private weak var deliveryDetailViewController: UIViewController?
+    private weak var photoTakingViewController: UIViewController?
+    private weak var photoReviewHostViewController: UIViewController?
     private var packageViewModel: PackageViewModel
     @Published var photos: [UIImage] = []
     @Published var photoTaken: UIImage?
@@ -33,23 +34,24 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
     @Published var showingNetworkErrorAlert: Bool = false
     @Published var showingSaveErrorAlert: Bool = false
     
-    init(packageViewModel: PackageViewModel) {
+    init(presenter: UIViewController?, packageViewModel: PackageViewModel) {
+        self.presenter = presenter
         self.packageViewModel = packageViewModel
-        CoreDataManager.shared.$saveError
+        CoreDataManager.shared.$saveFailedUploadedError
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink(receiveValue: { [weak self] error in
                 guard let strongSelf = self else { return }
                 if let err = error {
                     switch err {
-                    case .save:
+                    case .saveFailedUploaded:
                         strongSelf.showingBackground = true
                         strongSelf.showingSaveErrorAlert = true
                     case .fetch:
                         break
                     }
                 } else {
-                    self?.dismissNavigator()
+                    strongSelf.backToDeliveryList()
                 }
             })
             .store(in: &disposables)
@@ -59,14 +61,11 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         self.packageViewModel
     }
     
-    func presentDeliveryDetail(presenter: UIViewController) {
+    func presentDeliveryDetail() {
         let contentView = CompletePackageDetailView(navigator: self)
         let host = UIHostingController(rootView: contentView)
-        naviController.viewControllers = [host]
         self.deliveryDetailViewController = host
-        naviController.modalPresentationStyle = .automatic
-        naviController.modalTransitionStyle = .crossDissolve
-        presenter.present(naviController, animated: true)
+        self.presenter?.present(host, animated: true)
     }
     
     func startPhotoTakingFlow() {
@@ -176,8 +175,14 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         CoreDataManager.shared.saveFailedUploaded(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
     }
     
-    func dismissNavigator() {
-        self.naviController.dismiss(animated: true)
+    func back() {
+        self.deliveryDetailViewController?.dismiss(animated: true)
+    }
+    
+    func backToDeliveryList() {
+        self.deliveryDetailViewController?.dismiss(animated: true) {
+            self.presenter?.navigationController?.popViewController(animated: true)
+        }
     }
     
     func dismissPhotoTaking(animated: Bool = true, completion: (() -> Void)? = nil) {
@@ -214,24 +219,25 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
                 dispatchGroup.leave()
             }
         }
-        dispatchGroup.notify(queue: .main) {
-            switch self.photoTakingFlow {
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let strongSelf = self else { return }
+            switch strongSelf.photoTakingFlow {
             case .taking:
                 for image in images {
-                    if self.photos.count < 2 {
-                        self.photos.append(image)
+                    if strongSelf.photos.count < 2 {
+                        strongSelf.photos.append(image)
                     }
                 }
-                if self.photos.count >= 2 {
-                    self.dismissPhotoTaking()
+                if strongSelf.photos.count >= 2 {
+                    strongSelf.dismissPhotoTaking()
                 }
             case .review(let index):
                 if images.count > 0 {
-                    self.photos[index] = images[0]
-                    self.photoTaken = images[0]
+                    strongSelf.photos[index] = images[0]
+                    strongSelf.photoTaken = images[0]
                 }
-                self.dismissPhotoTaking() {
-                    self.dismissPhotoReview(animated: false)
+                strongSelf.dismissPhotoTaking() {
+                    strongSelf.dismissPhotoReview(animated: false)
                 }
             }
         }

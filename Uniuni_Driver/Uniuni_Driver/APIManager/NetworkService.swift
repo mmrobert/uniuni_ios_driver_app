@@ -133,10 +133,10 @@ class NetworkService: NetworkServiceProvider {
         }
     }
     
-    func completeDelivery(orderID: Int, deliveryResult: Int, podImages: [Data], failedReason: Int?) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
+    func completeDelivery(orderID: Int, deliveryResult: Int, podImages: [Data]?, failedReason: Int?) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
         let bodyParas = ["order_id": orderID,
                          "delivery_result": deliveryResult,
-                         "pod_images": podImages,
+                         "pod_images": podImages as Any,
                          "failed_reason": failedReason as Any] as [String:Any]
         let router = NetworkAPIs.completeDelivery(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
         do {
@@ -155,6 +155,26 @@ class NetworkService: NetworkServiceProvider {
     func reDeliveryHistory(driverID: Int, orderID: Int) -> AnyPublisher<RedeliveryHistoryDataModel, NetworkRequestError> {
         let pathParas = [String(driverID), String(orderID)]
         let router = NetworkAPIs.reDeliveryHistory(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func reDeliveryTry(driverID: Int, orderID: Int, latitude: Double, longitude: Double, podImages: [Data]?) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
+        let bodyParas = ["driver_id": driverID,
+                         "order_id": orderID,
+                         "latitude": latitude,
+                         "longitude": longitude,
+                         "pod_img": podImages as Any] as [String:Any]
+        let router = NetworkAPIs.reDeliveryTry(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
         do {
             let netRequest = try router.makeURLRequest()
             return router.fetchJSON(request: netRequest)
