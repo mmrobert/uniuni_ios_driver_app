@@ -6,6 +6,7 @@
         <attribute name="image1" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="image2" optional="YES" attributeType="Binary"/>
         <attribute name="order_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="saved_time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="Package" representedClassName="Package" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
@@ -57,7 +58,7 @@
         <attribute name="warehouse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="FailedUploaded" positionX="-63" positionY="144" width="128" height="14"/>
+        <element name="FailedUploaded" positionX="-63" positionY="144" width="128" height="119"/>
         <element name="Package" positionX="-63" positionY="-18" width="128" height="344"/>
         <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="389"/>
     </elements>

@@ -315,6 +315,7 @@ class CoreDataManager {
             object.setValue(orderID, forKeyPath: "order_id")
             object.setValue(deliveryResult, forKeyPath: "delivery_result")
             object.setValue(failedReason, forKeyPath: "failed_reason")
+            object.setValue(Date(), forKeyPath: "saved_time")
             if podImages.count == 1 {
                 object.setValue(podImages[0], forKeyPath: "image1")
             } else if podImages.count > 1 {
