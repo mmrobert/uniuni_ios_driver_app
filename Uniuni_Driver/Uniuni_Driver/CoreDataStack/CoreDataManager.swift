@@ -159,6 +159,30 @@ class CoreDataManager {
         }
     }
     
+    func deleteSinglePackage(orderID: Int) {
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
+            
+        var pack: [NSManagedObject]?
+        do {
+            pack = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if let pack = pack {
+            for obj in pack {
+                taskContext.delete(obj)
+            }
+        }
+        do {
+            try taskContext.save()
+        } catch let error as NSError {
+            print("Could not save: \(error)")
+        }
+    }
+    
     private func isPackageSaved(package: PackageDataModel) -> Bool {
         
         guard let orderId = package.order_id else {
@@ -332,6 +356,50 @@ class CoreDataManager {
             if self.saveFailedUploadedError == nil {
                 self.saveFailedUploadedError = nil
             }
+        }
+    }
+    
+    func deleteSingleFailedUploaded(orderID: Int) {
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
+            
+        var failedUploaded: [NSManagedObject]?
+        do {
+            failedUploaded = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if let failedUploaded = failedUploaded {
+            for obj in failedUploaded {
+                taskContext.delete(obj)
+            }
+        }
+        do {
+            try taskContext.save()
+        } catch let error as NSError {
+            print("Could not save: \(error)")
+        }
+    }
+    
+    func deleteAllFailedUploaded() {
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
         }
     }
     
