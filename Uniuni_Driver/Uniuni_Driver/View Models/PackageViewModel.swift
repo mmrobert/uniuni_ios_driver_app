@@ -29,7 +29,10 @@ struct PackageViewModel: Identifiable, Equatable {
     var buzz_code: String?
     var postscript: String?
     var warehouse_id: Int?
+    var need_retry: Int?
     var failed_handle_type: FailedHandleType?
+    
+    var redeliveryData: RedeliveryDataModel?
     
     init(dataModel: PackageDataModel) {
         self.order_id = dataModel.order_id
@@ -51,6 +54,7 @@ struct PackageViewModel: Identifiable, Equatable {
         self.buzz_code = dataModel.buzz_code
         self.postscript = dataModel.postscript
         self.warehouse_id = dataModel.warehouse_id
+        self.need_retry = dataModel.need_retry
         self.failed_handle_type = dataModel.failed_handle_type
     }
     

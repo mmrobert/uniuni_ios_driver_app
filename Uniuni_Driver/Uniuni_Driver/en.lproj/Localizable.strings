@@ -94,7 +94,6 @@
 "Save and Leave" = "Save and Leave";
 "Saving Failed" = "Saving Failed";
 "Not enough storage space" = "Not enough storage space. Please retry after getting more storage space.";
-
 "Reason of Fail" = "Reason of Fail";
 "Choose a reason of failing delivery" = "Choose a reason of failing delivery.";
 "Fail to Contact Customer" = "Fail to Contact Customer";
@@ -103,4 +102,5 @@
 "Attempt Failed" = "Attempt Failed";
 "Your two attempts are too close" = "Your two attempts are too close. Please try to redelivery this parcel one hour later.";
 "Failed Reason" = "Failed Reason";
+"Take at least 1 photo" = "Take at least 1 photo.";
 

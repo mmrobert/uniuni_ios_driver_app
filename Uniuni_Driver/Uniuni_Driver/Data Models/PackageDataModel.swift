@@ -27,6 +27,7 @@ struct PackageDataModel: Codable {
     var buzz_code: String?
     var postscript: String?
     var warehouse_id: Int?
+    var need_retry: Int?
     var failed_handle_type: FailedHandleType?
     
     static func dataModelFrom(viewModel: PackageViewModel) -> PackageDataModel {
@@ -50,6 +51,7 @@ struct PackageDataModel: Codable {
             buzz_code: viewModel.buzz_code,
             postscript: viewModel.postscript,
             warehouse_id: viewModel.warehouse_id,
+            need_retry: viewModel.need_retry,
             failed_handle_type: viewModel.failed_handle_type
         )
     }
@@ -75,6 +77,7 @@ struct PackageDataModel: Codable {
             buzz_code: mapDetailViewModel.buzz,
             postscript: mapDetailViewModel.note,
             warehouse_id: mapDetailViewModel.warehouseID,
+            need_retry: mapDetailViewModel.needRetry,
             failed_handle_type: nil
         )
     }

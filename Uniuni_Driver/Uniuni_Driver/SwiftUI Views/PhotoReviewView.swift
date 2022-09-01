@@ -117,6 +117,6 @@ struct PhotoReviewView<Navigator>: View where Navigator: TakePhotosViewControlle
 
 struct PhotoReviewView_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoReviewView(navigator: CompleteDeliveryNavigator(packageViewModel: PackageViewModel(dataModel: PackageDataModel())))
+        PhotoReviewView(navigator: CompleteDeliveryNavigator(presenter: nil, packageViewModel: PackageViewModel(dataModel: PackageDataModel())))
     }
 }

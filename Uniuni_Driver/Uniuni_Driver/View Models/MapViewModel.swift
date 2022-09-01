@@ -19,9 +19,6 @@ class MapViewModel: ObservableObject {
     @Published var errorUpdateAddressType: String?
     @Published var errorSendMsg: NetworkRequestError?
     
-    @Published var showingAlertWithRedelivery: Bool?
-    @Published var showingAlertWithoutRedelivery: Bool?
-    
     private var disposables = Set<AnyCancellable>()
     
     init() {}
@@ -105,23 +102,22 @@ class MapViewModel: ObservableObject {
             .store(in: &disposables)
     }
     
-    func reDeliveryHistory(driverID: Int, orderID: Int) {
+    func reDeliveryHistory(driverID: Int, orderID: Int, completion: @escaping (RedeliveryDataModel?) -> ()) {
         
         NetworkService.shared.reDeliveryHistory(driverID: driverID, orderID: orderID)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] value in
+            .sink(receiveCompletion: { value in
                 switch value {
                 case .failure:
                     break
                 case .finished:
                     break
                 }
-            }, receiveValue: { [weak self] response in
-                guard let strongSelf = self else { return }
-                if let retry = response.biz_data?.retry_times, retry < 3 {
-                    strongSelf.showingAlertWithRedelivery = true
+            }, receiveValue: { response in
+                if let retryData = response.biz_data {
+                    completion(retryData)
                 } else {
-                    strongSelf.showingAlertWithoutRedelivery = true
+                    completion(nil)
                 }
             })
             .store(in: &disposables)

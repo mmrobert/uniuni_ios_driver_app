@@ -105,6 +105,6 @@ extension String {
     static let attemptFailedStr = NSLocalizedString("Attempt Failed", comment: "")
     static let yourTwoAttemptsAreTooCloseStr = NSLocalizedString("Your two attempts are too close", comment: "")
     static let failedReasonStr = NSLocalizedString("Failed Reason", comment: "")
-    
+    static let takeAtLeast1PhotoStr = NSLocalizedString("Take at least 1 photo", comment: "")
     
 }

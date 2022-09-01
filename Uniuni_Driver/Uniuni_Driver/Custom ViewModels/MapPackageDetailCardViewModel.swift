@@ -29,6 +29,7 @@ class MapPackageDetailCardViewModel {
     var buzz: String?
     var note: String?
     var warehouseID: Int?
+    var needRetry: Int?
     var failedButtonTitle: String?
     var deliveredButtonTitle: String?
 
@@ -51,6 +52,7 @@ class MapPackageDetailCardViewModel {
          buzz: String?,
          note: String?,
          warehouseID: Int?,
+         needRetry: Int?,
          failedButtonTitle: String?,
          deliveredButtonTitle: String?) {
 
@@ -73,6 +75,7 @@ class MapPackageDetailCardViewModel {
         self.buzz = buzz
         self.note = note
         self.warehouseID = warehouseID
+        self.needRetry = needRetry
         self.failedButtonTitle = failedButtonTitle
         self.deliveredButtonTitle = deliveredButtonTitle
     }
@@ -97,7 +100,7 @@ class MapPackageDetailCardViewModel {
         self.buzz = packageViewModel.buzz_code
         self.note = packageViewModel.postscript
         self.warehouseID = packageViewModel.warehouse_id
-        
+        self.needRetry = packageViewModel.need_retry
         self.failedButtonTitle = failedButtonTitle
         self.deliveredButtonTitle = deliveredButtonTitle
     }

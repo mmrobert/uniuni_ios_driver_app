@@ -18,7 +18,7 @@ class CoreDataManager {
     @Published var packages: [PackageDataModel] = []
     @Published var services: [ServicePointDataModel] = []
     
-    @Published var saveError: CoreDataError?
+    @Published var saveFailedUploadedError: CoreDataError?
     
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
@@ -72,6 +72,7 @@ class CoreDataManager {
             object.setValue(package.buzz_code, forKeyPath: "buzz_code")
             object.setValue(package.postscript, forKeyPath: "postscript")
             object.setValue(package.warehouse_id, forKeyPath: "warehouse_id")
+            object.setValue(package.need_retry, forKeyPath: "need_retry")
             object.setValue(package.failed_handle_type?.rawValue, forKeyPath: "failed_handle_type")
             
             do {
@@ -118,6 +119,7 @@ class CoreDataManager {
                     pack.buzz_code = object.value(forKey: "buzz_code") as? String
                     pack.postscript = object.value(forKey: "postscript") as? String
                     pack.warehouse_id = object.value(forKey: "warehouse_id") as? Int
+                    pack.need_retry = object.value(forKey: "need_retry") as? Int
                     let failedInt = object.value(forKey: "failed_handle_type") as? Int
                     pack.failed_handle_type = FailedHandleType.getTypeFrom(value: failedInt)
                     
@@ -144,6 +146,7 @@ class CoreDataManager {
                 if packs.count > 0 {
                     let managedObject = packs[0]
                     managedObject.setValue(package.address_type?.rawValue, forKeyPath: "address_type")
+                    managedObject.setValue(package.state?.rawValue, forKeyPath: "state")
                     do {
                         try taskContext.save()
                     } catch let error as NSError {
@@ -153,6 +156,30 @@ class CoreDataManager {
             } catch {
                 print("Could not fetch package: \(error)")
             }
+        }
+    }
+    
+    func deleteSinglePackage(orderID: Int) {
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
+            
+        var pack: [NSManagedObject]?
+        do {
+            pack = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if let pack = pack {
+            for obj in pack {
+                taskContext.delete(obj)
+            }
+        }
+        do {
+            try taskContext.save()
+        } catch let error as NSError {
+            print("Could not save: \(error)")
         }
     }
     
@@ -299,6 +326,7 @@ class CoreDataManager {
     func saveFailedUploaded(orderID: Int, deliveryResult: Int, podImages: [Data], failedReason: Int?) {
         
         if isFailedUploadedSaved(orderID: orderID) {
+            self.saveFailedUploadedError = nil
             return
         }
 
@@ -311,6 +339,7 @@ class CoreDataManager {
             object.setValue(orderID, forKeyPath: "order_id")
             object.setValue(deliveryResult, forKeyPath: "delivery_result")
             object.setValue(failedReason, forKeyPath: "failed_reason")
+            object.setValue(Date(), forKeyPath: "saved_time")
             if podImages.count == 1 {
                 object.setValue(podImages[0], forKeyPath: "image1")
             } else if podImages.count > 1 {
@@ -321,12 +350,56 @@ class CoreDataManager {
             do {
                 try taskContext.save()
             } catch let error as NSError {
-                self.saveError = CoreDataError.save
+                self.saveFailedUploadedError = CoreDataError.saveFailedUploaded
                 print("Could not save: \(error)")
             }
-            if self.saveError == nil {
-                self.saveError = nil
+            if self.saveFailedUploadedError == nil {
+                self.saveFailedUploadedError = nil
             }
+        }
+    }
+    
+    func deleteSingleFailedUploaded(orderID: Int) {
+        let taskContext = newTaskContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+        fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
+            
+        var failedUploaded: [NSManagedObject]?
+        do {
+            failedUploaded = try taskContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch: \(error)")
+        }
+        
+        if let failedUploaded = failedUploaded {
+            for obj in failedUploaded {
+                taskContext.delete(obj)
+            }
+        }
+        do {
+            try taskContext.save()
+        } catch let error as NSError {
+            print("Could not save: \(error)")
+        }
+    }
+    
+    func deleteAllFailedUploaded() {
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
         }
     }
     
@@ -360,6 +433,6 @@ class CoreDataManager {
 }
 
 enum CoreDataError: Error {
-    case save
+    case saveFailedUploaded
     case fetch
 }

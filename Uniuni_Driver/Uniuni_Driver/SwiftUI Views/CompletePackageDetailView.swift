@@ -22,200 +22,211 @@ struct CompletePackageDetailView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                ScrollView(showsIndicators: false) {
-                    VStack {
-                        HStack {
-                            Text(String.orderInformationStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        VStack {
-                            TitleTextView(title: String.orderNoStr, text: packageViewModel.order_sn)
-                            TitleTextView(title: String.trackingNoStr, text: packageViewModel.tracking_no)
-                            TitleTextView(title: String.orderTypeStr, text: packageViewModel.goods_type?.getDisplayString())
-                            TitleTextView(title: String.routeNoStr, text: "\(packageViewModel.route_no ?? 0)")
-                            TitleTextView(title: String.assignedTimeStr, text: packageViewModel.assign_time)
-                            TitleTextView(title: String.deliveryTypeStr, text: packageViewModel.express_type?.getDisplayString())
-                            TitleTextView(title: String.deliveryAttemptStr, text: packageViewModel.getDeliveryAttemptValue())
-                            TitleTextView(title: String.deliveryByStr, text: packageViewModel.delivery_by)
-                        }
-                        HStack {
-                            Text(String.customerInformationStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        VStack {
-                            TitleTextView(title: String.nameStr, text: packageViewModel.name)
-                            TitleTextView(title: String.phoneNumberStr, text: packageViewModel.mobile)
-                            TitleTextView(title: String.addressStr, text: ((packageViewModel.address ?? "") + " " + (packageViewModel.zipcode ?? "")))
-                        }
-                        HStack {
-                            Text(String.customerNotesStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        VStack {
-                            TitleTextView(title: String.buzzStr, text: packageViewModel.buzz_code)
-                            TitleTextView(title: String.noteStr, text: packageViewModel.postscript)
-                        }
-                        HStack {
-                            Text(String.photosStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        HStack {
-                            Text(String.take2PhotosStr)
-                                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                .foregroundColor(.gray)
-                            Spacer()
-                        }
-                    }
-                    .background(
-                        GeometryReader { geo -> Color in
-                            DispatchQueue.main.async {
-                                scrollViewContentSize = geo.size
-                            }
-                            return Color.clear
-                        }
-                    )
-                }
-                .frame(maxHeight: scrollViewContentSize.height)
+        NavigationView {
+            ZStack {
                 VStack {
-                    HStack(spacing: 6) {
-                        if navigator.photos.count == 0 {
-                            Image("icon-camera")
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .background(Color("screen-base"))
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                        } else if navigator.photos.count == 1 {
-                            Image(uiImage: navigator.photos[0])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                            Image("icon-camera")
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .background(Color("screen-base"))
-                                .onTapGesture {
-                                    self.navigator.startPhotoTakingFlow()
-                                }
-                        } else if navigator.photos.count == 2 {
-                            Image(uiImage: navigator.photos[0])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoReviewFlow(index: 0)
-                                }
-                            Image(uiImage: navigator.photos[1])
-                                .resizable()
-                                .frame(width: 110, height: 110)
-                                .onTapGesture {
-                                    self.navigator.startPhotoReviewFlow(index: 1)
-                                }
+                    ScrollView(showsIndicators: false) {
+                        VStack {
+                            HStack {
+                                Text(String.orderInformationStr)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    .font(.bold(.system(size: 20))())
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+                            VStack {
+                                TitleTextView(title: String.orderNoStr, text: packageViewModel.order_sn)
+                                TitleTextView(title: String.trackingNoStr, text: packageViewModel.tracking_no)
+                                TitleTextView(title: String.orderTypeStr, text: packageViewModel.goods_type?.getDisplayString())
+                                TitleTextView(title: String.routeNoStr, text: "\(packageViewModel.route_no ?? 0)")
+                                TitleTextView(title: String.assignedTimeStr, text: packageViewModel.assign_time)
+                                TitleTextView(title: String.deliveryTypeStr, text: packageViewModel.express_type?.getDisplayString())
+                                TitleTextView(title: String.deliveryAttemptStr, text: packageViewModel.getDeliveryAttemptValue())
+                                TitleTextView(title: String.deliveryByStr, text: packageViewModel.delivery_by)
+                            }
+                            HStack {
+                                Text(String.customerInformationStr)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    .font(.bold(.system(size: 20))())
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+                            VStack {
+                                TitleTextView(title: String.nameStr, text: packageViewModel.name)
+                                TitleTextView(title: String.phoneNumberStr, text: packageViewModel.mobile)
+                                TitleTextView(title: String.addressStr, text: ((packageViewModel.address ?? "") + " " + (packageViewModel.zipcode ?? "")))
+                            }
+                            HStack {
+                                Text(String.customerNotesStr)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    .font(.bold(.system(size: 20))())
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+                            VStack {
+                                TitleTextView(title: String.buzzStr, text: packageViewModel.buzz_code)
+                                TitleTextView(title: String.noteStr, text: packageViewModel.postscript)
+                            }
+                            HStack {
+                                Text(String.photosStr)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    .font(.bold(.system(size: 20))())
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+                            HStack {
+                                Text(String.take2PhotosStr)
+                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
                         }
-                        Spacer()
+                        .background(
+                            GeometryReader { geo -> Color in
+                                DispatchQueue.main.async {
+                                    scrollViewContentSize = geo.size
+                                }
+                                return Color.clear
+                            }
+                        )
                     }
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                    Button(String.completeStr) {
-                        self.navigator.showingBackground = true
-                        self.navigator.showingProgressView = true
-                        self.navigator.successfulDelivery()
+                    .frame(maxHeight: scrollViewContentSize.height)
+                    VStack {
+                        HStack(spacing: 6) {
+                            if navigator.photos.count == 0 {
+                                ZStack {
+                                    Color("screen-base")
+                                        .frame(width: 137, height: 124)
+                                    Image("icon-camera")
+                                        .resizable()
+                                        .frame(width: 73, height: 71)
+                                        .background(Color("screen-base"))
+                                        .onTapGesture {
+                                            self.navigator.startPhotoTakingFlow()
+                                        }
+                                }
+                            } else if navigator.photos.count == 1 {
+                                Image(uiImage: navigator.photos[0])
+                                    .resizable()
+                                    .frame(width: 137, height: 124)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoTakingFlow()
+                                    }
+                                ZStack {
+                                    Color("screen-base")
+                                        .frame(width: 137, height: 124)
+                                    Image("icon-camera")
+                                        .resizable()
+                                        .frame(width: 73, height: 71)
+                                        .background(Color("screen-base"))
+                                        .onTapGesture {
+                                            self.navigator.startPhotoTakingFlow()
+                                        }
+                                }
+                            } else if navigator.photos.count == 2 {
+                                Image(uiImage: navigator.photos[0])
+                                    .resizable()
+                                    .frame(width: 137, height: 124)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoReviewFlow(index: 0)
+                                    }
+                                Image(uiImage: navigator.photos[1])
+                                    .resizable()
+                                    .frame(width: 137, height: 124)
+                                    .onTapGesture {
+                                        self.navigator.startPhotoReviewFlow(index: 1)
+                                    }
+                            }
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                        Button(String.completeStr) {
+                            self.navigator.showingBackground = true
+                            self.navigator.showingProgressView = true
+                            self.navigator.successfulDelivery()
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 46)
+                        .background(Color("tab-bar-tint"))
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .cornerRadius(23)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                        .disabled(self.navigator.photos.count < 2)
                     }
-                    .frame(maxWidth: .infinity, minHeight: 46)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(23)
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                    .disabled(self.navigator.photos.count < 2)
+                }
+                VStack {
+                    Color("black-transparent-0.4")
+                        .ignoresSafeArea()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .isHidden(!navigator.showingBackground)
+                VStack {
+                    ProgressView()
+                        .scaleEffect(4)
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
+                .isHidden(!self.navigator.showingProgressView)
+            }
+            .navigationBarTitle(String.deliveredStr)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading: Button {
+                self.navigator.back()
+            } label: {
+                Image("icon-back")
+            })
+            .popup(isPresented: navigator.showingSuccessfulAlert) {
+                VStack {
+                    Image("circled-checkmark")
+                    Text(String.completedStr)
+                }
+                .frame(width: 158, height: 157)
+                .background(Color("white-transparent-0.6"))
+                .cornerRadius(10)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.navigator.showingSuccessfulAlert = false
+                        self.navigator.showingBackground = false
+                        self.navigator.backToDeliveryList()
+                    }
                 }
             }
-            VStack {
-                Color("black-transparent-0.4")
-                    .ignoresSafeArea()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .isHidden(!navigator.showingBackground)
-            VStack {
-                ProgressView()
-                    .scaleEffect(4)
-                    .progressViewStyle(CircularProgressViewStyle())
-            }
-            .isHidden(!self.navigator.showingProgressView)
-        }
-        .navigationBarTitle(String.deliveredStr)
-        .navigationBarItems(leading: Button {
-            self.navigator.dismissNavigator()
-        } label: {
-            Image("icon-back")
-        })
-        .popup(isPresented: navigator.showingSuccessfulAlert) {
-            VStack {
-                Image("circled-checkmark")
-                Text(String.completedStr)
-            }
-            .frame(width: 158, height: 157)
-            .background(Color("white-transparent-0.6"))
-            .cornerRadius(10)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    navigator.showingSuccessfulAlert = false
+            .alert(String.uploadingFailedStr, isPresented: $navigator.showingNetworkErrorAlert, actions: {
+                Button(String.retryStr, role: nil, action: {
+                    self.navigator.showingNetworkErrorAlert = false
+                    self.navigator.showingProgressView = true
+                    self.navigator.successfulDelivery()
+                })
+                Button(String.saveAndLeaveStr, role: nil, action: {
+                    self.navigator.showingNetworkErrorAlert = false
                     self.navigator.showingBackground = false
-                    self.navigator.dismissNavigator()
-                }
-            }
+                    self.navigator.saveFailedUploadedToCoreData()
+                })
+                Button(String.cancelStr, role: .cancel, action: {
+                    self.navigator.showingBackground = false
+                    self.navigator.showingNetworkErrorAlert = false
+                })
+            }, message: {
+                Text(String.completeDeliveryPleaseCheckYourNetworkStr)
+            })
+            .alert(String.savingFailedStr, isPresented: $navigator.showingSaveErrorAlert, actions: {
+                Button(String.retryStr, role: nil, action: {
+                    self.navigator.showingSaveErrorAlert = false
+                    self.navigator.showingBackground = false
+                    self.navigator.saveFailedUploadedToCoreData()
+                })
+                Button(String.cancelStr, role: .cancel, action: {
+                    self.navigator.showingBackground = false
+                    self.navigator.showingSaveErrorAlert = false
+                })
+            }, message: {
+                Text(String.notEnoughStorageSpaceStr)
+            })
         }
-        .alert(String.uploadingFailedStr, isPresented: $navigator.showingNetworkErrorAlert, actions: {
-            Button(String.retryStr, role: nil, action: {
-                self.navigator.showingNetworkErrorAlert = false
-                self.navigator.showingProgressView = true
-                self.navigator.successfulDelivery()
-            })
-            Button(String.saveAndLeaveStr, role: nil, action: {
-                self.navigator.showingNetworkErrorAlert = false
-                self.navigator.saveFailedUploadedToCoreData()
-                self.navigator.showingBackground = false
-            })
-            Button(String.cancelStr, role: .cancel, action: {
-                self.navigator.showingBackground = false
-                self.navigator.showingNetworkErrorAlert = false
-            })
-        }, message: {
-            Text(String.completeDeliveryPleaseCheckYourNetworkStr)
-        })
-        .alert(String.savingFailedStr, isPresented: $navigator.showingSaveErrorAlert, actions: {
-            Button(String.retryStr, role: nil, action: {
-                self.navigator.showingSaveErrorAlert = false
-                self.navigator.saveFailedUploadedToCoreData()
-                self.navigator.showingBackground = false
-            })
-            Button(String.cancelStr, role: .cancel, action: {
-                self.navigator.showingBackground = false
-                self.navigator.showingSaveErrorAlert = false
-            })
-        }, message: {
-            Text(String.notEnoughStorageSpaceStr)
-        })
     }
 }
 
 struct CompletePackageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        CompletePackageDetailView(navigator: CompleteDeliveryNavigator(packageViewModel: PackageViewModel(dataModel: PackageDataModel())))
+        CompletePackageDetailView(navigator: CompleteDeliveryNavigator(presenter: nil, packageViewModel: PackageViewModel(dataModel: PackageDataModel())))
     }
 }

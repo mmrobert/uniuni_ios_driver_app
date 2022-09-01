@@ -323,9 +323,25 @@ class MapPackageDetailCardView: UIView {
         self.phoneLabel.text = viewModel.phone
         self.addressLabel.text = viewModel.address
         self.distanceLabel.text = viewModel.distance?.kmDistance()
-        self.orderTypeLabel.configure(theme: nil, leadingTitle: String.orderTypeStr + ":", mainText: viewModel.goodsType?.getDisplayString(), textToRight: false)
+        var orderTypeTheme = LeadingTitleLabel.Theme.default
+        let orderType = viewModel.goodsType ?? .regular
+        switch orderType {
+        case .regular:
+            orderTypeTheme.mainTextColor = UIColor.lightGray160
+        case .medical:
+            orderTypeTheme.mainTextColor = UIColor.lightRed
+        }
+        self.orderTypeLabel.configure(theme: orderTypeTheme, leadingTitle: String.orderTypeStr + ":", mainText: viewModel.goodsType?.getDisplayString(), textToRight: false)
         self.assignedTimeLabel.configure(theme: nil, leadingTitle: String.assignedTimeStr + ":", mainText: viewModel.assignedTime, textToRight: false)
-        self.deliveryTypeLabel.configure(theme: nil, leadingTitle: String.deliveryTypeStr + ":", mainText: viewModel.expressType?.getDisplayString(), textToRight: false)
+        var deliveryTypeTheme = LeadingTitleLabel.Theme.default
+        let deliveryType = viewModel.expressType ?? .regular
+        switch deliveryType {
+        case .regular:
+            deliveryTypeTheme.mainTextColor = UIColor.lightGray160
+        case .express:
+            deliveryTypeTheme.mainTextColor = UIColor.redBackground
+        }
+        self.deliveryTypeLabel.configure(theme: deliveryTypeTheme, leadingTitle: String.deliveryTypeStr + ":", mainText: viewModel.expressType?.getDisplayString(), textToRight: false)
         self.deliveryAttemptLabel.configure(theme: nil, leadingTitle: String.deliveryAttemptStr, mainText: viewModel.getDeliveryAttemptValue(), textToRight: false)
         self.deliveryByLabel.configure(theme: nil, leadingTitle: String.deliveryByStr + ":", mainText: viewModel.deliveryBy, textToRight: false)
         self.buzzLabel.configure(theme: nil, leadingTitle: String.buzzStr + ":", mainText: viewModel.buzz, textToRight: false)
