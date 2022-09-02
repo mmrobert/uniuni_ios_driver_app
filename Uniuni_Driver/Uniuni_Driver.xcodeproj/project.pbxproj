@@ -77,6 +77,7 @@
 		9BD86CC5289AC20600228432 /* GeneralHttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */; };
 		9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE332862CE29006391D9 /* CoreDataManager.swift */; };
 		9BE4BE59286601D1006391D9 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */; };
+		9BF4A8B428C0F51A00A6C67E /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF4A8B328C0F51A00A6C67E /* BarCodeScanner.swift */; };
 		9BF57B35286B783100372045 /* TopActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B34286B783100372045 /* TopActionSheet.swift */; };
 		9BF57B37286B791700372045 /* TopActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */; };
 		D66EDD946221471036F74FF6 /* Pods_Uniuni_Driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5CF3EF4D38F764DA1EA477 /* Pods_Uniuni_Driver.framework */; };
@@ -179,6 +180,7 @@
 		9BD86CC4289AC20600228432 /* GeneralHttpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHttpResponse.swift; sourceTree = "<group>"; };
 		9BE4BE332862CE29006391D9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		9BE4BE58286601D1006391D9 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
+		9BF4A8B328C0F51A00A6C67E /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
 		9BF57B34286B783100372045 /* TopActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheet.swift; sourceTree = "<group>"; };
 		9BF57B36286B791700372045 /* TopActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopActionSheetViewModel.swift; sourceTree = "<group>"; };
 		FC9EE59809FA984C70D90CBA /* Pods-Uniuni_DriverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uniuni_DriverTests.debug.xcconfig"; path = "Target Support Files/Pods-Uniuni_DriverTests/Pods-Uniuni_DriverTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
 				9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */,
 				9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */,
+				9BF4A8B328C0F51A00A6C67E /* BarCodeScanner.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */,
 				9BC724C028848C4400229E51 /* MapPackageDetailCardViewModel.swift in Sources */,
 				9BB33A1428767BC2003ABD2F /* PackageViewModel.swift in Sources */,
+				9BF4A8B428C0F51A00A6C67E /* BarCodeScanner.swift in Sources */,
 				9BC9F807285E5E5F00376D95 /* PackagesListViewModel.swift in Sources */,
 				9B1730A5287E70F0005AE7AD /* ServicePointsListDataModel.swift in Sources */,
 				9B5B8F8028A407FC00CEA6BC /* TakePhotosViewController.swift in Sources */,
