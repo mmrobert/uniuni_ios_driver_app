@@ -183,6 +183,25 @@ class CoreDataManager {
         }
     }
     
+    func deleteAllPackages() {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
+        }
+    }
+    
     private func isPackageSaved(package: PackageDataModel) -> Bool {
         
         guard let orderId = package.order_id else {
@@ -249,6 +268,25 @@ class CoreDataManager {
             } catch let error as NSError {
                 print("Could not save service point: \(error)")
             }
+        }
+    }
+    
+    func deleteAllServicePoints() {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "ServicePoint")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
         }
     }
     
