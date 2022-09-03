@@ -94,12 +94,14 @@ class DeliveryListViewController: UIViewController {
         
         // fetch packages
         self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
-        //self.packagesListViewModel.fetchPackagesFromCoreData()
         //self.packagesListViewModel.saveMockPackagesList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if CoreDataManager.shared.packagesListUpdated {
+            self.packagesListViewModel.fetchPackagesFromCoreData()
+        }
     }
     
     private func checkLocationManager() {

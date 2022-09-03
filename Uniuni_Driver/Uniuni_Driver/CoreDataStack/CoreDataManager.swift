@@ -20,6 +20,8 @@ class CoreDataManager {
     
     @Published var saveFailedUploadedError: CoreDataError?
     
+    var packagesListUpdated: Bool = false
+    
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
         
@@ -132,6 +134,8 @@ class CoreDataManager {
     }
     
     func updatePackage(package: PackageDataModel) {
+        
+        self.packagesListUpdated = true
         
         guard let orderId = package.order_id else {
             return
