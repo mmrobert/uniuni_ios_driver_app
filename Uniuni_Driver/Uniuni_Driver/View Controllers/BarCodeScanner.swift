@@ -15,6 +15,7 @@ protocol BarCodeScannerProtocol: AnyObject {
     var didGrantCameraPermission: Bool { get }
     var previewLayer: AVCaptureVideoPreviewLayer { get }
     var barCodeDetected: String? { get set }
+    var scanMode: ScanMode { get set }
     
     func startRunningCaptureSession(completion: @escaping (Result<Void, Error>) -> Void)
     func stopRunningCaptureSession()
@@ -43,6 +44,16 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
         AVCaptureDevice.authorizationStatus(for: .video) == .authorized
     }
     
+    public var scanMode: ScanMode {
+        get {
+            self.scanMode
+        }
+        set {
+            self.scanMode = newValue
+        }
+    }
+    
+    var codesFound = Set<String>()
     @Published var barCodeDetected: String?
     
     private let options: [BarCodeScannerOptions]
@@ -201,7 +212,14 @@ extension BarCodeScanner: AVCaptureMetadataOutputObjectsDelegate {
         }
         
         // notify observer
-        self.barCodeDetected = code
+        switch self.scanMode {
+        case .once:
+            self.barCodeDetected = code
+        case .oncePerCode:
+            if !codesFound.contains(code) {
+                codesFound.insert(code)
+            }
+        }
     }
 }
 
@@ -222,5 +240,4 @@ public enum BarCodeScannerOptions: CaseIterable {
 enum ScanMode {
     case once
     case oncePerCode
-    case manual
 }
