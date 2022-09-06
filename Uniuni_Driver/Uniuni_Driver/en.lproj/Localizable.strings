@@ -75,6 +75,7 @@
 "Customer Notes" = "Customer Notes";
 "Photos" = "Photos";
 "Take 2 photos" = "Take 2 photos (shipping label and the location).";
+"Take 2 photos medication" = "Take 2 photos (shipping label and the customer holding package).";
 "Complete" = "Complete";
 "Completed" = "Completed";
 "Order No" = "Order No.";
@@ -82,6 +83,7 @@
 "Route No" = "Route No.";
 "Name" = "Name";
 "Address" = "Address";
+"Address Type" = "Address Type";
 "App has no permission to use the camera" = "App has no permission to use the camera, please change privacy settings";
 "Unable to capture media" = "Unable to capture media.";
 "First Photo" = "First Photo";

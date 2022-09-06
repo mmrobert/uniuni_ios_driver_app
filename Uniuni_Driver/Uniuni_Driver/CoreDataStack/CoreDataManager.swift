@@ -20,6 +20,8 @@ class CoreDataManager {
     
     @Published var saveFailedUploadedError: CoreDataError?
     
+    var packagesListUpdated: Bool = false
+    
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
         
@@ -133,6 +135,8 @@ class CoreDataManager {
     
     func updatePackage(package: PackageDataModel) {
         
+        self.packagesListUpdated = true
+        
         guard let orderId = package.order_id else {
             return
         }
@@ -180,6 +184,25 @@ class CoreDataManager {
             try taskContext.save()
         } catch let error as NSError {
             print("Could not save: \(error)")
+        }
+    }
+    
+    func deleteAllPackages() {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
         }
     }
     
@@ -249,6 +272,25 @@ class CoreDataManager {
             } catch let error as NSError {
                 print("Could not save service point: \(error)")
             }
+        }
+    }
+    
+    func deleteAllServicePoints() {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "ServicePoint")
+        fetchRequest.includesPropertyValues = false
+        let context = container.viewContext
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save: \(error)")
+            }
+        } catch {
+            print("Could not delete: \(error)")
         }
     }
     

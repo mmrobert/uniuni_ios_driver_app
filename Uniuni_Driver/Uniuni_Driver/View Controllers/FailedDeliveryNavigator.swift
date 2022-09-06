@@ -139,6 +139,10 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
     }
     
     func failedDelivery() {
+        var undelivered = PackageDataModel.dataModelFrom(viewModel: self.packageViewModel)
+        undelivered.state = .undelivered
+        CoreDataManager.shared.updatePackage(package: undelivered)
+        
         guard let orderID = self.packageViewModel.order_id else {
             return
         }
