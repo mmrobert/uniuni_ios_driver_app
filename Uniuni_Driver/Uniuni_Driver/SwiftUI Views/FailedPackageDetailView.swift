@@ -30,7 +30,7 @@ struct FailedPackageDetailView: View {
         NavigationView {
             ZStack {
                 VStack {
-                    ScrollView(showsIndicators: false) {
+                    ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             HStack {
                                 Text(String.orderInformationStr)

@@ -187,4 +187,36 @@ class NetworkService: NetworkServiceProvider {
             }
         }
     }
+    
+    func ordersToPickupInfo(driverID: Int) -> AnyPublisher<OrdersToPickupDataModel, NetworkRequestError> {
+        let pathParas = [String(driverID)]
+        let router = NetworkAPIs.ordersToPickup(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func ordersToDropoffInfo(driverID: Int) -> AnyPublisher<OrdersToDropoffDataModel, NetworkRequestError> {
+        let pathParas = [String(driverID)]
+        let router = NetworkAPIs.ordersToDropoff(pathParas: pathParas, queryParas: nil, bodyParas: nil)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
 }

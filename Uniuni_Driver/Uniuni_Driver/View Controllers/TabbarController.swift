@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 public enum AppTab {
     case delivery
@@ -31,12 +32,12 @@ class TabBarController: UITabBarController {
         return deliveryNav
     }
     
-    private func scanTab() -> UINavigationController {
-        let scanVC = UIViewController()  // to be customized in future
-        scanVC.view.backgroundColor = .white
-        let scanNav = UINavigationController(rootViewController: scanVC)
-        scanNav.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
-        return scanNav
+    private func scanTab() -> UIViewController {
+        let scanView = ScanHomeView(viewModel: ScanPackagesViewModel(driverID: 100))
+        let scanVC = UIHostingController(rootView: scanView)
+        
+        scanVC.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
+        return scanVC
     }
     
     private func incomeTab() -> UINavigationController {

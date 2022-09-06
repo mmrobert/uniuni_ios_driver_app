@@ -103,4 +103,14 @@
 "Your two attempts are too close" = "Your two attempts are too close. Please try to redelivery this parcel one hour later.";
 "Failed Reason" = "Failed Reason";
 "Take at least 1 photo" = "Take at least 1 photo.";
+"Order to Pick-up" = "Order to Pick-up";
+"Order to Drop-off" = "Order to Drop-off";
+"Business Pick-up" = "Business Pick-up";
+"Pick-up parcels from a business partner" = "Pick-up parcels from a business partner";
+"No service point is assigned to you" = "No service point is assigned to you. Please contact your driver manager.";
+"Pick-up Scan" = "Pick-up Scan";
+"Please scan a parcel" = "Please scan a parcel";
+"Generate Report" = "Generate Report";
+"Manual Input" = "Manual Input";
+
 

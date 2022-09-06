@@ -9,32 +9,27 @@ import Foundation
 import AVFoundation
 import Combine
 
-protocol BarCodeScannerProtocol: AnyObject {
+protocol BarCodeScannerProtocol: ObservableObject {
     var isSessionRunning: Bool { get }
     var hasCamera: Bool { get }
     var didGrantCameraPermission: Bool { get }
     var previewLayer: AVCaptureVideoPreviewLayer { get }
     var barCodeDetected: String? { get set }
-    var scanMode: ScanMode { get set }
+    var codeScannerError: BarCodeScannerError? { get set }
     
-    func startRunningCaptureSession(completion: @escaping (Result<Void, Error>) -> Void)
+    func startRunningCaptureSession()
     func stopRunningCaptureSession()
-    func restartCaptureSession(completion: @escaping (Result<Void, Error>) -> Void)
+    func restartCaptureSession()
     func updateScannerRectOfInterest(to rect: CGRect)
 }
 
-class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
+class BarCodeScanner: NSObject, BarCodeScannerProtocol {
     
     public var isSessionRunning: Bool {
         return self.captureSession.isRunning
     }
     
-    public var previewLayer: AVCaptureVideoPreviewLayer {
-        if !self.isSessionRunning {
-            print("⚠️ Attempted to access `previewLayer` without starting the capture session.")
-        }
-        return self._previewLayer
-    }
+    public var previewLayer: AVCaptureVideoPreviewLayer
     
     public var hasCamera: Bool {
         return AVCaptureDevice.default(for: .video) != nil
@@ -44,51 +39,39 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
         AVCaptureDevice.authorizationStatus(for: .video) == .authorized
     }
     
-    public var scanMode: ScanMode {
-        get {
-            self.scanMode
-        }
-        set {
-            self.scanMode = newValue
-        }
-    }
-    
-    var codesFound = Set<String>()
-    @Published var barCodeDetected: String?
-    
-    private let options: [BarCodeScannerOptions]
     private let metadataObjectTypes: [AVMetadataObject.ObjectType]
-    private lazy var _previewLayer: AVCaptureVideoPreviewLayer = {
-        return .init(session: self.captureSession)
-    }()
     private let captureSession: AVCaptureSession
-    private let captureSessionQueue: DispatchQueue = DispatchQueue.init(label: "com.masimo.QRCodeScanner.avCaptureSessionQueue")
+    private let captureSessionQueue: DispatchQueue = DispatchQueue.init(label: "BarCodeScanner.avCaptureSessionQueue")
     private lazy var metadataProcessingQueue: DispatchQueue = {
-        return .init(label: "com.masimo.QRCodeScanner.metadataOutputQueue")
+        return .init(label: "BarCodeScanner.metadataOutputQueue")
     }()
     private weak var scannerMetadataOutput: AVCaptureMetadataOutput?
     
+    @Published var barCodeDetected: String?
+    @Published var codeScannerError: BarCodeScannerError?
+    
     // MARK: - Initialization
     
-    public init(options: [BarCodeScannerOptions] = [], metadataObjectTypes: [AVMetadataObject.ObjectType] = [.qr, .dataMatrix]) {
+    public init(metadataObjectTypes: [AVMetadataObject.ObjectType] = [.qr, .dataMatrix]) {
         self.captureSession = AVCaptureSession()
-        self.options = options
+        self.captureSession.sessionPreset = .photo
+        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
         self.metadataObjectTypes = metadataObjectTypes
     }
     
     // MARK: - Public
     
-    public func startRunningCaptureSession(completion: @escaping (Result<Void, Error>) -> Void) {
+    public func startRunningCaptureSession() {
         self.requestCameraPermission { [weak self] result in
             guard let sSelf = self else { return }
             
             if case let .failure(error) = result {
-                completion(.failure(error))
+                sSelf.codeScannerError = error as? BarCodeScannerError
                 return
             }
             
             guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
-                completion(.failure(BarCodeScannerError.unsupportedDevice))
+                sSelf.codeScannerError = BarCodeScannerError.unsupportedDevice
                 return
             }
             
@@ -99,7 +82,7 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
             do {
                 let videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
                 guard sSelf.captureSession.canAddInput(videoInput) else {
-                    completion(.failure(BarCodeScannerError.canNotAddCaptureSessionInput))
+                    sSelf.codeScannerError = BarCodeScannerError.canNotAddCaptureSessionInput
                     return
                 }
                 sSelf.captureSession.addInput(videoInput)
@@ -107,7 +90,7 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
                 let metadataOutput = AVCaptureMetadataOutput()
                 
                 guard sSelf.captureSession.canAddOutput(metadataOutput) else {
-                    completion(.failure(BarCodeScannerError.canNotAddCaptureSessionOutput))
+                    sSelf.codeScannerError = BarCodeScannerError.canNotAddCaptureSessionOutput
                     return
                 }
                 sSelf.captureSession.addOutput(metadataOutput)
@@ -118,34 +101,30 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
                 
                 sSelf.captureSessionQueue.async { [weak self] in
                     self?.captureSession.startRunning()
-                    completion(.success(()))
                 }
             } catch {
-                completion(.failure(error))
+                sSelf.codeScannerError = BarCodeScannerError.unknown
             }
         }
     }
     
     public func stopRunningCaptureSession() {
-        // dispatch this to the global queue as the stopRunning()
-        // is synchronous and blocks the queue it runs on.
         self.captureSessionQueue.async { [weak self] in
             guard let sSelf = self else { return }
             sSelf.captureSession.stopRunning()
         }
     }
     
-    public func restartCaptureSession(completion: @escaping (Result<Void, Error>) -> Void) {
+    public func restartCaptureSession() {
         self.captureSessionQueue.async { [weak self] in
             guard let sSelf = self else { return }
             
             guard sSelf.captureSession.isRunning else {
-                sSelf.startRunningCaptureSession(completion: completion)
+                sSelf.startRunningCaptureSession()
                 return
             }
             sSelf.captureSession.stopRunning()
             sSelf.captureSession.startRunning()
-            
         }
     }
     
@@ -186,8 +165,7 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol, ObservableObject {
                         completionOnMainQueue(.failure(BarCodeScannerError.cameraAuthorizationDenied))
                     }
                 }
-            case .denied,
-                    .restricted:
+            case .denied, .restricted:
                 completionOnMainQueue(.failure(BarCodeScannerError.cameraAuthorizationDenied))
             @unknown default:
                 print("⚠️ Camera permission request switch reached unknown case")
@@ -206,19 +184,12 @@ extension BarCodeScanner: AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        // vibrate if necessary
-        if self.options.contains(.vibrateOnDetection) {
-            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-        }
+        // vibrate
+        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
         
-        // notify observer
-        switch self.scanMode {
-        case .once:
-            self.barCodeDetected = code
-        case .oncePerCode:
-            if !codesFound.contains(code) {
-                codesFound.insert(code)
-            }
+        DispatchQueue.main.async { [weak self] in
+            // notify observer
+            self?.barCodeDetected = code
         }
     }
 }
@@ -230,14 +201,4 @@ public enum BarCodeScannerError: Error {
     case noCamera
     case cameraAuthorizationDenied
     case unknown
-}
-
-public enum BarCodeScannerOptions: CaseIterable {
-    case vibrateOnDetection
-    case none
-}
-
-enum ScanMode {
-    case once
-    case oncePerCode
 }

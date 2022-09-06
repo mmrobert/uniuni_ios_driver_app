@@ -106,5 +106,16 @@ extension String {
     static let yourTwoAttemptsAreTooCloseStr = NSLocalizedString("Your two attempts are too close", comment: "")
     static let failedReasonStr = NSLocalizedString("Failed Reason", comment: "")
     static let takeAtLeast1PhotoStr = NSLocalizedString("Take at least 1 photo", comment: "")
+    static let orderToPickupStr = NSLocalizedString("Order to Pick-up", comment: "")
+    static let orderToDropoffStr = NSLocalizedString("Order to Drop-off", comment: "")
+    static let businessPickupStr = NSLocalizedString("Business Pick-up", comment: "")
+    static let pickupParcelsFromABusinessPartnerStr = NSLocalizedString("Pick-up parcels from a business partner", comment: "")
+    static let noServicePointIsAssignedToYouStr = NSLocalizedString("No service point is assigned to you", comment: "")
+    static let pickupScanStr = NSLocalizedString("Pick-up Scan", comment: "")
+    static let pleaseScanAParcelStr = NSLocalizedString("Please scan a parcel", comment: "")
+    static let generateReportStr = NSLocalizedString("Generate Report", comment: "")
+    static let manualInputStr = NSLocalizedString("Manual Input", comment: "")
+    
+    
     
 }

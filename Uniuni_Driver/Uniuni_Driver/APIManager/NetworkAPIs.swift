@@ -28,6 +28,8 @@ enum NetworkAPIs {
     case completeDelivery(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case reDeliveryHistory(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case reDeliveryTry(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case ordersToPickup(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case ordersToDropoff(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     
     // MARK: - base URL
     var baseURL: String {
@@ -62,6 +64,10 @@ enum NetworkAPIs {
             return .get
         case .reDeliveryTry( _, _, _):
             return .post
+        case .ordersToPickup( _, _, _):
+            return .get
+        case .ordersToDropoff( _, _, _):
+            return .get
         }
     }
     
@@ -120,6 +126,26 @@ enum NetworkAPIs {
             }
         case .reDeliveryTry( _, _, _):
             return "/delivery/retry"
+        case .ordersToPickup(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/to-be-picked-up/brief" + pathStr
+            } else {
+                return "/delivery/to-be-picked-up/brief"
+            }
+        case .ordersToDropoff(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/to-be-dropped-off/brief" + pathStr
+            } else {
+                return "/delivery/to-be-dropped-off/brief"
+            }
         }
     }
     
@@ -206,6 +232,22 @@ enum NetworkAPIs {
             } else {
                 return nil
             }
+        case .ordersToPickup( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .ordersToDropoff( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
         }
     }
     
@@ -232,6 +274,10 @@ enum NetworkAPIs {
             return bodyParas
         case .reDeliveryTry( _, _, let bodyParas):
             return bodyParas
+        case .ordersToPickup( _, _, let bodyParas):
+            return bodyParas
+        case .ordersToDropoff( _, _, let bodyParas):
+            return bodyParas
         }
     }
     
@@ -255,8 +301,8 @@ enum NetworkAPIs {
         // HTTP Method
         urlRequest.httpMethod = method.rawValue
         
-        //let tempToken = AppConstants.token
-        let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
+        let tempToken = AppConstants.token
+        //let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
         // Headers
         let bearer = "Bearer \(tempToken)"
         urlRequest.setValue(bearer, forHTTPHeaderField: "Authorization")
