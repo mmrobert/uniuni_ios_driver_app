@@ -318,7 +318,8 @@ class MapPackageDetailCardView: UIView {
     private func configureViewModel(viewModel: MapPackageDetailCardViewModel) {
         self.routeValueLabel.text = "\(viewModel.routeNo ?? 0)"
         self.routeLabelLabel.text = String.routeStr
-        self.addressTypeButton.setTitle(viewModel.addressType?.getDisplayString(), for: .normal)
+        let addType = viewModel.addressType?.getDisplayString() ?? String.addressTypeStr
+        self.addressTypeButton.setTitle(addType, for: .normal)
         self.nameLabel.text = viewModel.name
         self.phoneLabel.text = viewModel.phone
         self.addressLabel.text = viewModel.address

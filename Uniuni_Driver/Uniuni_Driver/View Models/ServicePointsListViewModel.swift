@@ -28,6 +28,7 @@ class ServicePointsListViewModel: ObservableObject {
     
     func fetchServicesFromAPI(driverID: Int) {
         
+        coreDataManager.deleteAllServicePoints()
         NetworkService.shared.fetchServiceList(driverID: driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in

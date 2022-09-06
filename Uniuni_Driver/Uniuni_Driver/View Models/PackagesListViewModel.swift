@@ -28,6 +28,8 @@ class PackagesListViewModel: ObservableObject {
     
     func fetchPackagesFromAPI(driverID: Int) {
         
+        coreDataManager.deleteAllPackages()
+        coreDataManager.packagesListUpdated = false
         NetworkService.shared.fetchDeliveringList(driverID: driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in

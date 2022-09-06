@@ -60,7 +60,7 @@ struct FailedPackageDetailView: View {
                             VStack {
                                 TitleTextView(title: String.nameStr, text: packageViewModel.name)
                                 TitleTextView(title: String.phoneNumberStr, text: packageViewModel.mobile)
-                                TitleTextView(title: String.addressStr, text: ((packageViewModel.address ?? "") + " " + (packageViewModel.zipcode ?? "")))
+                                TitleTextView(title: String.addressStr, text: (packageViewModel.address ?? ""))
                             }
                             HStack {
                                 Text(String.customerNotesStr)
@@ -97,9 +97,16 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    Text(String.take2PhotosStr)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                        .foregroundColor(.gray)
+                                    switch (packageViewModel.goods_type ?? .regular) {
+                                    case .regular:
+                                        Text(String.take2PhotosStr)
+                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                            .foregroundColor(.gray)
+                                    case .medical:
+                                        Text(String.take2PhotosMedicationStr)
+                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                            .foregroundColor(.gray)
+                                    }
                                     Spacer()
                                 }
                             case .wrongAddress, .poBox:
@@ -214,7 +221,7 @@ struct FailedPackageDetailView: View {
                                 self.navigator.failedReDeliveryTry()
                             }
                             .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(Color("tab-bar-tint"))
+                            .background(self.navigator.photos.count < 1 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
                             .font(.system(size: 18))
                             .foregroundColor(.white)
                             .cornerRadius(23)
@@ -227,7 +234,7 @@ struct FailedPackageDetailView: View {
                                 self.navigator.failedDelivery()
                             }
                             .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(Color("tab-bar-tint"))
+                            .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
                             .font(.system(size: 18))
                             .foregroundColor(.white)
                             .cornerRadius(23)
