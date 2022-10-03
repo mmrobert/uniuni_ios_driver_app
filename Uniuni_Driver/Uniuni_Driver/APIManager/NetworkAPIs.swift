@@ -355,8 +355,8 @@ enum NetworkAPIs {
         // HTTP Method
         urlRequest.httpMethod = method.rawValue
         
-        let tempToken = AppConstants.token
-        //let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
+        //let tempToken = AppConstants.token
+        let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
         // Headers
         let bearer = "Bearer \(tempToken)"
         urlRequest.setValue(bearer, forHTTPHeaderField: "Authorization")
