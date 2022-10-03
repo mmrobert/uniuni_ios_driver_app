@@ -9,21 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 
-protocol BarCodeScannerProtocol: ObservableObject {
-    var isSessionRunning: Bool { get }
-    var hasCamera: Bool { get }
-    var didGrantCameraPermission: Bool { get }
-    var previewLayer: AVCaptureVideoPreviewLayer { get }
-    var barCodeDetected: String? { get set }
-    var codeScannerError: BarCodeScannerError? { get set }
-    
-    func startRunningCaptureSession()
-    func stopRunningCaptureSession()
-    func restartCaptureSession()
-    func updateScannerRectOfInterest(to rect: CGRect)
-}
-
-class BarCodeScanner: NSObject, BarCodeScannerProtocol {
+class BarCodeScanner: NSObject, ObservableObject {
     
     public var isSessionRunning: Bool {
         return self.captureSession.isRunning
@@ -31,24 +17,20 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol {
     
     public var previewLayer: AVCaptureVideoPreviewLayer
     
-    public var hasCamera: Bool {
+    private var hasCamera: Bool {
         return AVCaptureDevice.default(for: .video) != nil
-    }
-    
-    public var didGrantCameraPermission: Bool {
-        AVCaptureDevice.authorizationStatus(for: .video) == .authorized
     }
     
     private let metadataObjectTypes: [AVMetadataObject.ObjectType]
     private let captureSession: AVCaptureSession
     private let captureSessionQueue: DispatchQueue = DispatchQueue.init(label: "BarCodeScanner.avCaptureSessionQueue")
-    private lazy var metadataProcessingQueue: DispatchQueue = {
-        return .init(label: "BarCodeScanner.metadataOutputQueue")
-    }()
     private weak var scannerMetadataOutput: AVCaptureMetadataOutput?
     
     @Published var barCodeDetected: String?
     @Published var codeScannerError: BarCodeScannerError?
+    
+    private var scanInterval: Double = 1.2
+    private var lastTime = Date(timeIntervalSince1970: 0)
     
     // MARK: - Initialization
     
@@ -96,7 +78,7 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol {
                 sSelf.captureSession.addOutput(metadataOutput)
                 sSelf.scannerMetadataOutput = metadataOutput
                 
-                metadataOutput.setMetadataObjectsDelegate(sSelf, queue: sSelf.metadataProcessingQueue)
+                metadataOutput.setMetadataObjectsDelegate(sSelf, queue: DispatchQueue.main)
                 metadataOutput.metadataObjectTypes = sSelf.metadataObjectTypes
                 
                 sSelf.captureSessionQueue.async { [weak self] in
@@ -112,19 +94,6 @@ class BarCodeScanner: NSObject, BarCodeScannerProtocol {
         self.captureSessionQueue.async { [weak self] in
             guard let sSelf = self else { return }
             sSelf.captureSession.stopRunning()
-        }
-    }
-    
-    public func restartCaptureSession() {
-        self.captureSessionQueue.async { [weak self] in
-            guard let sSelf = self else { return }
-            
-            guard sSelf.captureSession.isRunning else {
-                sSelf.startRunningCaptureSession()
-                return
-            }
-            sSelf.captureSession.stopRunning()
-            sSelf.captureSession.startRunning()
         }
     }
     
@@ -184,12 +153,13 @@ extension BarCodeScanner: AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        // vibrate
-        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-        
-        DispatchQueue.main.async { [weak self] in
+        let now = Date()
+        if now.timeIntervalSince(lastTime) >= scanInterval {
+            lastTime = now
+            // vibrate
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             // notify observer
-            self?.barCodeDetected = code
+            self.barCodeDetected = code
         }
     }
 }

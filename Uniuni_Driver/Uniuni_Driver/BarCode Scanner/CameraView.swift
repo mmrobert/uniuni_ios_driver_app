@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CameraView<Scanner>: UIView where Scanner: BarCodeScannerProtocol {
+class CameraView: UIView {
     
     private let cornerRadius: CGFloat = 6
     private let borderWidth: CGFloat = 1
@@ -28,10 +28,10 @@ class CameraView<Scanner>: UIView where Scanner: BarCodeScannerProtocol {
         return view
     }()
     
-    private var barCodeScanner: Scanner?
+    private var barCodeScanner: BarCodeScanner?
     private weak var focusRectLayer: CAShapeLayer?
     
-    convenience init(barCodeScanner: Scanner) {
+    convenience init(barCodeScanner: BarCodeScanner) {
         self.init(frame: .zero)
         self.barCodeScanner = barCodeScanner
         self.backgroundColor = .darkGray
@@ -46,7 +46,7 @@ class CameraView<Scanner>: UIView where Scanner: BarCodeScannerProtocol {
     }
     
     override func layoutSubviews() {
-        self.layoutSubviews()
+        super.layoutSubviews()
         self.setupFocusView()
         self.barCodeScanner?.startRunningCaptureSession()
         guard let layer = self.barCodeScanner?.previewLayer else {
@@ -90,7 +90,6 @@ class CameraView<Scanner>: UIView where Scanner: BarCodeScannerProtocol {
         self.barCodeScanner?.updateScannerRectOfInterest(to: focusRect)
     }
     
-    
     private func setupFocusView() {
         self.addSubview(self.focusView)
         NSLayoutConstraint.activate(
@@ -99,5 +98,21 @@ class CameraView<Scanner>: UIView where Scanner: BarCodeScannerProtocol {
              focusView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -trailingSpacing),
              focusView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -bottomSpacing)]
         )
+    }
+    
+    func updateView(focusHiden: Bool) {
+        if focusHiden {
+            self.focusView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.focusView.layer.borderWidth = 0.0
+            self.focusView.layer.borderColor = (UIColor.black.withAlphaComponent(0.5)).cgColor
+        } else {
+            self.focusView.backgroundColor = .clear
+            self.focusView.layer.borderWidth = borderWidth
+            self.focusView.layer.borderColor = borderColor.cgColor
+        }
+    }
+    
+    func stopSessionRunning() {
+        self.barCodeScanner?.stopRunningCaptureSession()
     }
 }

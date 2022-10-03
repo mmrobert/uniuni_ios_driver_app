@@ -13,7 +13,7 @@ struct BusinessPickupCardView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
-            Image("icon-package")
+            Image("icon-business-package")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 51, height: 51)

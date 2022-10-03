@@ -15,6 +15,8 @@ class PackagesListViewModel: ObservableObject {
     @Published var list: [PackageViewModel] = []
     @Published var networkError: NetworkRequestError?
     
+    private var failedUploaded: [Int] = []
+    
     private var disposables = Set<AnyCancellable>()
     
     init(list: [PackageDataModel]? = nil) {
@@ -24,12 +26,22 @@ class PackagesListViewModel: ObservableObject {
         self.list = list.map {
             PackageViewModel(dataModel: $0)
         }
+        
+        self.coreDataManager.$failedUploadeds
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] failed in
+                guard let strongSelf = self else { return }
+                strongSelf.failedUploaded = failed
+            })
+            .store(in: &disposables)
     }
     
     func fetchPackagesFromAPI(driverID: Int) {
         
         coreDataManager.deleteAllPackages()
+        self.list = []
         coreDataManager.packagesListUpdated = false
+        
         NetworkService.shared.fetchDeliveringList(driverID: driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
@@ -37,15 +49,15 @@ class PackagesListViewModel: ObservableObject {
                 switch value {
                 case .failure(let error):
                     strongSelf.networkError = error
-                    strongSelf.list = []
                 case .finished:
                     break
                 }
             }, receiveValue: { [weak self] packages in
                 guard let strongSelf = self else { return }
                 guard let biz_data = packages.biz_data else { return }
-                strongSelf.savePackagesToCoreData(packs: biz_data)
-                strongSelf.list = strongSelf.list + biz_data.map {
+                let newData = strongSelf.removeFailedUploaded(biz_data: biz_data)
+                strongSelf.savePackagesToCoreData(packs: newData)
+                strongSelf.list = strongSelf.list + newData.map {
                     PackageViewModel(dataModel: $0)
                 }
             })
@@ -58,19 +70,31 @@ class PackagesListViewModel: ObservableObject {
                 switch value {
                 case .failure(let error):
                     strongSelf.networkError = error
-                    strongSelf.list = []
                 case .finished:
                     break
                 }
             }, receiveValue: { [weak self] packages in
                 guard let strongSelf = self else { return }
                 guard let biz_data = packages.biz_data else { return }
-                strongSelf.savePackagesToCoreData(packs: biz_data)
-                strongSelf.list = strongSelf.list + biz_data.map {
+                let newData = strongSelf.removeFailedUploaded(biz_data: biz_data)
+                strongSelf.savePackagesToCoreData(packs: newData)
+                strongSelf.list = strongSelf.list + newData.map {
                     PackageViewModel(dataModel: $0)
                 }
             })
             .store(in: &disposables)
+    }
+    
+    private func removeFailedUploaded(biz_data: [PackageDataModel]) -> [PackageDataModel] {
+        var biz_data = biz_data
+        for failed in self.failedUploaded {
+            if let packIndex = biz_data.firstIndex(where: {
+                $0.order_id == failed
+            }) {
+                _ = biz_data.remove(at: packIndex)
+            }
+        }
+        return biz_data
     }
     
     private func savePackagesToCoreData(packs: [PackageDataModel]) {
@@ -237,7 +261,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 444,
             assign_time: "6-29-2022",
             delivery_by: "7-1-2022",
-            state: .undelivered,
+            state: .undelivered211,
             name: "Peter Lee",
             mobile: "444444444",
             address: "4444 Bayview St",
@@ -259,7 +283,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 555,
             assign_time: "8-29-2022",
             delivery_by: "9-1-2022",
-            state: .undelivered,
+            state: .undelivered206,
             name: "Water Lee",
             mobile: "55555555",
             address: "555 Bayview St",

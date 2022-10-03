@@ -155,6 +155,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
             }, receiveValue: { [weak self] response in
                 guard let strongSelf = self else { return }
                 if response.biz_code?.lowercased() == Constants.bizMsgSuccess.lowercased() {
+                    CoreDataManager.shared.deleteSinglePackage(orderID: orderID)
                     strongSelf.showingSuccessfulAlert = true
                 } else {
                     strongSelf.showingSuccessfulAlert = false
@@ -226,17 +227,20 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
                 for image in images {
                     if strongSelf.photos.count < 2 {
                         strongSelf.photos.append(image)
+                        strongSelf.photoTaken = image
                     }
                 }
                 if strongSelf.photos.count >= 2 {
                     strongSelf.dismissPhotoTaking()
+                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
+                    photoTakingVC.updateTitle()
                 }
             case .review(let index):
                 if images.count > 0 {
                     strongSelf.photos[index] = images[0]
                     strongSelf.photoTaken = images[0]
                 }
-                strongSelf.dismissPhotoTaking() {
+                strongSelf.dismissPhotoTaking(animated: false) {
                     strongSelf.dismissPhotoReview(animated: false)
                 }
             }

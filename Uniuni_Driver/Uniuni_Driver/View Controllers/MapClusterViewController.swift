@@ -331,22 +331,35 @@ class MapClusterViewController: UIViewController {
     @objc
     private func showDetailPackageCard() {
         
-        guard let packageToShow = self.packageToShowDetail else {
+        guard var packageToShow = self.packageToShowDetail else {
             return
         }
-        let orderId = packageToShow.order_id ?? 0
-        self.mapViewModel?.reDeliveryHistory(driverID: 100, orderID: orderId) { [weak self] retryData in
-            self?.packageToShowDetail?.redeliveryData = retryData
-        }
-        self.updateDataSource(packagesList: [packageToShow], servicesList: [])
         let location = (self.currentLocation.coordinate.latitude,
                         self.currentLocation.coordinate.longitude)
-        let viewModel = MapPackageDetailCardViewModel(
-            packageViewModel: packageToShow,
-            location: location,
-            failedButtonTitle: String.failedStr,
-            deliveredButtonTitle: String.deliveredStr
-        )
+        let orderId = packageToShow.order_id ?? 0
+        if let needRetry = self.packageToShowDetail?.need_retry, needRetry > 0 {
+            self.mapViewModel?.reDeliveryHistory(driverID: 100, orderID: orderId) { [weak self] retryData in
+                guard let strongSelf = self else { return }
+                strongSelf.packageToShowDetail?.redeliveryData = retryData
+                packageToShow.redeliveryData = retryData
+                let viewModel = MapPackageDetailCardViewModel(
+                    packageViewModel: packageToShow,
+                    location: location,
+                    failedButtonTitle: String.failedStr,
+                    deliveredButtonTitle: String.deliveredStr
+                )
+                strongSelf.detailCardView.configure(viewModel: viewModel)
+            }
+        } else {
+            let viewModel = MapPackageDetailCardViewModel(
+                packageViewModel: packageToShow,
+                location: location,
+                failedButtonTitle: String.failedStr,
+                deliveredButtonTitle: String.deliveredStr
+            )
+            self.detailCardView.configure(viewModel: viewModel)
+        }
+        self.updateDataSource(packagesList: [packageToShow], servicesList: [])
         self.detailCardView.chooseAddressTypeAction = { [weak self] in
             self?.showAddressTypePickup()
         }
@@ -406,8 +419,6 @@ class MapClusterViewController: UIViewController {
                 strongSelf.showReasonOfFailPickup(redelivery: false)
             }
         }
-        
-        self.detailCardView.configure(viewModel: viewModel)
         
         self.detailCardViewTopConstraint?.constant = -self.detailCardView.bounds.height
         UIView.animate(withDuration: 0.5, animations: { [weak self] in

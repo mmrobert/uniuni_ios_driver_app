@@ -13,10 +13,13 @@ class CoreDataManager {
     
     static let shared = CoreDataManager()
     
-    private init() {}
+    private init() {
+        self.fetchFailedUploadeds()
+    }
     
     @Published var packages: [PackageDataModel] = []
     @Published var services: [ServicePointDataModel] = []
+    @Published var failedUploadeds: [Int] = []   // array of orderID
     
     @Published var saveFailedUploadedError: CoreDataError?
     
@@ -76,6 +79,8 @@ class CoreDataManager {
             object.setValue(package.warehouse_id, forKeyPath: "warehouse_id")
             object.setValue(package.need_retry, forKeyPath: "need_retry")
             object.setValue(package.failed_handle_type?.rawValue, forKeyPath: "failed_handle_type")
+            object.setValue(package.dispatch_type?.SG, forKeyPath: "sg")
+            object.setValue(package.dispatch_type?.SZ, forKeyPath: "sz")
             
             do {
                 try taskContext.save()
@@ -86,6 +91,8 @@ class CoreDataManager {
     }
     
     func fetchPackages() {
+        
+        self.packagesListUpdated = false
         
         let taskContext = newTaskContext()
         
@@ -124,6 +131,9 @@ class CoreDataManager {
                     pack.need_retry = object.value(forKey: "need_retry") as? Int
                     let failedInt = object.value(forKey: "failed_handle_type") as? Int
                     pack.failed_handle_type = FailedHandleType.getTypeFrom(value: failedInt)
+                    let sg = object.value(forKey: "sg") as? Int
+                    let sz = object.value(forKey: "sz") as? Int
+                    pack.dispatch_type = PackageDataModel.DispatchType(SZ: sz, SG: sg)
                     
                     return pack
                 }
@@ -164,6 +174,7 @@ class CoreDataManager {
     }
     
     func deleteSinglePackage(orderID: Int) {
+        self.packagesListUpdated = true
         let taskContext = newTaskContext()
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
         fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)
@@ -397,6 +408,27 @@ class CoreDataManager {
             }
             if self.saveFailedUploadedError == nil {
                 self.saveFailedUploadedError = nil
+            }
+            self.fetchFailedUploadeds()
+        }
+    }
+    
+    func fetchFailedUploadeds() {
+        
+        let taskContext = newTaskContext()
+        
+        taskContext.perform { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FailedUploaded")
+            do {
+                let failed = try taskContext.fetch(fetchRequest)
+                strongSelf.failedUploadeds = failed.compactMap { object in
+                    object.value(forKey: "order_id") as? Int
+                }
+            } catch let error as NSError {
+                print("Could not fetch service points: \(error)")
             }
         }
     }

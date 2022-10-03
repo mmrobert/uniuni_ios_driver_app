@@ -15,6 +15,7 @@ protocol TakePhotosViewControllerNavigator: ObservableObject {
     var photoTaken: UIImage? { get set}
     var photos: [UIImage] { get set }
     var photoTakingFlow: PhotoTakingFlow { get set }
+    func getPackageViewModel() -> PackageViewModel
     func presentTakePhotoViewController()
     func presentPhotoPickerViewController()
     func presentPhotoReviewViewController()
@@ -59,6 +60,21 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
         label.numberOfLines = 1
         label.textAlignment = .center
         label.text = String.firstPhotoStr
+        return label
+    }()
+    
+    private lazy var remindingLabel: PaddingLabel = {
+        let label = PaddingLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        label.backgroundColor = UIColor.lightBlackText
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = UIColor.white
+        label.numberOfLines = 1
+        label.textAlignment = .center
+        label.layer.cornerRadius = 18
+        label.layer.masksToBounds = true
+        label.padding(top: 0, bottom: 0, left: 20, right: 20)
         return label
     }()
     
@@ -258,14 +274,38 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
         case .taking:
             if self.navigator.photos.count == 0 {
                 self.titleLabel.text = String.firstPhotoStr
+                let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLabelStr)
+                let range2 = (String.takeAPhotoOfTheParcelLabelStr as NSString).range(of: String.parcelLabelStr)
+                remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                self.remindingLabel.attributedText = remindingText
             } else {
                 self.titleLabel.text = String.secondPhotoStr
+                if navigator.getPackageViewModel().SG == 1 {
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
+                } else {
+                    self.remindingLabel.isHidden = true
+                }
             }
         case .review(let index):
             if index == 0 {
                 self.titleLabel.text = String.firstPhotoStr
+                let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLabelStr)
+                let range2 = (String.takeAPhotoOfTheParcelLabelStr as NSString).range(of: String.parcelLabelStr)
+                remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                self.remindingLabel.attributedText = remindingText
             } else {
                 self.titleLabel.text = String.secondPhotoStr
+                if navigator.getPackageViewModel().SG == 1 {
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
+                } else {
+                    self.remindingLabel.isHidden = true
+                }
             }
         }
         
@@ -555,6 +595,47 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
         }
     }
     
+    func updateTitle() {
+        switch self.navigator.photoTakingFlow {
+        case .taking:
+            if self.navigator.photos.count == 0 {
+                self.titleLabel.text = String.firstPhotoStr
+                let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLabelStr)
+                let range2 = (String.takeAPhotoOfTheParcelLabelStr as NSString).range(of: String.parcelLabelStr)
+                remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                self.remindingLabel.attributedText = remindingText
+            } else {
+                self.titleLabel.text = String.secondPhotoStr
+                if navigator.getPackageViewModel().SG == 1 {
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
+                } else {
+                    self.remindingLabel.isHidden = true
+                }
+            }
+        case .review(let index):
+            if index == 0 {
+                self.titleLabel.text = String.firstPhotoStr
+                let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLabelStr)
+                let range2 = (String.takeAPhotoOfTheParcelLabelStr as NSString).range(of: String.parcelLabelStr)
+                remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                self.remindingLabel.attributedText = remindingText
+            } else {
+                self.titleLabel.text = String.secondPhotoStr
+                if navigator.getPackageViewModel().SG == 1 {
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
+                } else {
+                    self.remindingLabel.isHidden = true
+                }
+            }
+        }
+    }
+    
     deinit {
         print("🍎 TakePhotosViewController - deinit")
     }
@@ -585,6 +666,13 @@ extension TakePhotosViewController {
              previewView.topAnchor.constraint(equalTo: topContainer.bottomAnchor),
              previewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
              previewView.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)]
+        )
+        
+        self.view.addSubview(self.remindingLabel)
+        NSLayoutConstraint.activate(
+            [remindingLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+             remindingLabel.heightAnchor.constraint(equalToConstant: 36),
+             remindingLabel.bottomAnchor.constraint(equalTo: previewView.bottomAnchor, constant: -22)]
         )
         
         self.topContainer.addSubview(self.closeButton)

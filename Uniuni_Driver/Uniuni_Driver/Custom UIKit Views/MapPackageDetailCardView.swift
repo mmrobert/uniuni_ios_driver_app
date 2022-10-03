@@ -35,6 +35,9 @@ class MapPackageDetailCardView: UIView {
         var nameTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
         var addressTextColor: UIColor = .black
         var addressTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
+        var remindingTextColor: UIColor = .white
+        var remindingTextFont: UIFont = UIFont.systemFont(ofSize: 14)
+        var remindingBackgroundColor: UIColor? = UIColor.lightRed
         var buzzNoteTextColor: UIColor? = UIColor.lightBlue
         var buzzNoteTextFont: UIFont = UIFont.systemFont(ofSize: 16)
         var failedBtnColor: UIColor? = UIColor.naviBarButton
@@ -56,6 +59,18 @@ class MapPackageDetailCardView: UIView {
         view.alignment = .leading
         view.spacing = -4
         return view
+    }()
+    
+    private lazy var signatureRemindingLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        label.backgroundColor = Theme.default.remindingBackgroundColor
+        label.font = Theme.default.remindingTextFont
+        label.textColor = Theme.default.remindingTextColor
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        return label
     }()
     
     private lazy var packDetailContainer2: UIStackView = {
@@ -176,6 +191,13 @@ class MapPackageDetailCardView: UIView {
         return label
     }()
     
+    private lazy var customerSignatureLabel: LeadingTitleLabel = {
+        let label = LeadingTitleLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        return label
+    }()
+    
     private lazy var assignedTimeLabel: LeadingTitleLabel = {
         let label = LeadingTitleLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -263,6 +285,8 @@ class MapPackageDetailCardView: UIView {
     private var theme: MapPackageDetailCardView.Theme?
     private var viewModel: MapPackageDetailCardViewModel?
     
+    private var signatureRemindingHeightConstraint: NSLayoutConstraint?
+    
     var chooseAddressTypeAction: (() -> Void)?
     var navigationAction: (() -> Void)?
     var longPressAddressAction: (() -> Void)?
@@ -293,8 +317,9 @@ class MapPackageDetailCardView: UIView {
         self.setupRouteContainer()
         self.setupAddressContainer()
         self.setupRouteAddressContainer()
-        self.setuppackDetailContainer1()
-        self.setuppackDetailContainer2()
+        self.setupPackDetailContainer1()
+        self.setupSignatureReminding()
+        self.setupPackDetailContainer2()
         self.setupButtons()
         
         guard let theme = self.theme else {
@@ -333,6 +358,15 @@ class MapPackageDetailCardView: UIView {
             orderTypeTheme.mainTextColor = UIColor.lightRed
         }
         self.orderTypeLabel.configure(theme: orderTypeTheme, leadingTitle: String.orderTypeStr + ":", mainText: viewModel.goodsType?.getDisplayString(), textToRight: false)
+        
+        var signatureLabelText = ""
+        if let signature = viewModel.SG, signature == 1 {
+            signatureLabelText = String.yesStr
+        } else {
+            signatureLabelText = String.noStr
+        }
+        self.customerSignatureLabel.configure(theme: nil, leadingTitle: String.customerSignatureStr + ":", mainText: signatureLabelText, textToRight: false)
+        
         self.assignedTimeLabel.configure(theme: nil, leadingTitle: String.assignedTimeStr + ":", mainText: viewModel.assignedTime, textToRight: false)
         var deliveryTypeTheme = LeadingTitleLabel.Theme.default
         let deliveryType = viewModel.expressType ?? .regular
@@ -343,8 +377,20 @@ class MapPackageDetailCardView: UIView {
             deliveryTypeTheme.mainTextColor = UIColor.redBackground
         }
         self.deliveryTypeLabel.configure(theme: deliveryTypeTheme, leadingTitle: String.deliveryTypeStr + ":", mainText: viewModel.expressType?.getDisplayString(), textToRight: false)
-        self.deliveryAttemptLabel.configure(theme: nil, leadingTitle: String.deliveryAttemptStr, mainText: viewModel.getDeliveryAttemptValue(), textToRight: false)
+        
+        if let needRetry = viewModel.needRetry, needRetry > 0 {
+            self.deliveryAttemptLabel.configure(theme: nil, leadingTitle: String.deliveryAttemptStr, mainText: viewModel.getDeliveryAttemptValue(maxAttempt: 3), textToRight: false)
+        } else {
+            self.deliveryAttemptLabel.configure(theme: nil, leadingTitle: String.deliveryAttemptStr, mainText: viewModel.getDeliveryAttemptValue(maxAttempt: 1), textToRight: false)
+        }
+        
         self.deliveryByLabel.configure(theme: nil, leadingTitle: String.deliveryByStr + ":", mainText: viewModel.deliveryBy, textToRight: false)
+        self.signatureRemindingLabel.text = String.thisParcelRequiresCustomerSignatureStr
+        if viewModel.SG == 1 {
+            self.signatureRemindingHeightConstraint?.constant = 28
+        } else {
+            self.signatureRemindingHeightConstraint?.constant = 0
+        }
         self.buzzLabel.configure(theme: nil, leadingTitle: String.buzzStr + ":", mainText: viewModel.buzz, textToRight: false)
         self.noteLabel.configure(theme: nil, leadingTitle: String.noteStr + ":", mainText: viewModel.note, textToRight: false)
         self.failedButton.setTitle(viewModel.failedButtonTitle, for: .normal)
@@ -477,7 +523,7 @@ extension MapPackageDetailCardView {
         )
     }
     
-    private func setuppackDetailContainer1() {
+    private func setupPackDetailContainer1() {
         self.addSubview(packDetailContainer1)
         NSLayoutConstraint.activate(
             [packDetailContainer1.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
@@ -486,17 +532,32 @@ extension MapPackageDetailCardView {
         )
         
         self.packDetailContainer1.addArrangedSubview(orderTypeLabel)
+        self.packDetailContainer1.addArrangedSubview(customerSignatureLabel)
         self.packDetailContainer1.addArrangedSubview(assignedTimeLabel)
         self.packDetailContainer1.addArrangedSubview(deliveryTypeLabel)
         self.packDetailContainer1.addArrangedSubview(deliveryAttemptLabel)
         self.packDetailContainer1.addArrangedSubview(deliveryByLabel)
     }
     
-    private func setuppackDetailContainer2() {
+    private func setupSignatureReminding() {
+        self.addSubview(signatureRemindingLabel)
+        self.signatureRemindingHeightConstraint = signatureRemindingLabel.heightAnchor.constraint(equalToConstant: 28)
+        guard let heightConstraint = self.signatureRemindingHeightConstraint else {
+            return
+        }
+        NSLayoutConstraint.activate(
+            [signatureRemindingLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+             signatureRemindingLabel.topAnchor.constraint(equalTo: packDetailContainer1.bottomAnchor, constant: 4),
+             signatureRemindingLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
+             heightConstraint]
+        )
+    }
+    
+    private func setupPackDetailContainer2() {
         self.addSubview(packDetailContainer2)
         NSLayoutConstraint.activate(
             [packDetailContainer2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
-             packDetailContainer2.topAnchor.constraint(equalTo: packDetailContainer1.bottomAnchor, constant: 6),
+             packDetailContainer2.topAnchor.constraint(equalTo: signatureRemindingLabel.bottomAnchor, constant: 4),
              packDetailContainer2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
              packDetailContainer2.heightAnchor.constraint(greaterThanOrEqualToConstant: 46)]
         )

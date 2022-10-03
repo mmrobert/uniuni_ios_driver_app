@@ -29,6 +29,12 @@ struct PackageDataModel: Codable {
     var warehouse_id: Int?
     var need_retry: Int?
     var failed_handle_type: FailedHandleType?
+    var dispatch_type: DispatchType?
+    
+    struct DispatchType: Codable {
+        var SZ: Int?
+        var SG: Int?
+    }
     
     static func dataModelFrom(viewModel: PackageViewModel) -> PackageDataModel {
         return PackageDataModel(

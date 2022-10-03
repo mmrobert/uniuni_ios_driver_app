@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SwiftUI
+import Combine
 
 public enum AppTab {
     case delivery
@@ -16,9 +17,13 @@ public enum AppTab {
 }
 
 class TabBarController: UITabBarController {
+    
+    private var disposables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.observeGlobalVariables()
 
         self.tabBar.backgroundColor = UIColor.tabbarBackground
         self.tabBar.tintColor = UIColor.tabbarTint
@@ -33,9 +38,8 @@ class TabBarController: UITabBarController {
     }
     
     private func scanTab() -> UIViewController {
-        let scanView = ScanHomeView(viewModel: ScanPackagesViewModel(driverID: 100))
+        let scanView = ScanHomeView(viewModel: ScanHomeViewModel())
         let scanVC = UIHostingController(rootView: scanView)
-        
         scanVC.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
         return scanVC
     }
@@ -46,6 +50,16 @@ class TabBarController: UITabBarController {
         let incomeNav = UINavigationController(rootViewController: incomeVC)
         incomeNav.tabBarItem = UITabBarItem(title: String.incomeStr, image: UIImage.dollar, tag: 3)
         return incomeNav
+    }
+    
+    private func observeGlobalVariables() {
+        AppGlobalVariables.shared.$tabBarHiden
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] hiden in
+                guard let strongSelf = self else { return }
+                strongSelf.tabBar.isHidden = hiden
+            })
+            .store(in: &disposables)
     }
 
     public func chooseTab(appTab: AppTab) {

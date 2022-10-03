@@ -9,9 +9,9 @@ import SwiftUI
 
 struct OrderToDropoffCardView: View {
     
-    @ObservedObject private var viewModel: ScanPackagesViewModel
+    @ObservedObject private var viewModel: ScanHomeViewModel
     
-    init(viewModel: ScanPackagesViewModel) {
+    init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
     }
     
@@ -31,26 +31,27 @@ struct OrderToDropoffCardView: View {
                     .multilineTextAlignment(.leading)
                 HStack {
                     Text(String.scanStr)
-                        .font(.bold(.system(size: 14))())
+                        .font(.bold(.system(size: 16))())
                         .foregroundColor(Color("navi-bar-button"))
                     Image(systemName: "chevron.right")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 12, height: 16)
+                        .frame(width: 14, height: 16)
                     Spacer()
                 }
+                .padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 0))
             }
             Image("icon-delivery-man")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 78, height: 164)
         }
-        .padding(EdgeInsets(top: 30, leading: 20, bottom: 26, trailing: 15))
+        .padding(EdgeInsets(top: 46, leading: 20, bottom: 42, trailing: 15))
     }
 }
 
 struct OrderToDropoffCardView_Previews: PreviewProvider {
     static var previews: some View {
-        OrderToDropoffCardView(viewModel: ScanPackagesViewModel(driverID: 10))
+        OrderToDropoffCardView(viewModel: ScanHomeViewModel())
     }
 }

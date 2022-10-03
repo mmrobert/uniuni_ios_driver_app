@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ScanHomeView: View {
     
-    @ObservedObject private var viewModel: ScanPackagesViewModel
+    @ObservedObject private var viewModel: ScanHomeViewModel
     
-    init(viewModel: ScanPackagesViewModel) {
+    init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
-        viewModel.fetchPacksPickDropInfo()
+        viewModel.fetchPacksPickDropInfo(driverID: 100)
     }
     
     var body: some View {
@@ -32,8 +32,8 @@ struct ScanHomeView: View {
                         BusinessPickupCardView()
                             .background(.white)
                             .cornerRadius(16)
-                            .padding(EdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20))
-                        Spacer(minLength: 10)
+                            .padding(EdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20))
+                        Spacer(minLength: 5)
                     }
                     .background(Color("screen-base"))
                 }
@@ -41,12 +41,15 @@ struct ScanHomeView: View {
             }
             .navigationBarTitle(String.scanStr)
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                AppGlobalVariables.shared.tabBarHiden = false
+            }
         }
     }
 }
 
 struct ScanHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        ScanHomeView(viewModel: ScanPackagesViewModel(driverID: 10))
+        ScanHomeView(viewModel: ScanHomeViewModel())
     }
 }

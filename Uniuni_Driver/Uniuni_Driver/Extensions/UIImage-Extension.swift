@@ -32,6 +32,7 @@ extension UIImage {
     static let flashOpen: UIImage? = UIImage(named: "flash-open")
     static let gallary: UIImage? = UIImage(named: "gallary")
     static let cameraClick: UIImage? = UIImage(named: "camera-click")
+    static let manualInput: UIImage? = UIImage(named: "icon-manual-input")
     
     func compressImageTo(expectedSizeInMB: Double) -> UIImage? {
         

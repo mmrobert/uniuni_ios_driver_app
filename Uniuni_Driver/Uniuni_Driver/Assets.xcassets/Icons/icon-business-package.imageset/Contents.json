@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon-business-package.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

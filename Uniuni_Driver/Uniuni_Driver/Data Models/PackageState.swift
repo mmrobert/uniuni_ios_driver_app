@@ -9,13 +9,16 @@ import Foundation
 
 enum PackageState: Int, Codable {
     case delivering = 202
-    case undelivered = 211
+    case undelivered211 = 211
+    case undelivered206 = 206
     
     func getDisplayString() -> String {
         switch self {
         case .delivering:
             return String.deliveringStr
-        case .undelivered:
+        case .undelivered211:
+            return String.undeliveredStr
+        case .undelivered206:
             return String.undeliveredStr
         }
     }

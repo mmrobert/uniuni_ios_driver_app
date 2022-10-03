@@ -219,4 +219,54 @@ class NetworkService: NetworkServiceProvider {
             }
         }
     }
+    
+    func fetchScanBatchID(driverID: Int) -> AnyPublisher<ScanBatchIDDataModel, NetworkRequestError> {
+        let bodyParas = ["driver_id": driverID]
+        let router = NetworkAPIs.fetchScanBatchID(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func checkPickupScanned(scanBatchID: Int, trackingNo: String) -> AnyPublisher<PickupCheckScannedDataModel, NetworkRequestError> {
+        let bodyParas = ["scan_batch_id": scanBatchID,
+                         "tracking_no": trackingNo] as [String:Any]
+        let router = NetworkAPIs.checkPickupScanned(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    func closeReopenBatch(scanBatchID: Int, status: String) -> AnyPublisher<GeneralHttpResponse, NetworkRequestError> {
+        let pathParas = [String(scanBatchID)]
+        let bodyParas = ["status": status] as [String:Any]
+        let router = NetworkAPIs.closeReopenBatch(pathParas: pathParas, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
 }

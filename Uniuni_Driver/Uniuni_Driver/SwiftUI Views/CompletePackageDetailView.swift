@@ -13,6 +13,8 @@ struct CompletePackageDetailView: View {
     @ObservedObject private var navigator: CompleteDeliveryNavigator
     @State private var scrollViewContentSize: CGSize = .zero
     
+    @State private var showingSignatureConfirm: Bool = false
+    
     var packageViewModel: PackageViewModel {
         navigator.getPackageViewModel()
     }
@@ -27,6 +29,20 @@ struct CompletePackageDetailView: View {
                 VStack {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
+                            
+                            ZStack {
+                                Color("light-red")
+                                HStack {
+                                    Text(String.thisParcelRequiresCustomerSignatureStr)
+                                        .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 0))
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                }
+                            }
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                            .isHidden(!self.requiredSignatureReminding())
+                            
                             HStack {
                                 Text(String.orderInformationStr)
                                     .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
@@ -35,10 +51,10 @@ struct CompletePackageDetailView: View {
                                 Spacer()
                             }
                             VStack {
-                                TitleTextView(title: String.orderNoStr, text: packageViewModel.order_sn)
                                 TitleTextView(title: String.trackingNoStr, text: packageViewModel.tracking_no)
-                                TitleTextView(title: String.orderTypeStr, text: packageViewModel.goods_type?.getDisplayString())
                                 TitleTextView(title: String.routeNoStr, text: "\(packageViewModel.route_no ?? 0)")
+                                TitleTextView(title: String.orderTypeStr, text: packageViewModel.goods_type?.getDisplayString())
+                                TitleTextView(title: String.customerSignatureStr, text: requiredCustomerSignature())
                                 TitleTextView(title: String.assignedTimeStr, text: packageViewModel.assign_time)
                                 TitleTextView(title: String.deliveryTypeStr, text: packageViewModel.express_type?.getDisplayString())
                                 TitleTextView(title: String.deliveryAttemptStr, text: packageViewModel.getDeliveryAttemptValue())
@@ -148,9 +164,14 @@ struct CompletePackageDetailView: View {
                         }
                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                         Button(String.completeStr) {
-                            self.navigator.showingBackground = true
-                            self.navigator.showingProgressView = true
-                            self.navigator.successfulDelivery()
+                            if packageViewModel.SG == 1 {
+                                self.showingSignatureConfirm = true
+                            } else {
+                                self.showingSignatureConfirm = false
+                                self.navigator.showingBackground = true
+                                self.navigator.showingProgressView = true
+                                self.navigator.successfulDelivery()
+                            }
                         }
                         .frame(maxWidth: .infinity, minHeight: 46)
                         .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
@@ -228,6 +249,35 @@ struct CompletePackageDetailView: View {
             }, message: {
                 Text(String.notEnoughStorageSpaceStr)
             })
+            .alert(String.signatureStr, isPresented: $showingSignatureConfirm, actions: {
+                Button(String.yesStr, role: nil, action: {
+                    self.showingSignatureConfirm = false
+                    self.navigator.showingBackground = true
+                    self.navigator.showingProgressView = true
+                    self.navigator.successfulDelivery()
+                })
+                Button(String.noStr, role: .cancel, action: {
+                    self.showingSignatureConfirm = false
+                })
+            }, message: {
+                Text(String.signatureConfirmStr)
+            })
+        }
+    }
+    
+    private func requiredCustomerSignature() -> String {
+        if packageViewModel.SG == 1 {
+            return String.yesStr
+        } else {
+            return String.noStr
+        }
+    }
+    
+    private func requiredSignatureReminding() -> Bool {
+        if packageViewModel.SG == 1 {
+            return true
+        } else {
+            return false
         }
     }
 }
