@@ -125,7 +125,6 @@
 "Please scan a parcel" = "Please scan a parcel";
 "Generate Report" = "Generate Report";
 "Manual Input" = "Manual Input";
-
 "Wrong Package" = "Wrong Package!";
 "This package should not be picked up" = "This package should not be picked up at this location by you.";
 "Failed Scanning" = "Failed Scanning";
@@ -134,3 +133,12 @@
 "This parcel has been scanned" = "This parcel has been scanned by you earlier.";
 "Scan Closed" = "Scan Closed";
 "The scan session is closed" = "The scan session is closed. Would you like to reopen the session and continue your scan?";
+"Pick-up Confirmation" = "Pick-up Confirmation";
+"Scan time" = "Scan time";
+"Orders assigned" = "Orders assigned";
+"Total scanned" = "Total scanned";
+"Orders not scanned" = "Orders not scanned";
+"Parcels to be returned" = "Parcels to be returned";
+"Please show this report" = "Please show this report to the warehouse admin before clicking the button below.";
+"Confirm Pick-up" = "Confirm Pick-up";
+

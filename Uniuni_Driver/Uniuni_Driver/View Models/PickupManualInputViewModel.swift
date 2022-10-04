@@ -84,10 +84,8 @@ class PickupManualInputViewModel: ObservableObject {
                         pack?.order_id = response.biz_data?.order_id
                     }
                     if let pack = pack {
-                        if let previousPack = strongSelf.inputedPackage {
-                            strongSelf.inputedPackagesList.insert(previousPack, at: 0)
-                        }
                         strongSelf.inputedPackage = InputedPackage(package: pack, wrongPackage: true)
+                        strongSelf.inputedPackagesList.insert(InputedPackage(package: pack, wrongPackage: true), at: 0)
                     }
                     strongSelf.showingWrongPackageAlert = true
                     return
@@ -106,10 +104,8 @@ class PickupManualInputViewModel: ObservableObject {
                     pack?.order_id = response.biz_data?.order_id
                 }
                 if let pack = pack {
-                    if let previousPack = strongSelf.inputedPackage {
-                        strongSelf.inputedPackagesList.insert(previousPack, at: 0)
-                    }
                     strongSelf.inputedPackage = InputedPackage(package: pack, wrongPackage: false)
+                    strongSelf.inputedPackagesList.insert(InputedPackage(package: pack, wrongPackage: false), at: 0)
                 }
             })
             .store(in: &disposables)

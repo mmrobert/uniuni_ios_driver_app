@@ -12,7 +12,6 @@ struct PickupManualInputView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: PickupManualInputViewModel
     @State private var searchString = ""
-    @State private var selectedPackage: PackageViewModel?
     
     @FocusState private var showingKeyboard: Bool
     
@@ -42,6 +41,8 @@ struct PickupManualInputView: View {
                     .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 10))
                     Button(String.searchStr) {
                         showingKeyboard = false
+                        self.viewModel.showingProgressView = true
+                        self.viewModel.checkPickupInputed(trackingNo: searchString)
                     }
                     .frame(width: 65, height: 25)
                     .font(.bold(.system(size: 18))())
@@ -63,6 +64,12 @@ struct PickupManualInputView: View {
                 .listStyle(.plain)
                 .background(Color("screen-base"))
             }
+            VStack {
+                ProgressView()
+                    .scaleEffect(4)
+                    .progressViewStyle(CircularProgressViewStyle())
+            }
+            .isHidden(!self.viewModel.showingProgressView)
         }
         .navigationBarBackButtonHidden(true)
         .navigationTitle(String.manualInputStr)
@@ -76,6 +83,39 @@ struct PickupManualInputView: View {
                 }
             }
         }
+        .alert(String.wrongPackageStr, isPresented: $viewModel.showingWrongPackageAlert, actions: {
+            Button(String.OKStr, role: nil, action: {
+                self.viewModel.showingWrongPackageAlert = false
+            })
+        }, message: {
+            Text(String.thisPackageShouldNotBePickedupStr)
+        })
+        .alert(String.failedScanningStr, isPresented: $viewModel.showingNetworkErrorAlert, actions: {
+            Button(String.OKStr, role: nil, action: {
+                self.viewModel.showingNetworkErrorAlert = false
+            })
+        }, message: {
+            Text(String.scanningNetworkFailureStr)
+        })
+        .alert(String.alreadyScannedStr, isPresented: $viewModel.showingAlreadyScannedAlert, actions: {
+            Button(String.OKStr, role: nil, action: {
+                self.viewModel.showingAlreadyScannedAlert = false
+            })
+        }, message: {
+            Text(String.thisParcelHasBeenScannedStr)
+        })
+        .alert(String.scanClosedStr, isPresented: $viewModel.showingBatchClosedAlert, actions: {
+            Button(String.yesStr, role: nil, action: {
+                self.viewModel.showingBatchClosedAlert = false
+                self.viewModel.showingProgressView = true
+                self.viewModel.reopenBatch()
+            })
+            Button(String.noStr, role: .cancel, action: {
+                self.viewModel.showingBatchClosedAlert = false
+            })
+        }, message: {
+            Text(String.theScanSessionIsClosedStr)
+        })
     }
     
     private func wrongPackage(pack: PickupManualInputViewModel.InputedPackage?) -> Bool {

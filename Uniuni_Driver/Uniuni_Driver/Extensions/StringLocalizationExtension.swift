@@ -137,6 +137,14 @@ extension String {
     static let thisParcelHasBeenScannedStr = NSLocalizedString("This parcel has been scanned", comment: "")
     static let scanClosedStr = NSLocalizedString("Scan Closed", comment: "")
     static let theScanSessionIsClosedStr = NSLocalizedString("The scan session is closed", comment: "")
+    static let pickupConfirmationStr = NSLocalizedString("Pick-up Confirmation", comment: "")
+    static let scanTimeStr = NSLocalizedString("Scan time", comment: "")
+    static let ordersAssignedStr = NSLocalizedString("Orders assigned", comment: "")
+    static let totalScannedStr = NSLocalizedString("Total scanned", comment: "")
+    static let ordersNotScannedStr = NSLocalizedString("Orders not scanned", comment: "")
+    static let parcelsToBeReturnedStr = NSLocalizedString("Parcels to be returned", comment: "")
+    static let pleaseShowThisReportStr = NSLocalizedString("Please show this report", comment: "")
+    static let confirmPickupStr = NSLocalizedString("Confirm Pick-up", comment: "")
     
     
     

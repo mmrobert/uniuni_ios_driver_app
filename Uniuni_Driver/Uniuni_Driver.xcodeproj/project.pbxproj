@@ -39,6 +39,7 @@
 		9B7EDEAD28EA1962004C5738 /* PickupManualInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEAC28EA1962004C5738 /* PickupManualInputView.swift */; };
 		9B7EDEAF28EA1980004C5738 /* PickupGenerateReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */; };
 		9B7EDEB128EA1ED8004C5738 /* PickupManualInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */; };
+		9B7EDEB328EC7D98004C5738 /* PickupGenerateReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */; };
 		9B92E6AC289238A4007B34EE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AB289238A4007B34EE /* AppConstants.swift */; };
 		9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */; };
 		9BACEFA6287543E300969C44 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BACEFA5287543E300969C44 /* Double-Extension.swift */; };
@@ -150,6 +151,7 @@
 		9B7EDEAC28EA1962004C5738 /* PickupManualInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupManualInputView.swift; sourceTree = "<group>"; };
 		9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportView.swift; sourceTree = "<group>"; };
 		9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupManualInputViewModel.swift; sourceTree = "<group>"; };
+		9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportViewModel.swift; sourceTree = "<group>"; };
 		9B92E6AB289238A4007B34EE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B92E6AD289239F7007B34EE /* AddressNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressNavigationType.swift; sourceTree = "<group>"; };
 		9BACEFA5287543E300969C44 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				9BF4A8D028DD55F200A6C67E /* ScanHomeViewModel.swift */,
 				9BF4A8BB28C4F7D000A6C67E /* PickupScanPackagesViewModel.swift */,
 				9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */,
+				9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -669,6 +672,7 @@
 				9B6B33D028B2975E0036293E /* FailedPackageDetailView.swift in Sources */,
 				9B5B8F7A28A018FB00CEA6BC /* CompletePackageDetailView.swift in Sources */,
 				9B1730A9287E7909005AE7AD /* ServicePointViewModel.swift in Sources */,
+				9B7EDEB328EC7D98004C5738 /* PickupGenerateReportViewModel.swift in Sources */,
 				9BF4A8C028C5216A00A6C67E /* BusinessPickupCardView.swift in Sources */,
 				9BB33A1228767AEF003ABD2F /* FailedHandleType.swift in Sources */,
 				9BB33A0A28767A0D003ABD2F /* PackageDataModel.swift in Sources */,
