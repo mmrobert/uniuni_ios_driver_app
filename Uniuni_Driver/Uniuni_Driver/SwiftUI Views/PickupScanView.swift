@@ -13,6 +13,7 @@ struct PickupScanView: View {
     @ObservedObject private var viewModel: PickupScanPackagesViewModel
     
     @ObservedObject private var manualInputViewModel = PickupManualInputViewModel()
+    @ObservedObject private var generateReportViewModel = PickupGenerateReportViewModel()
     
     @State private var focusViewHiden: Bool = false
     @State private var manualInput: Bool = false
@@ -114,7 +115,7 @@ struct PickupScanView: View {
                 PickupManualInputView(viewModel: manualInputViewModel)
             }
             NavigationLink("", isActive: $generateReport) {
-                PickupGenerateReportView()
+                PickupGenerateReportView(viewModel: generateReportViewModel)
             }
         }
         .navigationBarBackButtonHidden(true)
