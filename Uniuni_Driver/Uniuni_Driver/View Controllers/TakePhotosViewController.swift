@@ -286,7 +286,10 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                     remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
                     self.remindingLabel.attributedText = remindingText
                 } else {
-                    self.remindingLabel.isHidden = true
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                    let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
                 }
             }
         case .review(let index):
@@ -304,7 +307,10 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                     remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
                     self.remindingLabel.attributedText = remindingText
                 } else {
-                    self.remindingLabel.isHidden = true
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                    let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
                 }
             }
         }
@@ -612,7 +618,10 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                     remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
                     self.remindingLabel.attributedText = remindingText
                 } else {
-                    self.remindingLabel.isHidden = true
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                    let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
                 }
             }
         case .review(let index):
@@ -630,7 +639,10 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                     remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
                     self.remindingLabel.attributedText = remindingText
                 } else {
-                    self.remindingLabel.isHidden = true
+                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                    let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                    self.remindingLabel.attributedText = remindingText
                 }
             }
         }

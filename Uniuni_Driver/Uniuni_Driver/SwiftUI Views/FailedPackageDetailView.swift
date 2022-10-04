@@ -97,13 +97,12 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    switch (packageViewModel.goods_type ?? .regular) {
-                                    case .regular:
-                                        Text(String.take2PhotosStr)
+                                    if packageViewModel.SG == 1 {
+                                        Text(String.take2PhotosSignatureStr)
                                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                             .foregroundColor(.gray)
-                                    case .medical:
-                                        Text(String.take2PhotosMedicationStr)
+                                    } else {
+                                        Text(String.take2PhotosStr)
                                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                             .foregroundColor(.gray)
                                     }

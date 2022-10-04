@@ -76,9 +76,11 @@
 "Customer Notes" = "Customer Notes";
 "Photos" = "Photos";
 "Take 2 photos" = "Take 2 photos (the shipping label and parcel's location).";
-"Take 2 photos medication" = "Take 2 photos (shipping label and the customer holding package).";
+"Take 2 photos signature" = "Take 2 photos (the shipping label and customer's signature).";
 "Take a photo of the parcel label" = "Take a photo of the parcel label";
 "parcel label" = "parcel label";
+"Take a photo of the parcel's location" = "Take a photo of the parcel's location";
+"parcel's location" = "parcel's location";
 "Take a photo of the customer's signature" = "Take a photo of the customer's signature";
 "customer's signature" = "customer's signature";
 "Complete" = "Complete";
