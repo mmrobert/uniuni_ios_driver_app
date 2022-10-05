@@ -65,6 +65,8 @@ class DeliveryListViewController: UIViewController {
     
     private var currentLocation: (lat: Double, lng: Double) = (49.14, -122.98)
     
+    private var listRefreshing: Bool = false
+    
     init(packagesListViewModel: PackagesListViewModel) {
         self.packagesListViewModel = packagesListViewModel
         super.init(nibName: nil, bundle: nil)
@@ -118,6 +120,10 @@ class DeliveryListViewController: UIViewController {
         self.packagesListViewModel.$list
             .sink(receiveValue: { [weak self] list in
                 guard let strongSelf = self else { return }
+                if strongSelf.listRefreshing {
+                    strongSelf.tableView.refreshControl?.endRefreshing()
+                    strongSelf.listRefreshing = false
+                }
                 strongSelf.packagesList = list
                 strongSelf.segmentSelected()
             })
@@ -131,6 +137,10 @@ class DeliveryListViewController: UIViewController {
                 guard let strongSelf = self else { return }
                 guard let err = err else {
                     return
+                }
+                if strongSelf.listRefreshing {
+                    strongSelf.tableView.refreshControl?.endRefreshing()
+                    strongSelf.listRefreshing = false
                 }
                 switch err {
                 case .invalidURL( _):
@@ -154,8 +164,18 @@ class DeliveryListViewController: UIViewController {
                 $0.state == .delivering
             }
         case 1:
-            self.listToDisplay = self.packagesList.filter {
-                $0.state == .undelivered
+            self.listToDisplay = self.packagesList.filter { pack in
+                guard let state = pack.state else {
+                    return false
+                }
+                switch state {
+                case .delivering:
+                    return false
+                case .undelivered211:
+                    return true
+                case .undelivered206:
+                    return true
+                }
             }
         default:
             self.listToDisplay = self.packagesList.filter {
@@ -293,6 +313,8 @@ extension DeliveryListViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.separatorStyle = .none
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(DeliveryListViewController.refreshPackagesListFromAPI), for: .valueChanged)
         self.view.addSubview(self.tableView)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
@@ -300,6 +322,12 @@ extension DeliveryListViewController {
             tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    @objc
+    private func refreshPackagesListFromAPI() {
+        self.listRefreshing = true
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
     }
 }
 

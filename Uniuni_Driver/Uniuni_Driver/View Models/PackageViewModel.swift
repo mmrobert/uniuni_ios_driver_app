@@ -31,8 +31,12 @@ struct PackageViewModel: Identifiable, Equatable {
     var warehouse_id: Int?
     var need_retry: Int?
     var failed_handle_type: FailedHandleType?
+    var SZ: Int?
+    var SG: Int?
     
     var redeliveryData: RedeliveryDataModel?
+    
+    init() {}
     
     init(dataModel: PackageDataModel) {
         self.order_id = dataModel.order_id
@@ -56,6 +60,8 @@ struct PackageViewModel: Identifiable, Equatable {
         self.warehouse_id = dataModel.warehouse_id
         self.need_retry = dataModel.need_retry
         self.failed_handle_type = dataModel.failed_handle_type
+        self.SZ = dataModel.dispatch_type?.SZ
+        self.SG = dataModel.dispatch_type?.SG
     }
     
     func getDistanceFrom(location: (lat: Double, lng: Double), distanceUnit: DistanceUnit) -> Double {
@@ -87,7 +93,11 @@ struct PackageViewModel: Identifiable, Equatable {
     }
     
     func getDeliveryAttemptValue() -> String {
-        String(format: String.deliveryAttemptValueStr, "1", "3")
+        if let needRetry = self.need_retry, needRetry > 0 {
+            return String(format: String.deliveryAttemptValueStr, String(redeliveryData?.retry_times ?? 1), "3")
+        } else {
+            return String(format: String.deliveryAttemptValueStr, String(redeliveryData?.retry_times ?? 1), "1")
+        }
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {

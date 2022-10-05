@@ -26,7 +26,9 @@
         <attribute name="order_sn" optional="YES" attributeType="String"/>
         <attribute name="postscript" optional="YES" attributeType="String"/>
         <attribute name="route_no" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sg" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sz" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tracking_no" optional="YES" attributeType="String"/>
         <attribute name="warehouse_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="zipcode" optional="YES" attributeType="String"/>
@@ -59,7 +61,7 @@
     </entity>
     <elements>
         <element name="FailedUploaded" positionX="-63" positionY="144" width="128" height="119"/>
-        <element name="Package" positionX="-63" positionY="-18" width="128" height="344"/>
+        <element name="Package" positionX="-63" positionY="-18" width="128" height="374"/>
         <element name="ServicePoint" positionX="-63" positionY="117" width="128" height="389"/>
     </elements>
 </model>

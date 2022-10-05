@@ -32,53 +32,10 @@ class MapPackageDetailCardViewModel {
     var needRetry: Int?
     var failedButtonTitle: String?
     var deliveredButtonTitle: String?
-
-    init(orderSN: String?,
-         orderId: Int?,
-         trackingNo: String?,
-         routeNo: Int?,
-         addressType: AddressType?,
-         name: String?,
-         phone: String?,
-         address: String?,
-         lat: String?,
-         lng: String?,
-         distance: Double?,
-         distanceUnit: DistanceUnit?,
-         goodsType: GoodsType?,
-         expressType: ExpressType?,
-         assignedTime: String?,
-         deliveryBy: String?,
-         buzz: String?,
-         note: String?,
-         warehouseID: Int?,
-         needRetry: Int?,
-         failedButtonTitle: String?,
-         deliveredButtonTitle: String?) {
-
-        self.orderSN = orderSN
-        self.orderId = orderId
-        self.trackingNo = trackingNo
-        self.routeNo = routeNo
-        self.addressType = addressType
-        self.name = name
-        self.phone = phone
-        self.address = address
-        self.lat = lat
-        self.lng = lng
-        self.distance = distance
-        self.distanceUnit = distanceUnit
-        self.goodsType = goodsType
-        self.expressType = expressType
-        self.assignedTime = assignedTime
-        self.deliveryBy = deliveryBy
-        self.buzz = buzz
-        self.note = note
-        self.warehouseID = warehouseID
-        self.needRetry = needRetry
-        self.failedButtonTitle = failedButtonTitle
-        self.deliveredButtonTitle = deliveredButtonTitle
-    }
+    var SZ: Int?
+    var SG: Int?
+    
+    var redeliveryData: RedeliveryDataModel?
     
     init(packageViewModel: PackageViewModel, location: (lat: Double, lng: Double), failedButtonTitle: String?, deliveredButtonTitle: String?) {
         self.orderSN = packageViewModel.order_sn
@@ -101,11 +58,16 @@ class MapPackageDetailCardViewModel {
         self.note = packageViewModel.postscript
         self.warehouseID = packageViewModel.warehouse_id
         self.needRetry = packageViewModel.need_retry
+        self.SZ = packageViewModel.SZ
+        self.SG = packageViewModel.SG
+        
+        self.redeliveryData = packageViewModel.redeliveryData
+        
         self.failedButtonTitle = failedButtonTitle
         self.deliveredButtonTitle = deliveredButtonTitle
     }
     
-    func getDeliveryAttemptValue() -> String {
-        String(format: String.deliveryAttemptValueStr, "1", "3")
+    func getDeliveryAttemptValue(maxAttempt: Int) -> String {
+        String(format: String.deliveryAttemptValueStr, String(redeliveryData?.retry_times ?? 1), String(maxAttempt))
     }
 }

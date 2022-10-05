@@ -30,7 +30,7 @@ struct FailedPackageDetailView: View {
         NavigationView {
             ZStack {
                 VStack {
-                    ScrollView(showsIndicators: false) {
+                    ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             HStack {
                                 Text(String.orderInformationStr)
@@ -83,7 +83,7 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    Text(String.takeAtLeast1PhotoStr)
+                                    Text(String.takeAPhotoOfBuildingNumberStr)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .foregroundColor(.gray)
                                     Spacer()
@@ -97,16 +97,9 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    switch (packageViewModel.goods_type ?? .regular) {
-                                    case .regular:
-                                        Text(String.take2PhotosStr)
-                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                            .foregroundColor(.gray)
-                                    case .medical:
-                                        Text(String.take2PhotosMedicationStr)
-                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                            .foregroundColor(.gray)
-                                    }
+                                    Text(String.take2PhotosStr)
+                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                        .foregroundColor(.gray)
                                     Spacer()
                                 }
                             case .wrongAddress, .poBox:

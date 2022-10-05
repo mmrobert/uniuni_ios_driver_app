@@ -28,6 +28,12 @@ enum NetworkAPIs {
     case completeDelivery(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case reDeliveryHistory(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case reDeliveryTry(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case ordersToPickup(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case ordersToDropoff(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case fetchScanBatchID(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case checkPickupScanned(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case closeReopenBatch(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
+    case pickupScanReport(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     
     // MARK: - base URL
     var baseURL: String {
@@ -61,6 +67,18 @@ enum NetworkAPIs {
         case .reDeliveryHistory( _, _, _):
             return .get
         case .reDeliveryTry( _, _, _):
+            return .post
+        case .ordersToPickup( _, _, _):
+            return .get
+        case .ordersToDropoff( _, _, _):
+            return .get
+        case .fetchScanBatchID( _, _, _):
+            return .post
+        case .checkPickupScanned( _, _, _):
+            return .post
+        case .closeReopenBatch( _, _, _):
+            return .put
+        case .pickupScanReport( _, _, _):
             return .post
         }
     }
@@ -120,6 +138,42 @@ enum NetworkAPIs {
             }
         case .reDeliveryTry( _, _, _):
             return "/delivery/retry"
+        case .ordersToPickup(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/to-be-picked-up/brief" + pathStr
+            } else {
+                return "/delivery/to-be-picked-up/brief"
+            }
+        case .ordersToDropoff(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/to-be-dropped-off/brief" + pathStr
+            } else {
+                return "/delivery/to-be-dropped-off/brief"
+            }
+        case .fetchScanBatchID( _, _, _):
+            return "/delivery/scan/batch"
+        case .checkPickupScanned( _, _, _):
+            return "/delivery/scan"
+        case .closeReopenBatch(let pathParas, _, _):
+            if let pathParas = pathParas {
+                var pathStr = ""
+                for para in pathParas {
+                    pathStr += "/\(para)"
+                }
+                return "/delivery/scan/batch" + pathStr
+            } else {
+                return "/delivery/scan/batch"
+            }
+        case .pickupScanReport( _, _, _):
+            return "/delivery/scan/batch/report"
         }
     }
     
@@ -206,6 +260,54 @@ enum NetworkAPIs {
             } else {
                 return nil
             }
+        case .ordersToPickup( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .ordersToDropoff( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .fetchScanBatchID( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .checkPickupScanned( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .closeReopenBatch( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
+        case .pickupScanReport( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
         }
     }
     
@@ -231,6 +333,18 @@ enum NetworkAPIs {
         case .reDeliveryHistory( _, _, let bodyParas):
             return bodyParas
         case .reDeliveryTry( _, _, let bodyParas):
+            return bodyParas
+        case .ordersToPickup( _, _, let bodyParas):
+            return bodyParas
+        case .ordersToDropoff( _, _, let bodyParas):
+            return bodyParas
+        case .fetchScanBatchID( _, _, let bodyParas):
+            return bodyParas
+        case .checkPickupScanned( _, _, let bodyParas):
+            return bodyParas
+        case .closeReopenBatch( _, _, let bodyParas):
+            return bodyParas
+        case .pickupScanReport( _, _, let bodyParas):
             return bodyParas
         }
     }
@@ -301,6 +415,12 @@ enum NetworkAPIs {
                 let httpResponse = element.response as? HTTPURLResponse
                 if let httpResponse = httpResponse, httpResponse.statusCode == 200 {
                     return element.data
+                } else if let httpResponse = httpResponse, httpResponse.statusCode == 403 {
+                    if case .checkPickupScanned( _, _, _) = self {
+                        return element.data
+                    } else {
+                        throw NetworkRequestError.failStatusCode(description: "Status code: \(403)")
+                    }
                 } else if let statusCode = httpResponse?.statusCode {
                     throw NetworkRequestError.failStatusCode(description: "Status code: \(statusCode)")
                 } else {

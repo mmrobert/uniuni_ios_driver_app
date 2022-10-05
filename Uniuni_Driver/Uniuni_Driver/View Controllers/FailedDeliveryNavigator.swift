@@ -139,9 +139,6 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
     }
     
     func failedDelivery() {
-        var undelivered = PackageDataModel.dataModelFrom(viewModel: self.packageViewModel)
-        undelivered.state = .undelivered
-        CoreDataManager.shared.updatePackage(package: undelivered)
         
         guard let orderID = self.packageViewModel.order_id else {
             return
@@ -290,24 +287,28 @@ extension FailedDeliveryNavigator: PHPickerViewControllerDelegate {
                 dispatchGroup.leave()
             }
         }
-        dispatchGroup.notify(queue: .main) {
-            switch self.photoTakingFlow {
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let strongSelf = self else { return }
+            switch strongSelf.photoTakingFlow {
             case .taking:
                 for image in images {
-                    if self.photos.count < 2 {
-                        self.photos.append(image)
+                    if strongSelf.photos.count < 2 {
+                        strongSelf.photos.append(image)
+                        strongSelf.photoTaken = image
                     }
                 }
-                if self.photos.count >= 2 {
-                    self.dismissPhotoTaking()
+                if strongSelf.photos.count >= 2 {
+                    strongSelf.dismissPhotoTaking()
+                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
+                    photoTakingVC.updateTitle()
                 }
             case .review(let index):
                 if images.count > 0 {
-                    self.photos[index] = images[0]
-                    self.photoTaken = images[0]
+                    strongSelf.photos[index] = images[0]
+                    strongSelf.photoTaken = images[0]
                 }
-                self.dismissPhotoTaking() {
-                    self.dismissPhotoReview(animated: false)
+                strongSelf.dismissPhotoTaking(animated: false) {
+                    strongSelf.dismissPhotoReview(animated: false)
                 }
             }
         }

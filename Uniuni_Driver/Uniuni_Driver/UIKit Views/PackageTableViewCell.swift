@@ -40,10 +40,12 @@ class PackageTableViewCell: UITableViewCell {
             trackingNo: packageViewModel.tracking_no,
             goodsType: packageViewModel.goods_type,
             expressType: packageViewModel.express_type,
+            state: packageViewModel.state,
             routeNo: packageViewModel.route_no,
             receiverName: packageViewModel.name,
             receiverAddress: packageViewModel.address,
-            receiverDistance: packageViewModel.getDistanceFrom(location: location, distanceUnit: .KM).kmDistance()
+            receiverDistance: packageViewModel.getDistanceFrom(location: location, distanceUnit: .KM).kmDistance(),
+            failedHandleType: packageViewModel.failed_handle_type
         )
         
         self.cardView.configure(viewModel: cardViewModel)

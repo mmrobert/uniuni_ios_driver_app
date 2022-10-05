@@ -116,7 +116,7 @@ class PackageCardView: UIView {
         label.isUserInteractionEnabled = false
         label.font = Theme.default.generalTextFont
         label.textColor = Theme.default.generalTextColor
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.textAlignment = .left
         return label
     }()
@@ -212,17 +212,55 @@ class PackageCardView: UIView {
         self.receiverNameLabel.text = viewModel.receiverName
         self.receiverAddressLabel.text = viewModel.receiverAddress
         self.receiverDistanceLabel.text = viewModel.receiverDistance
-        if viewModel.expressType == .express {
-            self.expressTypeLabel.isHidden = false
-            self.expressTypeLabel.text = viewModel.expressType?.getDisplayString()
-        } else {
-            self.expressTypeLabel.isHidden = true
-            self.expressTypeLabel.text = nil
-        }
         if viewModel.goodsType == .medical {
             self.medicalIcon.image = UIImage.iconMedicalCross
         } else {
             self.medicalIcon.image = nil
+        }
+        guard let state = viewModel.state else {
+            return
+        }
+        switch state {
+        case .delivering:
+            if viewModel.expressType == .express {
+                self.expressTypeLabel.isHidden = false
+                self.expressTypeLabel.text = viewModel.expressType?.getDisplayString()
+            } else {
+                self.expressTypeLabel.isHidden = true
+                self.expressTypeLabel.text = nil
+            }
+        case .undelivered211:
+            if let failedHandle = viewModel.failedHandleType {
+                switch failedHandle {
+                case .returned:
+                    self.expressTypeLabel.isHidden = false
+                    self.expressTypeLabel.text = failedHandle.getDisplayString()
+                    self.expressTypeLabel.backgroundColor = UIColor.tabbarTint
+                case .drop_off:
+                    self.expressTypeLabel.isHidden = false
+                    self.expressTypeLabel.text = failedHandle.getDisplayString()
+                    self.expressTypeLabel.backgroundColor = UIColor.highlightedBlue
+                }
+            } else {
+                self.expressTypeLabel.isHidden = true
+                self.expressTypeLabel.text = nil
+            }
+        case .undelivered206:
+            if let failedHandle = viewModel.failedHandleType {
+                switch failedHandle {
+                case .returned:
+                    self.expressTypeLabel.isHidden = false
+                    self.expressTypeLabel.text = failedHandle.getDisplayString()
+                    self.expressTypeLabel.backgroundColor = UIColor.tabbarTint
+                case .drop_off:
+                    self.expressTypeLabel.isHidden = false
+                    self.expressTypeLabel.text = failedHandle.getDisplayString()
+                    self.expressTypeLabel.backgroundColor = UIColor.highlightedBlue
+                }
+            } else {
+                self.expressTypeLabel.isHidden = true
+                self.expressTypeLabel.text = nil
+            }
         }
     }
     
