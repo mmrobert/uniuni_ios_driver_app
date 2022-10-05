@@ -269,4 +269,20 @@ class NetworkService: NetworkServiceProvider {
             }
         }
     }
+    
+    func pickupScanReport(scanBatchID: Int) -> AnyPublisher<PickupScanReportDataModel, NetworkRequestError> {
+        let bodyParas = ["scan_batch_id": scanBatchID] as [String:Any]
+        let router = NetworkAPIs.pickupScanReport(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
 }

@@ -56,16 +56,26 @@ class PickupManualInputViewModel: ObservableObject {
         NetworkService.shared.checkPickupScanned(scanBatchID: self.scanBatchID, trackingNo: trackingNo)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
-                self?.showingProgressView = false
+                guard let strongSelf = self else { return }
+                strongSelf.showingProgressView = false
                 switch value {
                 case .failure(let error):
                     switch error {
                     case .invalidURL( _):
-                        self?.showingNetworkErrorAlert = true
+                        strongSelf.showingNetworkErrorAlert = true
                     case .netConnection( _):
-                        self?.showingNetworkErrorAlert = true
-                    case .failStatusCode( _):
-                        self?.showingNetworkErrorAlert = true
+                        strongSelf.showingNetworkErrorAlert = true
+                    case .failStatusCode(let codeStr):
+                        if codeStr == "Status code: \(404)" {
+                            strongSelf.showingWrongPackageAlert = true
+                            let pack = strongSelf.createInputedPackage(trackingNo: trackingNo, orderID: nil, routeNo: nil, wrongPack: true)
+                            strongSelf.inputedPackage = pack
+                            if !strongSelf.listContainElement(element: pack) {
+                                strongSelf.inputedPackagesList.insert(pack, at: 0)
+                            }
+                        } else {
+                            strongSelf.showingNetworkErrorAlert = true
+                        }
                     default:
                         break
                     }
@@ -76,17 +86,14 @@ class PickupManualInputViewModel: ObservableObject {
                 guard let strongSelf = self else { return }
                 strongSelf.showingProgressView = false
                 if response.biz_code?.lowercased() == Constants.wrongPackage.lowercased() {
-                    var pack: PackageViewModel? = nil
                     if let trackingNo = response.biz_data?.tracking_no {
-                        pack = PackageViewModel()
-                        pack?.tracking_no = trackingNo
-                        pack?.route_no = response.biz_data?.route_no
-                        pack?.order_id = response.biz_data?.order_id
+                        let pack = strongSelf.createInputedPackage(trackingNo: trackingNo, orderID: response.biz_data?.order_id, routeNo: response.biz_data?.route_no, wrongPack: true)
+                        strongSelf.inputedPackage = pack
+                        if !strongSelf.listContainElement(element: pack) {
+                            strongSelf.inputedPackagesList.insert(pack, at: 0)
+                        }
                     }
-                    if let pack = pack {
-                        strongSelf.inputedPackage = InputedPackage(package: pack, wrongPackage: true)
-                        strongSelf.inputedPackagesList.insert(InputedPackage(package: pack, wrongPackage: true), at: 0)
-                    }
+                    
                     strongSelf.showingWrongPackageAlert = true
                     return
                 } else if response.biz_code?.lowercased() == Constants.alreadyScanned.lowercased() {
@@ -96,16 +103,12 @@ class PickupManualInputViewModel: ObservableObject {
                     strongSelf.showingBatchClosedAlert = true
                     return
                 }
-                var pack: PackageViewModel? = nil
                 if let trackingNo = response.biz_data?.tracking_no {
-                    pack = PackageViewModel()
-                    pack?.tracking_no = trackingNo
-                    pack?.route_no = response.biz_data?.route_no
-                    pack?.order_id = response.biz_data?.order_id
-                }
-                if let pack = pack {
-                    strongSelf.inputedPackage = InputedPackage(package: pack, wrongPackage: false)
-                    strongSelf.inputedPackagesList.insert(InputedPackage(package: pack, wrongPackage: false), at: 0)
+                    let pack = strongSelf.createInputedPackage(trackingNo: trackingNo, orderID: response.biz_data?.order_id, routeNo: response.biz_data?.route_no, wrongPack: false)
+                    strongSelf.inputedPackage = pack
+                    if !strongSelf.listContainElement(element: pack) {
+                        strongSelf.inputedPackagesList.insert(pack, at: 0)
+                    }
                 }
             })
             .store(in: &disposables)
@@ -130,6 +133,23 @@ class PickupManualInputViewModel: ObservableObject {
                 }
             })
             .store(in: &disposables)
+    }
+    
+    private func createInputedPackage(trackingNo: String, orderID: Int?, routeNo: Int?, wrongPack: Bool) -> InputedPackage {
+        var pack = PackageViewModel()
+        pack.tracking_no = trackingNo
+        pack.route_no = routeNo
+        pack.order_id = orderID
+        return InputedPackage(package: pack, wrongPackage: wrongPack)
+    }
+    
+    private func listContainElement(element: InputedPackage) -> Bool {
+        if self.inputedPackagesList.firstIndex(where: {
+            $0.package.tracking_no == element.package.tracking_no
+        }) != nil {
+            return true
+        }
+        return false
     }
     
     struct InputedPackage: Identifiable {

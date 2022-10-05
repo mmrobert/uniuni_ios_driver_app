@@ -79,16 +79,25 @@ class PickupScanPackagesViewModel: ObservableObject {
         NetworkService.shared.checkPickupScanned(scanBatchID: self.scanBatchID, trackingNo: trackingNo)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
-                self?.showingProgressView = false
+                guard let strongSelf = self else { return }
+                strongSelf.showingProgressView = false
                 switch value {
                 case .failure(let error):
                     switch error {
                     case .invalidURL( _):
-                        self?.showingNetworkErrorAlert = true
+                        strongSelf.showingNetworkErrorAlert = true
                     case .netConnection( _):
-                        self?.showingNetworkErrorAlert = true
-                    case .failStatusCode( _):
-                        self?.showingNetworkErrorAlert = true
+                        strongSelf.showingNetworkErrorAlert = true
+                    case .failStatusCode(let codeStr):
+                        if codeStr == "Status code: \(404)" {
+                            strongSelf.showingWrongPackageAlert = true
+                            if let previousPack = strongSelf.scannedPackage, !strongSelf.listContainElement(element: previousPack) {
+                                strongSelf.scannedPackagesList.insert(previousPack, at: 0)
+                            }
+                            strongSelf.scannedPackage = strongSelf.createScannedPackage(trackingNo: trackingNo, orderID: nil, routeNo: nil, wrongPack: true)
+                        } else {
+                            strongSelf.showingNetworkErrorAlert = true
+                        }
                     default:
                         break
                     }
@@ -99,18 +108,11 @@ class PickupScanPackagesViewModel: ObservableObject {
                 guard let strongSelf = self else { return }
                 strongSelf.showingProgressView = false
                 if response.biz_code?.lowercased() == Constants.wrongPackage.lowercased() {
-                    var pack: PackageViewModel? = nil
                     if let trackingNo = response.biz_data?.tracking_no {
-                        pack = PackageViewModel()
-                        pack?.tracking_no = trackingNo
-                        pack?.route_no = response.biz_data?.route_no
-                        pack?.order_id = response.biz_data?.order_id
-                    }
-                    if let pack = pack {
-                        if let previousPack = strongSelf.scannedPackage {
+                        if let previousPack = strongSelf.scannedPackage, !strongSelf.listContainElement(element: previousPack) {
                             strongSelf.scannedPackagesList.insert(previousPack, at: 0)
                         }
-                        strongSelf.scannedPackage = ScannedPackage(package: pack, wrongPackage: true)
+                        strongSelf.scannedPackage = strongSelf.createScannedPackage(trackingNo: trackingNo, orderID: response.biz_data?.order_id, routeNo: response.biz_data?.route_no, wrongPack: true)
                     }
                     strongSelf.showingWrongPackageAlert = true
                     return
@@ -121,18 +123,11 @@ class PickupScanPackagesViewModel: ObservableObject {
                     strongSelf.showingBatchClosedAlert = true
                     return
                 }
-                var pack: PackageViewModel? = nil
                 if let trackingNo = response.biz_data?.tracking_no {
-                    pack = PackageViewModel()
-                    pack?.tracking_no = trackingNo
-                    pack?.route_no = response.biz_data?.route_no
-                    pack?.order_id = response.biz_data?.order_id
-                }
-                if let pack = pack {
-                    if let previousPack = strongSelf.scannedPackage {
+                    if let previousPack = strongSelf.scannedPackage, !strongSelf.listContainElement(element: previousPack) {
                         strongSelf.scannedPackagesList.insert(previousPack, at: 0)
                     }
-                    strongSelf.scannedPackage = ScannedPackage(package: pack, wrongPackage: false)
+                    strongSelf.scannedPackage = strongSelf.createScannedPackage(trackingNo: trackingNo, orderID: response.biz_data?.order_id, routeNo: response.biz_data?.route_no, wrongPack: false)
                 }
                 strongSelf.detectionPaused = false
                 strongSelf.startNetworking = false
@@ -159,6 +154,23 @@ class PickupScanPackagesViewModel: ObservableObject {
                 }
             })
             .store(in: &disposables)
+    }
+    
+    private func createScannedPackage(trackingNo: String, orderID: Int?, routeNo: Int?, wrongPack: Bool) -> ScannedPackage {
+        var pack = PackageViewModel()
+        pack.tracking_no = trackingNo
+        pack.route_no = routeNo
+        pack.order_id = orderID
+        return ScannedPackage(package: pack, wrongPackage: wrongPack)
+    }
+    
+    private func listContainElement(element: ScannedPackage) -> Bool {
+        if self.scannedPackagesList.firstIndex(where: {
+            $0.package.tracking_no == element.package.tracking_no
+        }) != nil {
+            return true
+        }
+        return false
     }
     
     struct ScannedPackage: Identifiable {

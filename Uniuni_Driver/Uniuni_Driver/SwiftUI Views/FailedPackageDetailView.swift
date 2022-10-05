@@ -83,7 +83,7 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    Text(String.takeAtLeast1PhotoStr)
+                                    Text(String.takeAPhotoOfBuildingNumberStr)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .foregroundColor(.gray)
                                     Spacer()
@@ -97,15 +97,9 @@ struct FailedPackageDetailView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    if packageViewModel.SG == 1 {
-                                        Text(String.take2PhotosSignatureStr)
-                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                            .foregroundColor(.gray)
-                                    } else {
-                                        Text(String.take2PhotosStr)
-                                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                            .foregroundColor(.gray)
-                                    }
+                                    Text(String.take2PhotosStr)
+                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                        .foregroundColor(.gray)
                                     Spacer()
                                 }
                             case .wrongAddress, .poBox:

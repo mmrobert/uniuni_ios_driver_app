@@ -33,7 +33,7 @@ enum NetworkAPIs {
     case fetchScanBatchID(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case checkPickupScanned(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case closeReopenBatch(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
-    
+    case pickupScanReport(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     
     // MARK: - base URL
     var baseURL: String {
@@ -78,6 +78,8 @@ enum NetworkAPIs {
             return .post
         case .closeReopenBatch( _, _, _):
             return .put
+        case .pickupScanReport( _, _, _):
+            return .post
         }
     }
     
@@ -170,6 +172,8 @@ enum NetworkAPIs {
             } else {
                 return "/delivery/scan/batch"
             }
+        case .pickupScanReport( _, _, _):
+            return "/delivery/scan/batch/report"
         }
     }
     
@@ -296,6 +300,14 @@ enum NetworkAPIs {
             } else {
                 return nil
             }
+        case .pickupScanReport( _, let queryParas, _):
+            if let query = queryParas {
+                return query.map({
+                    URLQueryItem(name: $0.key, value: $0.value)
+                })
+            } else {
+                return nil
+            }
         }
     }
     
@@ -331,6 +343,8 @@ enum NetworkAPIs {
         case .checkPickupScanned( _, _, let bodyParas):
             return bodyParas
         case .closeReopenBatch( _, _, let bodyParas):
+            return bodyParas
+        case .pickupScanReport( _, _, let bodyParas):
             return bodyParas
         }
     }

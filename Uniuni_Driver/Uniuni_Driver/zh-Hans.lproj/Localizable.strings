@@ -115,7 +115,7 @@
 "Attempt Failed" = "Attempt Failed";
 "Your two attempts are too close" = "Your two attempts are too close. Please try to redelivery this parcel one hour later.";
 "Failed Reason" = "Failed Reason";
-"Take at least 1 photo" = "Take at least 1 photo.";
+"Take a photo of building number" = "Take a photo of building number.";
 "Order to Pick-up" = "Order to Pick-up";
 "Order to Drop-off" = "Order to Drop-off";
 "Business Pick-up" = "Business Pick-up";
@@ -141,3 +141,4 @@
 "Parcels to be returned" = "Parcels to be returned";
 "Please show this report" = "Please show this report to the warehouse admin before clicking the button below.";
 "Confirm Pick-up" = "Confirm Pick-up";
+"Confirm pick-up message" = "Click Yes will close this scan session. Do you want to proceed?";

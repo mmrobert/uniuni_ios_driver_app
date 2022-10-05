@@ -119,7 +119,7 @@ extension String {
     static let attemptFailedStr = NSLocalizedString("Attempt Failed", comment: "")
     static let yourTwoAttemptsAreTooCloseStr = NSLocalizedString("Your two attempts are too close", comment: "")
     static let failedReasonStr = NSLocalizedString("Failed Reason", comment: "")
-    static let takeAtLeast1PhotoStr = NSLocalizedString("Take at least 1 photo", comment: "")
+    static let takeAPhotoOfBuildingNumberStr = NSLocalizedString("Take a photo of building number", comment: "")
     static let orderToPickupStr = NSLocalizedString("Order to Pick-up", comment: "")
     static let orderToDropoffStr = NSLocalizedString("Order to Drop-off", comment: "")
     static let businessPickupStr = NSLocalizedString("Business Pick-up", comment: "")
@@ -145,7 +145,7 @@ extension String {
     static let parcelsToBeReturnedStr = NSLocalizedString("Parcels to be returned", comment: "")
     static let pleaseShowThisReportStr = NSLocalizedString("Please show this report", comment: "")
     static let confirmPickupStr = NSLocalizedString("Confirm Pick-up", comment: "")
-    
+    static let confirmPickupMessageStr = NSLocalizedString("Confirm pick-up message", comment: "")
     
     
 }
