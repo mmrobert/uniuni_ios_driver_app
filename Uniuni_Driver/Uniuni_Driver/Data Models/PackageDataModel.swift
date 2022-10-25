@@ -16,7 +16,7 @@ struct PackageDataModel: Codable {
     var route_no: Int?
     var assign_time: String?    // 2021-11-25 13:38:42
     var delivery_by: String?    // 2021-11-28 13:38:42
-    var state: PackageState?
+    var state: Int?
     var name: String?
     var mobile: String?
     var address: String?
@@ -46,7 +46,7 @@ struct PackageDataModel: Codable {
             route_no: viewModel.route_no,
             assign_time: viewModel.assign_time,
             delivery_by: viewModel.delivery_by,
-            state: viewModel.state,
+            state: PackageState.getIntFrom(state: viewModel.state),
             name: viewModel.name,
             mobile: viewModel.mobile,
             address: viewModel.address,

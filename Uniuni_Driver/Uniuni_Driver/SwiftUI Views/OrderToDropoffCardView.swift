@@ -10,6 +10,7 @@ import SwiftUI
 struct OrderToDropoffCardView: View {
     
     @ObservedObject private var viewModel: ScanHomeViewModel
+    @State var scanToDropoff: Bool = false
     
     init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
@@ -40,6 +41,10 @@ struct OrderToDropoffCardView: View {
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 0))
+                .onTapGesture {
+                    self.scanToDropoff = true
+                    AppGlobalVariables.shared.tabBarHiden = true
+                }
             }
             Image("icon-delivery-man")
                 .resizable()
@@ -47,6 +52,12 @@ struct OrderToDropoffCardView: View {
                 .frame(width: 78, height: 164)
         }
         .padding(EdgeInsets(top: 46, leading: 20, bottom: 42, trailing: 15))
+        .onAppear {
+            self.scanToDropoff = false
+        }
+        NavigationLink("", isActive: $scanToDropoff) {
+            DropoffScanView(address: viewModel.packsToDropAddress, viewModel: DropoffScanPackagesViewModel())
+        }
     }
 }
 

@@ -10,12 +10,12 @@ import UIKit
 import Combine
 import SwiftUI
 import PhotosUI
+import MapKit
 
-class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
+class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
     
     private struct Constants {
         static let bizMsgSuccess = "DELIVERY.SUBMIT.SUCCESS"
-        static let defaultLocation: CLLocation = CLLocation(latitude: 49.2, longitude: -123.0)
     }
     
     private var packageViewModel: PackageViewModel
@@ -39,13 +39,17 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
     @Published var showingNetworkErrorAlert: Bool = false
     @Published var showingSaveErrorAlert: Bool = false
     
-    var currentLocation: CLLocation?
+    private let locationManager = CLLocationManager()
+    private var currentLocation: CLLocation = CLLocation(latitude: 49.14, longitude: -122.98)
     
     init(presenter: UIViewController?, packageViewModel: PackageViewModel, failedReason: FailedReasonDelivery, currentLocation: CLLocation? = nil) {
         self.presenter = presenter
         self.packageViewModel = packageViewModel
         self.failedReason = failedReason
-        self.currentLocation = currentLocation
+        self.currentLocation = currentLocation ?? CLLocation(latitude: 49.14, longitude: -122.98)
+        super.init()
+        self.locationManager.delegate = self
+        self.startLocationManager()
         CoreDataManager.shared.$saveFailedUploadedError
             .receive(on: DispatchQueue.main)
             .dropFirst()
@@ -64,6 +68,14 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
                 }
             })
             .store(in: &disposables)
+    }
+    
+    private func startLocationManager() {
+        let authStatus = locationManager.authorizationStatus
+        if authStatus == .authorizedWhenInUse {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.startUpdatingLocation()
+        }
     }
     
     func getPackageViewModel() -> PackageViewModel {
@@ -158,7 +170,7 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
         case .poBox:
             failed = 3
         }
-        NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 1, podImages: podImages, failedReason: failed)
+        NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 1, podImages: podImages, failedReason: failed, longitude: self.currentLocation.coordinate.longitude, latitude: self.currentLocation.coordinate.latitude)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -195,12 +207,12 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
         guard let orderID = self.packageViewModel.order_id else {
             return
         }
-        let lat = self.currentLocation?.coordinate.latitude ?? Constants.defaultLocation.coordinate.latitude
-        let lng = self.currentLocation?.coordinate.longitude ?? Constants.defaultLocation.coordinate.longitude
+        let lat = self.currentLocation.coordinate.latitude
+        let lng = self.currentLocation.coordinate.longitude
         let podImages = self.photos.compactMap {
             $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
         }
-        NetworkService.shared.reDeliveryTry(driverID: 100, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
+        NetworkService.shared.reDeliveryTry(driverID: AppConstants.driverID, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -263,6 +275,16 @@ class FailedDeliveryNavigator: TakePhotosViewControllerNavigator {
     
     deinit {
         print("🍎 FailedDeliveryNavigator - deinit")
+    }
+}
+
+extension FailedDeliveryNavigator: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let latestLo = locations.first else {
+            return
+        }
+        self.currentLocation = latestLo
     }
 }
 

@@ -17,7 +17,7 @@ struct PickupManualInputView: View {
     
     init(viewModel: PickupManualInputViewModel) {
         self.viewModel = viewModel
-        viewModel.fetchScanBatchID(driverID: 100)
+        viewModel.fetchScanBatchID(driverID: AppConstants.driverID)
     }
     
     var body: some View {

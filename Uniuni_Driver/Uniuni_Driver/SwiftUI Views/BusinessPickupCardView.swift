@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BusinessPickupCardView: View {
     
+    @State var businessPickup: Bool = false
+    
     init() {}
     
     var body: some View {
@@ -34,8 +36,18 @@ struct BusinessPickupCardView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 16, height: 24)
+                .onTapGesture {
+                    self.businessPickup = true
+                    AppGlobalVariables.shared.tabBarHiden = true
+                }
         }
         .padding(EdgeInsets(top: 20, leading: 20, bottom: 16, trailing: 15))
+        .onAppear {
+            self.businessPickup = false
+        }
+        NavigationLink("", isActive: $businessPickup) {
+            BusinessPickupScanListView(viewModel: BusinessPickupScanViewModel())
+        }
     }
 }
 

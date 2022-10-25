@@ -221,7 +221,7 @@ class PackageCardView: UIView {
             return
         }
         switch state {
-        case .delivering:
+        case .delivering, .delivering231, .delivering232:
             if viewModel.expressType == .express {
                 self.expressTypeLabel.isHidden = false
                 self.expressTypeLabel.text = viewModel.expressType?.getDisplayString()
@@ -261,6 +261,8 @@ class PackageCardView: UIView {
                 self.expressTypeLabel.isHidden = true
                 self.expressTypeLabel.text = nil
             }
+        case .none:
+            break
         }
     }
     

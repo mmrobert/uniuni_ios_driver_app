@@ -21,7 +21,7 @@ struct PickupScanView: View {
     
     init(viewModel: PickupScanPackagesViewModel) {
         self.viewModel = viewModel
-        viewModel.fetchScanBatchID(driverID: 100)
+        viewModel.fetchScanBatchID(driverID: AppConstants.driverID)
     }
     
     var body: some View {
@@ -104,6 +104,11 @@ struct PickupScanView: View {
                     .padding(EdgeInsets(top: 10, leading: 20, bottom: -30, trailing: 20))
                 }
                 .background(Color("screen-base"))
+                .onAppear {
+                    manualInput = false
+                    generateReport = false
+                    focusViewHiden = false
+                }
             }
             VStack {
                 ProgressView()

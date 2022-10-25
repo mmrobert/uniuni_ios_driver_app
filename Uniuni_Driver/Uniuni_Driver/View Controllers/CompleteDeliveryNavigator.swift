@@ -9,8 +9,9 @@ import UIKit
 import Combine
 import SwiftUI
 import PhotosUI
+import MapKit
 
-class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
+class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
     
     private struct Constants {
         static let bizMsgSuccess = "DELIVERY.SUBMIT.SUCCESS"
@@ -34,9 +35,15 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
     @Published var showingNetworkErrorAlert: Bool = false
     @Published var showingSaveErrorAlert: Bool = false
     
+    private let locationManager = CLLocationManager()
+    private var currentLocation: CLLocation = CLLocation(latitude: 49.14, longitude: -122.98)
+    
     init(presenter: UIViewController?, packageViewModel: PackageViewModel) {
         self.presenter = presenter
         self.packageViewModel = packageViewModel
+        super.init()
+        self.locationManager.delegate = self
+        self.startLocationManager()
         CoreDataManager.shared.$saveFailedUploadedError
             .receive(on: DispatchQueue.main)
             .dropFirst()
@@ -55,6 +62,14 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
                 }
             })
             .store(in: &disposables)
+    }
+    
+    private func startLocationManager() {
+        let authStatus = locationManager.authorizationStatus
+        if authStatus == .authorizedWhenInUse {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.startUpdatingLocation()
+        }
     }
     
     func getPackageViewModel() -> PackageViewModel {
@@ -132,7 +147,7 @@ class CompleteDeliveryNavigator: TakePhotosViewControllerNavigator {
         let podImages = self.photos.compactMap {
             $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
         }
-        NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
+        NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil, longitude: self.currentLocation.coordinate.longitude, latitude: self.currentLocation.coordinate.latitude)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -248,3 +263,12 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
     }
 }
 
+extension CompleteDeliveryNavigator: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let latestLo = locations.first else {
+            return
+        }
+        self.currentLocation = latestLo
+    }
+}

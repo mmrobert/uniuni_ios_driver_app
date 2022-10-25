@@ -47,7 +47,7 @@ struct PackageViewModel: Identifiable, Equatable {
         self.route_no = dataModel.route_no
         self.assign_time = dataModel.assign_time
         self.delivery_by = dataModel.delivery_by
-        self.state = dataModel.state
+        self.state = PackageState.getStateFrom(value: dataModel.state)
         self.name = dataModel.name
         self.mobile = dataModel.mobile
         self.address = dataModel.address
@@ -101,6 +101,6 @@ struct PackageViewModel: Identifiable, Equatable {
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.order_sn == rhs.order_sn
+        return lhs.tracking_no == rhs.tracking_no
     }
 }

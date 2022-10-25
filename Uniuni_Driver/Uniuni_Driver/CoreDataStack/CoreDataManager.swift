@@ -66,7 +66,7 @@ class CoreDataManager {
             object.setValue(package.route_no, forKeyPath: "route_no")
             object.setValue(package.assign_time, forKeyPath: "assign_time")
             object.setValue(package.delivery_by, forKeyPath: "delivery_by")
-            object.setValue(package.state?.rawValue, forKeyPath: "state")
+            object.setValue(package.state, forKeyPath: "state")
             object.setValue(package.name, forKeyPath: "name")
             object.setValue(package.mobile, forKeyPath: "mobile")
             object.setValue(package.address, forKeyPath: "address")
@@ -115,8 +115,7 @@ class CoreDataManager {
                     pack.route_no = object.value(forKey: "route_no") as? Int
                     pack.assign_time = object.value(forKey: "assign_time") as? String
                     pack.delivery_by = object.value(forKey: "delivery_by") as? String
-                    let stateInt = object.value(forKey: "state") as? Int
-                    pack.state = PackageState.getStateFrom(value: stateInt)
+                    pack.state = object.value(forKey: "state") as? Int
                     pack.name = object.value(forKey: "name") as? String
                     pack.mobile = object.value(forKey: "mobile") as? String
                     pack.address = object.value(forKey: "address") as? String
@@ -160,7 +159,7 @@ class CoreDataManager {
                 if packs.count > 0 {
                     let managedObject = packs[0]
                     managedObject.setValue(package.address_type?.rawValue, forKeyPath: "address_type")
-                    managedObject.setValue(package.state?.rawValue, forKeyPath: "state")
+                    managedObject.setValue(package.state, forKeyPath: "state")
                     do {
                         try taskContext.save()
                     } catch let error as NSError {

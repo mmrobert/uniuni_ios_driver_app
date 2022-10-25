@@ -34,6 +34,7 @@ class PackagesListViewModel: ObservableObject {
                 strongSelf.failedUploaded = failed
             })
             .store(in: &disposables)
+        self.coreDataManager.fetchFailedUploadeds()
     }
     
     func fetchPackagesFromAPI(driverID: Int) {
@@ -173,7 +174,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 111,
             assign_time: "4-1-2022",
             delivery_by: "5-1-2022",
-            state: .delivering,
+            state: 202,
             name: "John Lee",
             mobile: "11111111",
             address: "1111 Bayview St",
@@ -195,7 +196,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 222,
             assign_time: "4-3-2022",
             delivery_by: "5-3-2022",
-            state: .delivering,
+            state: 202,
             name: "Lucy Su",
             mobile: "222222222",
             address: "222 Bayview St",
@@ -217,7 +218,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 33,
             assign_time: "5-1-2022",
             delivery_by: "5-4-2022",
-            state: .delivering,
+            state: 206,
             name: "Charlie John",
             mobile: "33333333",
             address: "333 Bayview St",
@@ -239,7 +240,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 99,
             assign_time: "5-2-2019",
             delivery_by: "5-4-2019",
-            state: .delivering,
+            state: 211,
             name: "Charlie Peter",
             mobile: "999999999",
             address: "999 Bayview St",
@@ -261,7 +262,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 444,
             assign_time: "6-29-2022",
             delivery_by: "7-1-2022",
-            state: .undelivered211,
+            state: 211,
             name: "Peter Lee",
             mobile: "444444444",
             address: "4444 Bayview St",
@@ -283,7 +284,7 @@ class PackagesListViewModel: ObservableObject {
             route_no: 555,
             assign_time: "8-29-2022",
             delivery_by: "9-1-2022",
-            state: .undelivered206,
+            state: 206,
             name: "Water Lee",
             mobile: "55555555",
             address: "555 Bayview St",
