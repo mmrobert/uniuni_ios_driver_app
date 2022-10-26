@@ -102,6 +102,11 @@ class MapClusterViewController: UIViewController {
         //self.servicesListViewModel.saveMockServicesList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.detailCardViewTopConstraint?.constant = 0
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.showDetailPackageCard()
@@ -119,18 +124,17 @@ class MapClusterViewController: UIViewController {
             mapView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        mapView.mapboxMap.onNext(.styleLoaded) { [weak self] _ in
+        mapView.mapboxMap.onNext(event: .styleLoaded) { [weak self] _ in
             self?.setupCluster()
         }
-        mapView.mapboxMap.onNext(.mapLoaded) { [weak self] _ in
+        mapView.mapboxMap.onNext(event: .mapLoaded) { [weak self] _ in
             self?.setupInitZoom()
             self?.setupSingleTapAction()
             // fetch packages
             self?.observingViewModels()
             self?.observingError()
             self?.packagesListViewModel.fetchPackagesFromCoreData()
-            self?.servicesListViewModel.fetchServicesFromAPI(driverID: 100)
+            self?.servicesListViewModel.fetchServicesFromAPI(driverID: AppConstants.driverID)
             //self?.servicesListViewModel.fetchServicePointsFromCoreData()
         }
     }
@@ -145,7 +149,8 @@ class MapClusterViewController: UIViewController {
     private func setupCurrentLocation() {
         mapView.location.delegate = self
         mapView.location.options.activityType = .other
-        mapView.location.options.puckType = .puck2D()
+        let config = Puck2DConfiguration.makeDefault(showBearing: true)
+        mapView.location.options.puckType = .puck2D(config)
         mapView.location.addLocationConsumer(newConsumer: self)
         mapView.location.locationProvider.startUpdatingLocation()
     }
@@ -180,7 +185,7 @@ class MapClusterViewController: UIViewController {
             height: Constants.featureQueryAreaWidth
         )
         solidView.mapboxMap.queryRenderedFeatures(
-            in: rect,
+            with: rect,
             options: queryOptions
         ) { [weak solidView, weak self] tappedQueryResult in
             guard let feature = try? tappedQueryResult.get().first?.feature else {
@@ -338,7 +343,7 @@ class MapClusterViewController: UIViewController {
                         self.currentLocation.coordinate.longitude)
         let orderId = packageToShow.order_id ?? 0
         if let needRetry = self.packageToShowDetail?.need_retry, needRetry > 0 {
-            self.mapViewModel?.reDeliveryHistory(driverID: 100, orderID: orderId) { [weak self] retryData in
+            self.mapViewModel?.reDeliveryHistory(driverID: AppConstants.driverID, orderID: orderId) { [weak self] retryData in
                 guard let strongSelf = self else { return }
                 strongSelf.packageToShowDetail?.redeliveryData = retryData
                 packageToShow.redeliveryData = retryData
@@ -406,7 +411,7 @@ class MapClusterViewController: UIViewController {
                 if let retryTime = strongSelf.packageToShowDetail?.redeliveryData?.retry_times, retryTime >= 2 {
                     strongSelf.showReasonOfFailPickup(redelivery: false)
                 } else {
-                    strongSelf.mapViewModel?.reDeliveryHistory(driverID: 100, orderID: orderId) { retryData in
+                    strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConstants.driverID, orderID: orderId) { retryData in
                         if let remain = retryData?.remaining_time, remain > 0 {
                             let positiveAction = Action(title: String.OKStr)
                             strongSelf.showAlert(title: String.attemptFailedStr, msg: String.yourTwoAttemptsAreTooCloseStr, positiveAction: positiveAction, negativeAction: nil)
@@ -420,11 +425,15 @@ class MapClusterViewController: UIViewController {
             }
         }
         
-        self.detailCardViewTopConstraint?.constant = -self.detailCardView.bounds.height
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
-            self?.detailCardView.layoutIfNeeded()
-        }) { [weak self] _ in
-            self?.zoomToDetailPackageLocation()
+        self.zoomToDetailPackageLocation() {
+            
+            self.detailCardView.sizeToFit()
+            self.detailCardViewTopConstraint?.constant = -self.detailCardView.bounds.height
+            
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in }
         }
     }
     
@@ -812,13 +821,15 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func zoomToDetailPackageLocation() {
+    private func zoomToDetailPackageLocation(completion: (() -> ())? = nil) {
         guard let lat = Double(self.packageToShowDetail?.lat ?? ""), let lng = Double(self.packageToShowDetail?.lng ?? "") else {
             return
         }
         let latRegion = (lat - 0.03, lat + 0.01)
         let lngRegion = (lng - 0.01, lng + 0.01)
-        self.updateCameraBound(latRegion: latRegion, lngRegion: lngRegion)
+        self.updateCameraBound(latRegion: latRegion, lngRegion: lngRegion) {
+            completion?()
+        }
     }
     
     private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
@@ -1039,7 +1050,7 @@ class MapClusterViewController: UIViewController {
         updateCameraBound(latRegion: (latMin, latMax), lngRegion: (lngMin, lngMax))
     }
     
-    private func updateCameraBound(latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double)) {
+    private func updateCameraBound(latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double), completion: (() -> ())? = nil) {
         
         let coordinates = [
             CLLocationCoordinate2DMake(latRegion.min, lngRegion.min),
@@ -1059,7 +1070,9 @@ class MapClusterViewController: UIViewController {
             bearing: nil,
             pitch: nil
         )
-        mapView.camera.ease(to: camera, duration: Constants.mapZoneUpdateDuration)
+        mapView.camera.ease(to: camera, duration: Constants.mapZoneUpdateDuration, curve: .linear) { _ in
+            completion?()
+        }
     }
     
     private func updateDataSource(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {

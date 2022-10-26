@@ -95,13 +95,10 @@ class PickupManualInputViewModel: ObservableObject {
                     }
                     
                     strongSelf.showingWrongPackageAlert = true
-                    return
                 } else if response.biz_code?.lowercased() == Constants.alreadyScanned.lowercased() {
                     strongSelf.showingAlreadyScannedAlert = true
-                    return
                 } else if response.biz_code?.lowercased() == Constants.batchClosed.lowercased() {
                     strongSelf.showingBatchClosedAlert = true
-                    return
                 }
                 if let trackingNo = response.biz_data?.tracking_no {
                     let pack = strongSelf.createInputedPackage(trackingNo: trackingNo, orderID: response.biz_data?.order_id, routeNo: response.biz_data?.route_no, wrongPack: false)

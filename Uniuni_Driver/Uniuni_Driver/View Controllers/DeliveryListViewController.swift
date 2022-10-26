@@ -95,7 +95,7 @@ class DeliveryListViewController: UIViewController {
         self.observingError()
         
         // fetch packages
-        self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConstants.driverID)
         //self.packagesListViewModel.saveMockPackagesList()
     }
     
@@ -160,8 +160,24 @@ class DeliveryListViewController: UIViewController {
     private func segmentSelected() {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            self.listToDisplay = self.packagesList.filter {
-                $0.state == .delivering
+            self.listToDisplay = self.packagesList.filter { pack in
+                guard let state = pack.state else {
+                    return false
+                }
+                switch state {
+                case .delivering:
+                    return true
+                case .delivering231:
+                    return true
+                case .delivering232:
+                    return true
+                case .undelivered211:
+                    return false
+                case .undelivered206:
+                    return false
+                case .none:
+                    return true
+                }
             }
         case 1:
             self.listToDisplay = self.packagesList.filter { pack in
@@ -171,9 +187,15 @@ class DeliveryListViewController: UIViewController {
                 switch state {
                 case .delivering:
                     return false
+                case .delivering231:
+                    return false
+                case .delivering232:
+                    return false
                 case .undelivered211:
                     return true
                 case .undelivered206:
+                    return true
+                case .none:
                     return true
                 }
             }
@@ -327,7 +349,7 @@ extension DeliveryListViewController {
     @objc
     private func refreshPackagesListFromAPI() {
         self.listRefreshing = true
-        self.packagesListViewModel.fetchPackagesFromAPI(driverID: 100)
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConstants.driverID)
     }
 }
 
@@ -347,12 +369,28 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pack = self.listToDisplay[indexPath.row]
-        let mapView = MapClusterViewController(
-            packagesListViewModel: PackagesListViewModel(),
-            servicesListViewModel: ServicePointsListViewModel(),
-            mapViewModel: MapViewModel())
-        mapView.packageToShowDetail = pack
-        self.navigationController?.pushViewController(mapView, animated: true)
+        
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            let mapView = MapClusterViewController(
+                packagesListViewModel: PackagesListViewModel(),
+                servicesListViewModel: ServicePointsListViewModel(),
+                mapViewModel: MapViewModel())
+            mapView.packageToShowDetail = pack
+            self.navigationController?.pushViewController(mapView, animated: true)
+        case 1:
+            let undeliveredVM = UndeliveredPackageDetailViewModel(packageViewModel: pack)
+            let undeliveredView = UndeliveredPackageDetailView(naviController: self.navigationController, viewModel: undeliveredVM)
+            let undeliveredVC = UIHostingController(rootView: undeliveredView)
+            self.navigationController?.pushViewController(undeliveredVC, animated: true)
+        default:
+            let mapView = MapClusterViewController(
+                packagesListViewModel: PackagesListViewModel(),
+                servicesListViewModel: ServicePointsListViewModel(),
+                mapViewModel: MapViewModel())
+            mapView.packageToShowDetail = pack
+            self.navigationController?.pushViewController(mapView, animated: true)
+        }
     }
 }
 

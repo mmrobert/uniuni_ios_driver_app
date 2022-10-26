@@ -28,6 +28,12 @@ struct PackageSearchView: View {
         }
         .navigationTitle(String.searchStr)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button {
+            self.naviController?.popViewController(animated: true)
+        } label: {
+            Image("icon-back")
+        })
         .onAppear {
             viewModel.fetchPackagesFromCoreData()
         }

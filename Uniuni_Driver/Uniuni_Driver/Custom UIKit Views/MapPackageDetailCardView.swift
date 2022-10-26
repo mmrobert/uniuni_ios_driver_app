@@ -559,7 +559,7 @@ extension MapPackageDetailCardView {
             [packDetailContainer2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
              packDetailContainer2.topAnchor.constraint(equalTo: signatureRemindingLabel.bottomAnchor, constant: 4),
              packDetailContainer2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
-             packDetailContainer2.heightAnchor.constraint(greaterThanOrEqualToConstant: 46)]
+             packDetailContainer2.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)]
         )
         self.packDetailContainer2.addArrangedSubview(buzzLabel)
         self.packDetailContainer2.addArrangedSubview(noteLabel)

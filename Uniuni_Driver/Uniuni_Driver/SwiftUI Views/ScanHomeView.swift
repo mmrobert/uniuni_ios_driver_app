@@ -13,7 +13,6 @@ struct ScanHomeView: View {
     
     init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
-        viewModel.fetchPacksPickDropInfo(driverID: 100)
     }
     
     var body: some View {
@@ -32,18 +31,17 @@ struct ScanHomeView: View {
                         BusinessPickupCardView()
                             .background(.white)
                             .cornerRadius(16)
-                            .padding(EdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20))
-                        Spacer(minLength: 5)
+                            .padding(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
                     }
                     .background(Color("screen-base"))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onAppear {
+                    viewModel.fetchPacksPickDropInfo(driverID: AppConstants.driverID)
+                }
             }
             .navigationBarTitle(String.scanStr)
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                AppGlobalVariables.shared.tabBarHiden = false
-            }
         }
     }
 }
