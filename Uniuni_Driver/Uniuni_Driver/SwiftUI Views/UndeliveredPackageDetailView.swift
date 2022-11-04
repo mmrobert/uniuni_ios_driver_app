@@ -14,8 +14,6 @@ struct UndeliveredPackageDetailView: View {
     
     @ObservedObject private var viewModel: UndeliveredPackageDetailViewModel
     
-    @State private var showingActionSheet = false
-    
     @State private var scrollViewContentSize: CGSize = .zero
     @State private var showingSignatureConfirm: Bool = false
     
@@ -124,30 +122,22 @@ struct UndeliveredPackageDetailView: View {
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     
                     HStack {
-                        Button(String.failedStr) {
-                            self.showingActionSheet = true
-                        }
-                        .frame(width: 116, height: 48)
-                        .background(.black)
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 0))
-                        Spacer()
-                        Button(String.deliveredStr) {
+                        Button(action: {
                             guard let vm = self.viewModel.packageViewModel else {
                                 return
                             }
                             self.naviController?.popViewController(animated: false)
                             let completeNavi = CompleteDeliveryNavigator(presenter: self.naviController, packageViewModel: vm)
                             completeNavi.presentDeliveryDetail()
+                        }) {
+                            Text(String.deliveredStr)
+                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .background(Color("tab-bar-tint"))
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                         }
-                        .frame(width: 200, height: 48)
-                        .background(Color("tab-bar-tint"))
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
                     }
                     .onAppear {
                         viewModel.showingBackground = true
@@ -185,19 +175,6 @@ struct UndeliveredPackageDetailView: View {
         }, message: {
             Text(String.pleaseCheckYourNetworkAndRetryStr)
         })
-        .confirmationDialog(String.failedDeliveryStr, isPresented: $showingActionSheet, titleVisibility: .visible) {
-            Button(String.redeliveryStr) {
-                self.showingActionSheet = false
-                guard let vm = self.viewModel.packageViewModel else {
-                    return
-                }
-                self.naviController?.popViewController(animated: false)
-                let failedNavi = FailedDeliveryNavigator(presenter: self.naviController, packageViewModel: vm, failedReason: .redelivery, currentLocation: nil)
-                failedNavi.presentFailedDetail()
-            }
-        } message: {
-            Text(String.chooseAReasonOfFailingDeliveryStr)
-        }
     }
     
     private func requiredCustomerSignature() -> String {

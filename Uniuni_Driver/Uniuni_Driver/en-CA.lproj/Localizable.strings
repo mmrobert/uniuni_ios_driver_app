@@ -122,6 +122,7 @@
 "Business Pick-up" = "Business Pick-up";
 "Pick-up parcels from a business partner" = "Pick-up parcels from a business partner";
 "No service point is assigned to you" = "No service point is assigned to you. Please contact your driver manager.";
+"No service point is currently assigned to you" = "No service point is currently assigned to you.";
 "Pick-up Scan" = "Pick-up Scan";
 "Please scan a parcel" = "Please scan a parcel";
 "Generate Report" = "Generate Report";

@@ -44,7 +44,9 @@ class PackageTableViewCell: UITableViewCell {
             routeNo: packageViewModel.route_no,
             receiverName: packageViewModel.name,
             receiverAddress: packageViewModel.address,
+            assignTime: self.getDateString(assignTime: packageViewModel.assign_time),
             receiverDistance: packageViewModel.getDistanceFrom(location: location, distanceUnit: .KM).kmDistance(),
+            note: packageViewModel.postscript,
             failedHandleType: packageViewModel.failed_handle_type
         )
         
@@ -60,5 +62,12 @@ class PackageTableViewCell: UITableViewCell {
             cardView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Constants.topSpacing),
             cardView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -Constants.trailingSpacing),
             cardView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -Constants.bottomSpacing)])
+    }
+    
+    private func getDateString(assignTime: String?) -> String {
+        guard let assignTime = assignTime else {
+            return ""
+        }
+        return String(assignTime.prefix(10))
     }
 }

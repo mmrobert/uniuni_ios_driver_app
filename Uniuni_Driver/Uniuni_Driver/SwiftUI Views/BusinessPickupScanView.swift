@@ -16,8 +16,13 @@ struct BusinessPickupScanView: View {
     @State private var manualInput: Bool = false
     @State private var generateReport: Bool = false
     
-    init(viewModel: BusinessPickupScanViewModel) {
+    @Binding var businessPickup: Bool
+    @Binding var toScanItem: Bool
+    
+    init(viewModel: BusinessPickupScanViewModel, businessPickup: Binding<Bool>, toScanItem: Binding<Bool>) {
         self.viewModel = viewModel
+        self._businessPickup = businessPickup
+        self._toScanItem = toScanItem
     }
     
     var body: some View {
@@ -67,8 +72,7 @@ struct BusinessPickupScanView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 74)
-                .background(Color(red: 1.0, green: 214 / 255, blue: 214 / 255))
-                
+                .background(Color(red: 222 / 255, green: 237 / 255, blue: 1.0))
                 List {
                     ForEach(viewModel.scannedPackagesList) { pack in
                         HStack {
@@ -82,15 +86,17 @@ struct BusinessPickupScanView: View {
                 .background(Color("screen-base"))
                 
                 VStack {
-                    Button(String.generateReportStr) {
+                    Button(action: {
                         self.generateReport = true
+                    }) {
+                        Text(String.generateReportStr)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(Color("tab-bar-tint"))
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: -18, trailing: 20))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(24)
-                    .padding(EdgeInsets(top: 10, leading: 20, bottom: -30, trailing: 20))
                 }
                 .background(Color("screen-base"))
                 .onAppear {
@@ -108,7 +114,7 @@ struct BusinessPickupScanView: View {
                 BusinessPickupManualInputView(viewModel: viewModel)
             }
             NavigationLink("", isActive: $generateReport) {
-                BusinessPickupScanConfirmationView(viewModel: viewModel)
+                BusinessPickupScanConfirmationView(viewModel: viewModel, businessPickup: $businessPickup, toScanItem: $toScanItem)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -158,6 +164,14 @@ struct BusinessPickupScanView: View {
 
 struct BusinessPickupScanView_Previews: PreviewProvider {
     static var previews: some View {
-        BusinessPickupScanView(viewModel: BusinessPickupScanViewModel())
+        let binding1 = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        let binding2 = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        BusinessPickupScanView(viewModel: BusinessPickupScanViewModel(), businessPickup: binding1, toScanItem: binding2)
     }
 }

@@ -23,8 +23,6 @@ class CoreDataManager {
     
     @Published var saveFailedUploadedError: CoreDataError?
     
-    var packagesListUpdated: Bool = false
-    
     /// A persistent container to set up the Core Data stack.
     lazy var container: NSPersistentContainer = {
         
@@ -92,8 +90,6 @@ class CoreDataManager {
     
     func fetchPackages() {
         
-        self.packagesListUpdated = false
-        
         let taskContext = newTaskContext()
         
         taskContext.perform { [weak self] in
@@ -144,8 +140,6 @@ class CoreDataManager {
     
     func updatePackage(package: PackageDataModel) {
         
-        self.packagesListUpdated = true
-        
         guard let orderId = package.order_id else {
             return
         }
@@ -173,7 +167,7 @@ class CoreDataManager {
     }
     
     func deleteSinglePackage(orderID: Int) {
-        self.packagesListUpdated = true
+        
         let taskContext = newTaskContext()
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Package")
         fetchRequest.predicate = NSPredicate(format: "order_id = %i", orderID)

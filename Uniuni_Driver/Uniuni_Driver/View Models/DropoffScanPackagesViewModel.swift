@@ -73,7 +73,7 @@ class DropoffScanPackagesViewModel: ObservableObject {
     }
     
     func undeliveredList() {
-        NetworkService.shared.fetchUndeliveredList(driverID: AppConstants.driverID)
+        NetworkService.shared.fetchUndeliveredList(driverID: AppConfigurator.shared.driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { value in
                 switch value {
@@ -121,7 +121,7 @@ class DropoffScanPackagesViewModel: ObservableObject {
     }
     
     func fetchServicePointInfo() {
-        NetworkService.shared.servicePointInfo(driverID: AppConstants.driverID)
+        NetworkService.shared.servicePointInfo(driverID: AppConfigurator.shared.driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { value in
                 switch value {
@@ -156,7 +156,7 @@ class DropoffScanPackagesViewModel: ObservableObject {
             scannedItems = scanneds.joined(separator: "|")
         }
         let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.6)?.jpegData(compressionQuality: 1)
-        NetworkService.shared.completeDropoffScan(driverID: AppConstants.driverID, servicePointID: servicePointID, scannedItems: scannedItems, signature: signature)
+        NetworkService.shared.completeDropoffScan(driverID: AppConfigurator.shared.driverID, servicePointID: servicePointID, scannedItems: scannedItems, signature: signature)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 self?.showingProgressView = false

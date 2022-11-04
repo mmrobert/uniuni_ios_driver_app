@@ -21,6 +21,23 @@ class NetworkService: NetworkServiceProvider {
     
     private init() {}
     
+    func login(driverID: Int, pw: String) -> AnyPublisher<LoginDataModel, NetworkRequestError> {
+        let bodyParas = ["credential_id": driverID,
+                         "password": pw] as [String:Any]
+        let router = NetworkAPIs.login(pathParas: nil, queryParas: nil, bodyParas: bodyParas)
+        do {
+            let netRequest = try router.makeURLRequest()
+            return router.fetchJSON(request: netRequest)
+        } catch let error {
+            if let error = error as? NetworkRequestError {
+                return Fail(error: error).eraseToAnyPublisher()
+            } else {
+                let error = NetworkRequestError.other(description: error.localizedDescription)
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+        }
+    }
+    
     func fetchDeliveringList(driverID: Int) -> AnyPublisher<PackagesListDataModel, NetworkRequestError> {
         let queryParas = ["driver_id": String(driverID)]
         let router = NetworkAPIs.fetchDeliveringList(pathParas: nil, queryParas: queryParas, bodyParas: nil)

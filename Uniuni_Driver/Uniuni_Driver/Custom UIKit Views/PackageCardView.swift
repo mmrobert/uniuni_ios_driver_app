@@ -132,6 +132,17 @@ class PackageCardView: UIView {
         return label
     }()
     
+    private lazy var receiverNoteLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        label.font = Theme.default.generalTextFont
+        label.textColor = UIColor.lightBlue
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        return label
+    }()
+    
     private lazy var routeContainer: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -211,7 +222,8 @@ class PackageCardView: UIView {
         self.routeValueLabel.text = "\(viewModel.routeNo ?? 0)"
         self.receiverNameLabel.text = viewModel.receiverName
         self.receiverAddressLabel.text = viewModel.receiverAddress
-        self.receiverDistanceLabel.text = viewModel.receiverDistance
+        self.receiverDistanceLabel.text = self.combineString(assignTime: viewModel.assignTime, receiverDistance: viewModel.receiverDistance)
+        self.receiverNoteLabel.text = self.noteString(note: viewModel.note)
         if viewModel.goodsType == .medical {
             self.medicalIcon.image = UIImage.iconMedicalCross
         } else {
@@ -225,6 +237,7 @@ class PackageCardView: UIView {
             if viewModel.expressType == .express {
                 self.expressTypeLabel.isHidden = false
                 self.expressTypeLabel.text = viewModel.expressType?.getDisplayString()
+                self.expressTypeLabel.backgroundColor = Theme.default.expressTypeBackgroundColor
             } else {
                 self.expressTypeLabel.isHidden = true
                 self.expressTypeLabel.text = nil
@@ -262,12 +275,25 @@ class PackageCardView: UIView {
                 self.expressTypeLabel.text = nil
             }
         case .none:
-            break
+            self.expressTypeLabel.isHidden = true
+            self.expressTypeLabel.text = nil
         }
     }
     
-    private func configureTheme(theme: PackageCardView.Theme) {
-        
+    private func configureTheme(theme: PackageCardView.Theme) {}
+    
+    private func combineString(assignTime: String?, receiverDistance: String?) -> String? {
+        guard let assignTime = assignTime else {
+            return receiverDistance
+        }
+        return assignTime + "    " + (receiverDistance ?? "")
+    }
+    
+    private func noteString(note: String?) -> String {
+        guard let note = note else {
+            return String.noteStr + ":"
+        }
+        return String.noteStr + ": " + note
     }
 }
 
@@ -342,5 +368,6 @@ extension PackageCardView {
         self.receiverStackView.addArrangedSubview(self.receiverNameLabel)
         self.receiverStackView.addArrangedSubview(self.receiverAddressLabel)
         self.receiverStackView.addArrangedSubview(self.receiverDistanceLabel)
+        self.receiverStackView.addArrangedSubview(self.receiverNoteLabel)
     }
 }

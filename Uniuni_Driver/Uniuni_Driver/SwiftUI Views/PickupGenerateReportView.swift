@@ -14,8 +14,11 @@ struct PickupGenerateReportView: View {
     
     @State private var showingRemind: Bool = false
     
-    init(viewModel: PickupGenerateReportViewModel) {
+    @Binding var scanToPickup: Bool
+    
+    init(viewModel: PickupGenerateReportViewModel, scanToPickup: Binding<Bool>) {
         self.viewModel = viewModel
+        self._scanToPickup = scanToPickup
     }
     
     var body: some View {
@@ -105,15 +108,17 @@ struct PickupGenerateReportView: View {
                         .font(.system(size: 14))
                         .padding(EdgeInsets(top: 10, leading: 30, bottom: 0, trailing: 30))
                         .multilineTextAlignment(.center)
-                    Button(String.confirmPickupStr) {
+                    Button(action: {
                         self.showingRemind = true
+                    }) {
+                        Text(String.confirmPickupStr)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(Color("tab-bar-tint"))
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: -18, trailing: 20))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(24)
-                    .padding(EdgeInsets(top: 10, leading: 20, bottom: -30, trailing: 20))
                 }
                 .background(Color("screen-base"))
                 VStack {
@@ -140,6 +145,8 @@ struct PickupGenerateReportView: View {
                     self.showingRemind = false
                     self.viewModel.showingProgressView = true
                     self.viewModel.closeBatch()
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.scanToPickup = false
                 })
                 Button(String.cancelStr, role: .cancel, action: {
                     self.showingRemind = false
@@ -157,6 +164,10 @@ struct PickupGenerateReportView: View {
 
 struct PickupGenerateReportView_Previews: PreviewProvider {
     static var previews: some View {
-        PickupGenerateReportView(viewModel: PickupGenerateReportViewModel())
+        let binding = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        PickupGenerateReportView(viewModel: PickupGenerateReportViewModel(), scanToPickup: binding)
     }
 }

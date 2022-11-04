@@ -22,4 +22,32 @@ struct AppConfigurator {
             return ""
         }
     }
+    
+    public var driverID: Int {
+        if let id = UserDefaults.standard.object(forKey: AppConstants.userDefaultsKey_driverID) as? Int {
+            return id
+        } else {
+            return AppConstants.driverID
+        }
+    }
+    
+    public var token: String {
+        if let token = UserDefaults.standard.object(forKey: AppConstants.userDefaultsKey_token) as? String {
+            return token
+        } else {
+            return AppConstants.token
+        }
+    }
+    
+    public var vcode: String {
+        return AppConstants.vcode
+    }
+    
+    public func setDriverID(driverID: Int) {
+        UserDefaults.standard.set(driverID, forKey: AppConstants.userDefaultsKey_driverID)
+    }
+    
+    public func setToken(token: String) {
+        UserDefaults.standard.set(token, forKey: AppConstants.userDefaultsKey_token)
+    }
 }

@@ -93,17 +93,12 @@ class DeliveryListViewController: UIViewController {
         
         self.observingViewModels()
         self.observingError()
-        
-        // fetch packages
-        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConstants.driverID)
-        //self.packagesListViewModel.saveMockPackagesList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if CoreDataManager.shared.packagesListUpdated {
-            self.packagesListViewModel.fetchPackagesFromCoreData()
-        }
+        // fetch packages
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConfigurator.shared.driverID)
     }
     
     private func checkLocationManager() {
@@ -179,6 +174,8 @@ class DeliveryListViewController: UIViewController {
                     return true
                 }
             }
+            segmentedControl.setTitle(String.deliveringStr + "(\(self.listToDisplay.count))", forSegmentAt: 0)
+            segmentedControl.setTitle(String.undeliveredStr, forSegmentAt: 1)
         case 1:
             self.listToDisplay = self.packagesList.filter { pack in
                 guard let state = pack.state else {
@@ -199,6 +196,8 @@ class DeliveryListViewController: UIViewController {
                     return true
                 }
             }
+            segmentedControl.setTitle(String.deliveringStr, forSegmentAt: 0)
+            segmentedControl.setTitle(String.undeliveredStr + "(\(self.listToDisplay.count))", forSegmentAt: 1)
         default:
             self.listToDisplay = self.packagesList.filter {
                 $0.state == .delivering
@@ -349,7 +348,7 @@ extension DeliveryListViewController {
     @objc
     private func refreshPackagesListFromAPI() {
         self.listRefreshing = true
-        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConstants.driverID)
+        self.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConfigurator.shared.driverID)
     }
 }
 

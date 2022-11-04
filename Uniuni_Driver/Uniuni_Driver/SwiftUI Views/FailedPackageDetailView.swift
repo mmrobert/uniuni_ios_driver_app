@@ -208,43 +208,49 @@ struct FailedPackageDetailView: View {
                     VStack {
                         switch failedReason {
                         case .redelivery:
-                            Button(String.completeStr) {
+                            Button(action: {
                                 self.navigator.showingBackground = true
                                 self.navigator.showingProgressView = true
                                 self.navigator.failedReDeliveryTry()
+                            }) {
+                                Text(String.completeStr)
+                                    .frame(maxWidth: .infinity, minHeight: 46)
+                                    .background(self.navigator.photos.count < 1 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(23)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                             }
-                            .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(self.navigator.photos.count < 1 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
-                            .cornerRadius(23)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             .disabled(self.navigator.photos.count < 1)
                         case .failedContactCustomer:
-                            Button(String.completeStr) {
+                            Button(action: {
                                 self.navigator.showingBackground = true
                                 self.navigator.showingProgressView = true
                                 self.navigator.failedDelivery()
+                            }) {
+                                Text(String.completeStr)
+                                    .frame(maxWidth: .infinity, minHeight: 46)
+                                    .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(23)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                             }
-                            .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
-                            .cornerRadius(23)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             .disabled(self.navigator.photos.count < 2)
                         case .wrongAddress, .poBox:
-                            Button(String.completeStr) {
+                            Button(action: {
                                 self.navigator.showingBackground = true
                                 self.navigator.showingProgressView = true
                                 self.navigator.failedDelivery()
+                            }) {
+                                Text(String.completeStr)
+                                    .frame(maxWidth: .infinity, minHeight: 46)
+                                    .background(Color("tab-bar-tint"))
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(23)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                             }
-                            .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(Color("tab-bar-tint"))
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
-                            .cornerRadius(23)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         }
                     }
                 }
@@ -280,7 +286,7 @@ struct FailedPackageDetailView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.navigator.showingSuccessfulAlert = false
                         self.navigator.showingBackground = false
-                        self.navigator.backToDeliveryList()
+                        self.navigator.back()
                     }
                 }
             }

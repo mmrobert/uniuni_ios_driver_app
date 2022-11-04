@@ -14,9 +14,12 @@ struct DropoffGenerateReportView: View {
     
     private var address: String = ""
     
-    init(address: String, viewModel: DropoffScanPackagesViewModel) {
+    @Binding var scanToDropoff: Bool
+    
+    init(address: String, viewModel: DropoffScanPackagesViewModel, scanToDropoff: Binding<Bool>) {
         self.address = address
         self.viewModel = viewModel
+        self._scanToDropoff = scanToDropoff
     }
     
     var body: some View {
@@ -45,6 +48,8 @@ struct DropoffGenerateReportView: View {
                                 .foregroundColor(.black)
                             Text(address)
                                 .foregroundColor(.black)
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.leading)
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 0, leading: 25, bottom: 0, trailing: 25))
@@ -106,16 +111,20 @@ struct DropoffGenerateReportView: View {
                             Spacer()
                         }
                     }
-                    Button(String.completeStr) {
+                    Button(action: {
                         self.viewModel.showingProgressView = true
                         self.viewModel.completeDropoffScan()
+                        self.presentationMode.wrappedValue.dismiss()
+                        self.scanToDropoff = false
+                    }) {
+                        Text(String.completeStr)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(Color("tab-bar-tint"))
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(EdgeInsets(top: 10, leading: 25, bottom: -18, trailing: 25))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(24)
-                    .padding(EdgeInsets(top: 10, leading: 25, bottom: -30, trailing: 25))
                 }
                 .background(Color("screen-base"))
                 VStack {
@@ -182,6 +191,10 @@ struct DropoffGenerateReportView: View {
 
 struct DropoffGenerateReportView_Previews: PreviewProvider {
     static var previews: some View {
-        DropoffGenerateReportView(address: "", viewModel: DropoffScanPackagesViewModel())
+        let binding = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        DropoffGenerateReportView(address: "", viewModel: DropoffScanPackagesViewModel(), scanToDropoff: binding)
     }
 }

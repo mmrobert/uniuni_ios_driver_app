@@ -15,9 +15,11 @@ struct BusinessPickupScanListView: View {
     @State var selectedListItem: BusinessPickupScanViewModel.ScanListItem?
     
     @State private var toScanItem: Bool = false
+    @Binding var businessPickup: Bool
     
-    init(viewModel: BusinessPickupScanViewModel) {
+    init(viewModel: BusinessPickupScanViewModel, businessPickup: Binding<Bool>) {
         self.viewModel = viewModel
+        self._businessPickup = businessPickup
     }
     
     var body: some View {
@@ -33,7 +35,7 @@ struct BusinessPickupScanListView: View {
                 .background(Color("screen-base"))
                 .padding(.bottom, -30)
                 NavigationLink("", isActive: $toScanItem) {
-                    BusinessPickupScanView(viewModel: viewModel)
+                    BusinessPickupScanView(viewModel: viewModel, businessPickup: $businessPickup, toScanItem: $toScanItem)
                 }
             }
             .navigationBarBackButtonHidden(true)
@@ -66,6 +68,10 @@ struct BusinessPickupScanListView: View {
 
 struct BusinessPickupScanListView_Previews: PreviewProvider {
     static var previews: some View {
-        BusinessPickupScanListView(viewModel: BusinessPickupScanViewModel())
+        let binding = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        BusinessPickupScanListView(viewModel: BusinessPickupScanViewModel(), businessPickup: binding)
     }
 }

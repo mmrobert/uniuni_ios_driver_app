@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SDWebImageSwiftUI
 
 class PackagesListViewModel: ObservableObject {
     
@@ -35,13 +36,16 @@ class PackagesListViewModel: ObservableObject {
             })
             .store(in: &disposables)
         self.coreDataManager.fetchFailedUploadeds()
+        
+        let tempToken = AppConfigurator.shared.token
+        let bearer = "Bearer \(tempToken)"
+        SDWebImageDownloader.shared.setValue(bearer, forHTTPHeaderField: "Authorization")
     }
     
     func fetchPackagesFromAPI(driverID: Int) {
         
         coreDataManager.deleteAllPackages()
         self.list = []
-        coreDataManager.packagesListUpdated = false
         
         NetworkService.shared.fetchDeliveringList(driverID: driverID)
             .receive(on: DispatchQueue.main)

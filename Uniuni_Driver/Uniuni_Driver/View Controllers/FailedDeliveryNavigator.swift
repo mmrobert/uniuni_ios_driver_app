@@ -64,7 +64,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         break
                     }
                 } else {
-                    strongSelf.backToDeliveryList()
+                    strongSelf.back()
                 }
             })
             .store(in: &disposables)
@@ -212,7 +212,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
         let podImages = self.photos.compactMap {
             $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
         }
-        NetworkService.shared.reDeliveryTry(driverID: AppConstants.driverID, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
+        NetworkService.shared.reDeliveryTry(driverID: AppConfigurator.shared.driverID, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -319,10 +319,11 @@ extension FailedDeliveryNavigator: PHPickerViewControllerDelegate {
                         strongSelf.photoTaken = image
                     }
                 }
+                if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<FailedDeliveryNavigator> {
+                    photoTakingVC.updateTitle()
+                }
                 if strongSelf.photos.count >= 2 {
                     strongSelf.dismissPhotoTaking()
-                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
-                    photoTakingVC.updateTitle()
                 }
             case .review(let index):
                 if images.count > 0 {

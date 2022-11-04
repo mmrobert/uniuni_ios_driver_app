@@ -37,7 +37,7 @@ struct ScanHomeView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
-                    viewModel.fetchPacksPickDropInfo(driverID: AppConstants.driverID)
+                    viewModel.fetchPacksPickDropInfo(driverID: AppConfigurator.shared.driverID)
                 }
             }
             .navigationBarTitle(String.scanStr)

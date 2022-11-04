@@ -41,24 +41,14 @@ struct BusinessPickupManualInputView: View {
                     Button(String.searchStr) {
                         showingKeyboard = false
                         self.viewModel.showingProgressView = true
-                        self.viewModel.checkPickupManualInput(trackingNo: searchString)
+                        self.viewModel.checkPickupScanned(trackingNo: searchString)
                     }
                     .frame(width: 65, height: 25)
                     .font(.bold(.system(size: 18))())
                     .foregroundColor(Color("highlighted-blue"))
                     .padding(.trailing, 15)
                 }
-                List {
-                    ForEach(viewModel.inputedPackagesList) { pack in
-                        HStack {
-                            Text(self.packageString(pack: pack))
-                            Spacer()
-                        }
-                        .listRowInsets(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 20))
-                    }
-                }
-                .listStyle(.plain)
-                .background(Color("screen-base"))
+                Spacer()
             }
             VStack {
                 ProgressView()

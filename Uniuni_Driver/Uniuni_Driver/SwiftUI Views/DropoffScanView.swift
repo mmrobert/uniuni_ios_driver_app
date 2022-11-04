@@ -20,9 +20,12 @@ struct DropoffScanView: View {
     @State private var manualInput: Bool = false
     @State private var generateReport: Bool = false
     
-    init(address: String, viewModel: DropoffScanPackagesViewModel) {
+    @Binding var scanToDropoff: Bool
+    
+    init(address: String, viewModel: DropoffScanPackagesViewModel, scanToDropoff: Binding<Bool>) {
         self.address = address
         self.viewModel = viewModel
+        self._scanToDropoff = scanToDropoff
     }
     
     var body: some View {
@@ -59,19 +62,22 @@ struct DropoffScanView: View {
                 .background(Color("screen-base"))
                 
                 VStack {
-                    Button(String.generateReportStr) {
+                    Button(action: {
                         if viewModel.checkScannedAmount() {
                             self.generateReport = true
                         } else {
+                            self.generateReport = false
                             self.showingIncorrectAmountAlert = true
                         }
+                    }) {
+                        Text(String.generateReportStr)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(Color("tab-bar-tint"))
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: -18, trailing: 20))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(24)
-                    .padding(EdgeInsets(top: 10, leading: 20, bottom: -30, trailing: 20))
                 }
                 .background(Color("screen-base"))
                 .onAppear {
@@ -84,7 +90,7 @@ struct DropoffScanView: View {
                 DropoffManualInputView(viewModel: viewModel)
             }
             NavigationLink("", isActive: $generateReport) {
-                DropoffGenerateReportView(address: address, viewModel: viewModel)
+                DropoffGenerateReportView(address: address, viewModel: viewModel, scanToDropoff: $scanToDropoff)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -135,6 +141,7 @@ struct DropoffScanView: View {
                 self.generateReport = true
             })
             Button(String.cancelStr, role: .cancel, action: {
+                self.generateReport = false
                 showingIncorrectAmountAlert = false
             })
         }, message: {
@@ -160,6 +167,10 @@ struct DropoffScanView: View {
 
 struct DropoffScanView_Previews: PreviewProvider {
     static var previews: some View {
-        DropoffScanView(address: "", viewModel: DropoffScanPackagesViewModel())
+        let binding = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        DropoffScanView(address: "", viewModel: DropoffScanPackagesViewModel(), scanToDropoff: binding)
     }
 }

@@ -43,12 +43,25 @@ struct PackageSearchView: View {
                 return
             }
             self.naviController?.popViewController(animated: false)
-            let mapView = MapClusterViewController(
-                packagesListViewModel: PackagesListViewModel(),
-                servicesListViewModel: ServicePointsListViewModel(),
-                mapViewModel: MapViewModel())
-            mapView.packageToShowDetail = selectedPackage
-            self.naviController?.pushViewController(mapView, animated: true)
+            
+            if let state = selectedPackage.state {
+                switch state {
+                case .delivering, .delivering231, .delivering232 :
+                    let mapView = MapClusterViewController(
+                        packagesListViewModel: PackagesListViewModel(),
+                        servicesListViewModel: ServicePointsListViewModel(),
+                        mapViewModel: MapViewModel())
+                    mapView.packageToShowDetail = selectedPackage
+                    self.naviController?.pushViewController(mapView, animated: true)
+                case .undelivered211, .undelivered206:
+                    let undeliveredVM = UndeliveredPackageDetailViewModel(packageViewModel: selectedPackage)
+                    let undeliveredView = UndeliveredPackageDetailView(naviController: self.naviController, viewModel: undeliveredVM)
+                    let undeliveredVC = UIHostingController(rootView: undeliveredView)
+                    self.naviController?.pushViewController(undeliveredVC, animated: true)
+                case .none:
+                    break
+                }
+            }
         }
     }
 }

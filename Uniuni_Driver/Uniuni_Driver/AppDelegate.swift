@@ -6,18 +6,12 @@
 //
 
 import UIKit
-import SDWebImageSwiftUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let tempToken = AppConstants.token
-        //let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
-        let bearer = "Bearer \(tempToken)"
-        SDWebImageDownloader.shared.setValue(bearer, forHTTPHeaderField: "Authorization")
             
         return true
     }

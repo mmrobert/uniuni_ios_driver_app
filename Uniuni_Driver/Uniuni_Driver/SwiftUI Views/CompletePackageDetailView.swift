@@ -161,7 +161,7 @@ struct CompletePackageDetailView: View {
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                        Button(String.completeStr) {
+                        Button(action: {
                             if packageViewModel.SG == 1 {
                                 self.showingSignatureConfirm = true
                             } else {
@@ -170,13 +170,15 @@ struct CompletePackageDetailView: View {
                                 self.navigator.showingProgressView = true
                                 self.navigator.successfulDelivery()
                             }
+                        }) {
+                            Text(String.completeStr)
+                                .frame(maxWidth: .infinity, minHeight: 46)
+                                .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .cornerRadius(23)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                         }
-                        .frame(maxWidth: .infinity, minHeight: 46)
-                        .background(self.navigator.photos.count < 2 ? Color("tab-bar-tint").opacity(0.4) : Color("tab-bar-tint"))
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(23)
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         .disabled(self.navigator.photos.count < 2)
                     }
                 }
@@ -195,6 +197,7 @@ struct CompletePackageDetailView: View {
             }
             .navigationBarTitle(String.deliveredStr)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: Button {
                 self.navigator.back()
             } label: {
@@ -212,7 +215,7 @@ struct CompletePackageDetailView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.navigator.showingSuccessfulAlert = false
                         self.navigator.showingBackground = false
-                        self.navigator.backToDeliveryList()
+                        self.navigator.back()
                     }
                 }
             }

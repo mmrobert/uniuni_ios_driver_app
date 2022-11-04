@@ -14,8 +14,13 @@ struct BusinessPickupScanConfirmationView: View {
     
     @State private var showReminding: Bool = false
     
-    init(viewModel: BusinessPickupScanViewModel) {
+    @Binding var businessPickup: Bool
+    @Binding var toScanItem: Bool
+    
+    init(viewModel: BusinessPickupScanViewModel, businessPickup: Binding<Bool>, toScanItem: Binding<Bool>) {
         self.viewModel = viewModel
+        self._businessPickup = businessPickup
+        self._toScanItem = toScanItem
     }
     
     var body: some View {
@@ -163,15 +168,17 @@ struct BusinessPickupScanConfirmationView: View {
                                 Spacer()
                             }
                         }
-                        Button(String.completeStr) {
+                        Button(action: {
                             self.showReminding = true
+                        }) {
+                            Text(String.completeStr)
+                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .background(Color("tab-bar-tint"))
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .padding(EdgeInsets(top: 7, leading: 25, bottom: -18, trailing: 25))
                         }
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(Color("tab-bar-tint"))
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .padding(EdgeInsets(top: 7, leading: 25, bottom: -30, trailing: 25))
                     }
                     .frame(height: 280)
                 }
@@ -223,6 +230,9 @@ struct BusinessPickupScanConfirmationView: View {
                     self.showReminding = false
                     self.viewModel.showingProgressView = true
                     self.viewModel.completeBusinessScan()
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.toScanItem = false
+                    self.businessPickup = false
                 })
                 Button(String.cancelStr, role: .cancel, action: {
                     self.showReminding = false
@@ -244,6 +254,14 @@ struct BusinessPickupScanConfirmationView: View {
 
 struct BusinessPickupScanConfirmationView_Previews: PreviewProvider {
     static var previews: some View {
-        BusinessPickupScanConfirmationView(viewModel: BusinessPickupScanViewModel())
+        let binding1 = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        let binding2 = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        BusinessPickupScanConfirmationView(viewModel: BusinessPickupScanViewModel(), businessPickup: binding1, toScanItem: binding2)
     }
 }

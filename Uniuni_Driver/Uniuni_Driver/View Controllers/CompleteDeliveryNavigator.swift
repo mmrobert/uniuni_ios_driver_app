@@ -58,7 +58,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         break
                     }
                 } else {
-                    strongSelf.backToDeliveryList()
+                    strongSelf.back()
                 }
             })
             .store(in: &disposables)
@@ -245,10 +245,11 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
                         strongSelf.photoTaken = image
                     }
                 }
+                if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
+                    photoTakingVC.updateTitle()
+                }
                 if strongSelf.photos.count >= 2 {
                     strongSelf.dismissPhotoTaking()
-                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
-                    photoTakingVC.updateTitle()
                 }
             case .review(let index):
                 if images.count > 0 {
