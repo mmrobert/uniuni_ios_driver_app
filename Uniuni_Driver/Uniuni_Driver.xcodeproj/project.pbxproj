@@ -27,6 +27,7 @@
 		9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */; };
 		9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */; };
 		9B45141C290D833A0080CCE9 /* LoginDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B45141B290D833A0080CCE9 /* LoginDataModel.swift */; };
+		9B45142029194F0D0080CCE9 /* ScanHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */; };
 		9B4ED765289421B800B4C93C /* AppConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4ED764289421B800B4C93C /* AppConfigurator.swift */; };
 		9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8C2858DCF5006865AA /* AppDelegate.swift */; };
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
@@ -159,6 +160,7 @@
 		9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPackageCardViewModel.swift; sourceTree = "<group>"; };
 		9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUnit.swift; sourceTree = "<group>"; };
 		9B45141B290D833A0080CCE9 /* LoginDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataModel.swift; sourceTree = "<group>"; };
+		9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHomeViewController.swift; sourceTree = "<group>"; };
 		9B4ED764289421B800B4C93C /* AppConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurator.swift; sourceTree = "<group>"; };
 		9B513C892858DCF5006865AA /* Uniuni_Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uniuni_Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513C8C2858DCF5006865AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
 				9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */,
 				9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */,
+				9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
 				9BF4A8BC28C4F7D000A6C67E /* PickupScanPackagesViewModel.swift in Sources */,
+				9B45142029194F0D0080CCE9 /* ScanHomeViewController.swift in Sources */,
 				9BC724BC28846D8100229E51 /* UnderlinedLabel.swift in Sources */,
 				9BF4A8C228C5249500A6C67E /* ScanHomeView.swift in Sources */,
 				9BC724BE28846E1300229E51 /* LeadingTitleLabel.swift in Sources */,

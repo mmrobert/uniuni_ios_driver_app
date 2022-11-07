@@ -177,7 +177,7 @@ struct BusinessPickupScanConfirmationView: View {
                                 .font(.system(size: 18))
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
-                                .padding(EdgeInsets(top: 7, leading: 25, bottom: -18, trailing: 25))
+                                .padding(EdgeInsets(top: 7, leading: 25, bottom: 15, trailing: 25))
                         }
                     }
                     .frame(height: 280)

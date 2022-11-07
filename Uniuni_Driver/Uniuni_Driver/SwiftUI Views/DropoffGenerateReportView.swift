@@ -123,7 +123,7 @@ struct DropoffGenerateReportView: View {
                             .font(.system(size: 18))
                             .foregroundColor(.white)
                             .cornerRadius(24)
-                            .padding(EdgeInsets(top: 10, leading: 25, bottom: -18, trailing: 25))
+                            .padding(EdgeInsets(top: 10, leading: 25, bottom: 15, trailing: 25))
                     }
                 }
                 .background(Color("screen-base"))

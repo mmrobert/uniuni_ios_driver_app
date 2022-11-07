@@ -11,14 +11,13 @@ struct ScanHomeView: View {
     
     @ObservedObject private var viewModel: ScanHomeViewModel
     
-    @State private var scrollViewContentSize: CGSize = .zero
-    
     init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        VStack {
+        NavigationView {
+        VStack(spacing: 0) {
             VStack {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 1) {
@@ -33,24 +32,24 @@ struct ScanHomeView: View {
                         BusinessPickupCardView()
                             .background(.white)
                             .cornerRadius(16)
-                            .padding(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
+                            .padding(EdgeInsets(top: 16, leading: 20, bottom: 6, trailing: 20))
                     }
-                    .background(
-                        GeometryReader { geo -> Color in
-                            DispatchQueue.main.async {
-                                scrollViewContentSize = geo.size
-                            }
-                            return Color("screen-base")
-                        }
-                    )
+                    .onAppear {
+                        viewModel.fetchPacksPickDropInfo(driverID: AppConfigurator.shared.driverID)
                 }
-                .frame(maxHeight: scrollViewContentSize.height)
-                .onAppear {
-                    viewModel.fetchPacksPickDropInfo(driverID: AppConfigurator.shared.driverID)
+                .frame(maxHeight: .infinity)
+                }
+                Spacer()
+                VStack {
+                    Color("screen-base")
+                        .frame(maxHeight: 0)
                 }
             }
-            .navigationBarTitle(String.scanStr)
-            .navigationBarTitleDisplayMode(.inline)
+            .background(Color("screen-base"))
+        }
+        .navigationBarTitle(String.scanStr)
+        .navigationBarTitleDisplayMode(.inline)
+            
         }
     }
 }

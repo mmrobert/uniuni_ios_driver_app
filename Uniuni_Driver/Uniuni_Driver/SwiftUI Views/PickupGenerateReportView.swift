@@ -117,7 +117,7 @@ struct PickupGenerateReportView: View {
                             .font(.system(size: 18))
                             .foregroundColor(.white)
                             .cornerRadius(24)
-                            .padding(EdgeInsets(top: 10, leading: 20, bottom: -18, trailing: 20))
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
                     }
                 }
                 .background(Color("screen-base"))

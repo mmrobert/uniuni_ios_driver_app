@@ -98,13 +98,13 @@ struct PickupScanView: View {
                     Button(action: {
                         self.generateReport = true
                     }) {
-                        Text(String.deliveredStr)
+                        Text(String.generateReportStr)
                             .frame(maxWidth: .infinity, minHeight: 48)
                             .background(Color("tab-bar-tint"))
                             .font(.system(size: 18))
                             .foregroundColor(.white)
                             .cornerRadius(24)
-                            .padding(EdgeInsets(top: 10, leading: 20, bottom: -5, trailing: 20))
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
                     }
                 }
                 .background(Color("screen-base"))
