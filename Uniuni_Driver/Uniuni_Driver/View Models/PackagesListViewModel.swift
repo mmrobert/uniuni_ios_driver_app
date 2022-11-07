@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SDWebImageSwiftUI
 
 class PackagesListViewModel: ObservableObject {
     
@@ -35,13 +36,16 @@ class PackagesListViewModel: ObservableObject {
             })
             .store(in: &disposables)
         self.coreDataManager.fetchFailedUploadeds()
+        
+        let tempToken = AppConfigurator.shared.token
+        let bearer = "Bearer \(tempToken)"
+        SDWebImageDownloader.shared.setValue(bearer, forHTTPHeaderField: "Authorization")
     }
     
     func fetchPackagesFromAPI(driverID: Int) {
         
         coreDataManager.deleteAllPackages()
         self.list = []
-        coreDataManager.packagesListUpdated = false
         
         NetworkService.shared.fetchDeliveringList(driverID: driverID)
             .receive(on: DispatchQueue.main)
@@ -58,9 +62,10 @@ class PackagesListViewModel: ObservableObject {
                 guard let biz_data = packages.biz_data else { return }
                 let newData = strongSelf.removeFailedUploaded(biz_data: biz_data)
                 strongSelf.savePackagesToCoreData(packs: newData)
-                strongSelf.list = strongSelf.list + newData.map {
+                let newVM = newData.map {
                     PackageViewModel(dataModel: $0)
                 }
+                strongSelf.updatePackagesList(data: newVM)
             })
             .store(in: &disposables)
         
@@ -79,11 +84,25 @@ class PackagesListViewModel: ObservableObject {
                 guard let biz_data = packages.biz_data else { return }
                 let newData = strongSelf.removeFailedUploaded(biz_data: biz_data)
                 strongSelf.savePackagesToCoreData(packs: newData)
-                strongSelf.list = strongSelf.list + newData.map {
+                let newVM = newData.map {
                     PackageViewModel(dataModel: $0)
                 }
+                strongSelf.updatePackagesList(data: newVM)
             })
             .store(in: &disposables)
+    }
+    
+    private func updatePackagesList(data: [PackageViewModel]) {
+        for pack in data {
+            if let packIndex = self.list.firstIndex(where: {
+                $0.tracking_no == pack.tracking_no
+            }) {
+                _ = self.list.remove(at: packIndex)
+                self.list.append(pack)
+            } else {
+                self.list.append(pack)
+            }
+        }
     }
     
     private func removeFailedUploaded(biz_data: [PackageDataModel]) -> [PackageDataModel] {

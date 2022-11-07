@@ -40,6 +40,14 @@ class TabBarController: UITabBarController {
     private func scanTab() -> UIViewController {
         let scanView = ScanHomeView(viewModel: ScanHomeViewModel())
         let scanVC = UIHostingController(rootView: scanView)
+        //let scanNav = UINavigationController(rootViewController: scanVC)
+        
+        //scanNav.configureNavigationBar(isLargeTitle: false, backgroundColor: UIColor.white, tintColor: UIColor.naviBarButton)
+        //scanNav.configureStatusBar(backgroundColor: UIColor.white)
+        
+        //scanNav.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
+        //return scanNav
+        
         scanVC.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
         return scanVC
     }

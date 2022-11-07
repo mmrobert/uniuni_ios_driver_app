@@ -45,19 +45,19 @@ struct OrderToPickupCardView: View {
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 0))
-                .onTapGesture {
-                    self.scanToPickup = true
-                    AppGlobalVariables.shared.tabBarHiden = true
-                }
             }
             .onAppear {
                 self.scanToPickup = false
             }
             NavigationLink("", isActive: $scanToPickup) {
-                PickupScanView(viewModel: PickupScanPackagesViewModel())
+                PickupScanView(viewModel: PickupScanPackagesViewModel(), scanToPickup: $scanToPickup)
             }
         }
         .padding(EdgeInsets(top: 46, leading: 20, bottom: 42, trailing: 15))
+        .onTapGesture {
+            self.scanToPickup = true
+            AppGlobalVariables.shared.tabBarHiden = true
+        }
     }
 }
 

@@ -14,7 +14,7 @@ class ScanHomeViewModel: ObservableObject {
     @Published var packsToPickNo: Int = 0
     @Published var packsToPickAddress: String = ""
     @Published var packsToDropNo: Int = 0
-    @Published var packsToDropAddress: String = ""
+    @Published var packsToDropAddress: String?
     
     private var disposables = Set<AnyCancellable>()
     
@@ -54,9 +54,7 @@ class ScanHomeViewModel: ObservableObject {
                 if let totalNumber = response.biz_data?.total_number {
                     strongSelf.packsToDropNo = totalNumber
                 }
-                if let add = response.biz_data?.address {
-                    strongSelf.packsToDropAddress = add
-                }
+                strongSelf.packsToDropAddress = response.biz_data?.address
             })
             .store(in: &disposables)
     }

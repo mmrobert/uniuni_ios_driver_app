@@ -10,14 +10,14 @@ import SwiftUI
 struct PickupManualInputView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: PickupManualInputViewModel
+    @ObservedObject var viewModel: PickupScanPackagesViewModel
     @State private var searchString = ""
     
     @FocusState private var showingKeyboard: Bool
     
-    init(viewModel: PickupManualInputViewModel) {
+    init(viewModel: PickupScanPackagesViewModel) {
         self.viewModel = viewModel
-        viewModel.fetchScanBatchID(driverID: AppConstants.driverID)
+        viewModel.fetchScanBatchID(driverID: AppConfigurator.shared.driverID)
     }
     
     var body: some View {
@@ -42,27 +42,14 @@ struct PickupManualInputView: View {
                     Button(String.searchStr) {
                         showingKeyboard = false
                         self.viewModel.showingProgressView = true
-                        self.viewModel.checkPickupInputed(trackingNo: searchString)
+                        self.viewModel.checkPickupScanned(trackingNo: searchString)
                     }
                     .frame(width: 65, height: 25)
                     .font(.bold(.system(size: 18))())
                     .foregroundColor(Color("highlighted-blue"))
                     .padding(.trailing, 15)
                 }
-                List {
-                    ForEach(viewModel.inputedPackagesList) { pack in
-                        HStack {
-                            Text(self.wrongPackageString(pack: pack))
-                            Spacer()
-                            if self.wrongPackage(pack: pack) {
-                                Image("icon-red-alarm")
-                            }
-                        }
-                        .listRowInsets(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 20))
-                    }
-                }
-                .listStyle(.plain)
-                .background(Color("screen-base"))
+                Spacer()
             }
             VStack {
                 ProgressView()
@@ -117,25 +104,10 @@ struct PickupManualInputView: View {
             Text(String.theScanSessionIsClosedStr)
         })
     }
-    
-    private func wrongPackage(pack: PickupManualInputViewModel.InputedPackage?) -> Bool {
-        if let wrong = pack?.wrongPackage {
-            return wrong
-        }
-        return false
-    }
-    
-    private func wrongPackageString(pack: PickupManualInputViewModel.InputedPackage) -> String {
-        if self.wrongPackage(pack: pack) {
-            return "\(pack.package.tracking_no ?? "")"
-        } else {
-            return "\(pack.package.tracking_no ?? "") - \(String.routeStr): \(pack.package.route_no ?? 0)"
-        }
-    }
 }
 
 struct PickupManualInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PickupManualInputView(viewModel: PickupManualInputViewModel())
+        PickupManualInputView(viewModel: PickupScanPackagesViewModel())
     }
 }

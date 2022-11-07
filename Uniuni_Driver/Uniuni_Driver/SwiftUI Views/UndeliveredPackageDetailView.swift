@@ -14,8 +14,6 @@ struct UndeliveredPackageDetailView: View {
     
     @ObservedObject private var viewModel: UndeliveredPackageDetailViewModel
     
-    @State private var showingActionSheet = false
-    
     @State private var scrollViewContentSize: CGSize = .zero
     @State private var showingSignatureConfirm: Bool = false
     
@@ -78,25 +76,6 @@ struct UndeliveredPackageDetailView: View {
                             TitleTextView(title: String.buzzStr, text: viewModel.packageViewModel?.buzz_code)
                             TitleTextView(title: String.noteStr, text: viewModel.packageViewModel?.postscript)
                         }
-                        HStack {
-                            Text(String.photosStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        HStack {
-                            if viewModel.packageViewModel?.SG == 1 {
-                                Text(String.take2PhotosSignatureStr)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .foregroundColor(.gray)
-                            } else {
-                                Text(String.take2PhotosStr)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .foregroundColor(.gray)
-                            }
-                            Spacer()
-                        }
                     }
                     .background(
                         GeometryReader { geo -> Color in
@@ -108,6 +87,25 @@ struct UndeliveredPackageDetailView: View {
                     )
                 }
                 .frame(maxHeight: scrollViewContentSize.height)
+                HStack {
+                    Text(String.photosStr)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                        .font(.bold(.system(size: 20))())
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                HStack {
+                    if viewModel.packageViewModel?.SG == 1 {
+                        Text(String.take2PhotosSignatureStr)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .foregroundColor(.gray)
+                    } else {
+                        Text(String.take2PhotosStr)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                }
                 Spacer()
                 VStack {
                     HStack(spacing: 16) {
@@ -124,50 +122,28 @@ struct UndeliveredPackageDetailView: View {
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     
                     HStack {
-                        Button(String.failedStr) {
-                            self.showingActionSheet = true
-                        }
-                        .frame(width: 116, height: 48)
-                        .background(.black)
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 0))
-                        Spacer()
-                        Button(String.deliveredStr) {
+                        Button(action: {
                             guard let vm = self.viewModel.packageViewModel else {
                                 return
                             }
                             self.naviController?.popViewController(animated: false)
                             let completeNavi = CompleteDeliveryNavigator(presenter: self.naviController, packageViewModel: vm)
                             completeNavi.presentDeliveryDetail()
+                        }) {
+                            Text(String.deliveredStr)
+                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .background(Color("tab-bar-tint"))
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20))
                         }
-                        .frame(width: 200, height: 48)
-                        .background(Color("tab-bar-tint"))
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
                     }
                     .onAppear {
-                        viewModel.showingBackground = true
-                        viewModel.showingProgressView = true
                         viewModel.fetchPackageDeliveryHistoryFromAPI()
                     }
                 }
             }
-            VStack {
-                Color("black-transparent-0.4")
-                    .ignoresSafeArea()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .isHidden(!viewModel.showingBackground)
-            VStack {
-                ProgressView()
-                    .scaleEffect(4)
-                    .progressViewStyle(CircularProgressViewStyle())
-            }
-            .isHidden(!viewModel.showingProgressView)
         }
         .navigationBarTitle(viewModel.packageViewModel?.tracking_no ?? "")
         .navigationBarTitleDisplayMode(.inline)
@@ -185,19 +161,6 @@ struct UndeliveredPackageDetailView: View {
         }, message: {
             Text(String.pleaseCheckYourNetworkAndRetryStr)
         })
-        .confirmationDialog(String.failedDeliveryStr, isPresented: $showingActionSheet, titleVisibility: .visible) {
-            Button(String.redeliveryStr) {
-                self.showingActionSheet = false
-                guard let vm = self.viewModel.packageViewModel else {
-                    return
-                }
-                self.naviController?.popViewController(animated: false)
-                let failedNavi = FailedDeliveryNavigator(presenter: self.naviController, packageViewModel: vm, failedReason: .redelivery, currentLocation: nil)
-                failedNavi.presentFailedDetail()
-            }
-        } message: {
-            Text(String.chooseAReasonOfFailingDeliveryStr)
-        }
     }
     
     private func requiredCustomerSignature() -> String {
@@ -225,15 +188,6 @@ struct UndeliveredPackageDetailView: View {
             return ""
         }
     }
-    /*
-    private func requiredSignatureReminding() -> Bool {
-        if viewModel.packageViewModel?.SG == 1 {
-            return true
-        } else {
-            return false
-        }
-    }
-     */
 }
 
 struct UndeliveredPackageDetailView_Previews: PreviewProvider {

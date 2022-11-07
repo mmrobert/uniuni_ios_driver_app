@@ -8,13 +8,14 @@
 import Foundation
 
 import UIKit
+import Combine
 
 class LoginViewController: UIViewController {
     
-    lazy var driverID: UITextField = {
+    lazy var driverIDInput: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "ID"
+        textField.placeholder = "Driver ID"
         textField.keyboardType = UIKeyboardType.default
         textField.returnKeyType = UIReturnKeyType.done
         textField.autocorrectionType = UITextAutocorrectionType.no
@@ -25,40 +26,45 @@ class LoginViewController: UIViewController {
         return textField
     }()
     
-    private var tokenInput: UITextView = {
-        
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        
-        textView.textAlignment = NSTextAlignment.justified
-        textView.backgroundColor = UIColor.lightGray198
-        
-        textView.font = UIFont.systemFont(ofSize: 15)
-        textView.textColor = UIColor.black
-        
-        textView.autocorrectionType = UITextAutocorrectionType.no
-        textView.spellCheckingType = UITextSpellCheckingType.no
-        
-        return textView
+    private var passwordInput: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "Password"
+        textField.keyboardType = UIKeyboardType.default
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing;
+        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        return textField
     }()
+    
+    private var disposables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.view.backgroundColor = .white
         
-        self.tokenField()
+        self.setupUI()
         self.createBtn()
     }
     
-    private func tokenField() {
+    private func setupUI() {
         
-        self.view.addSubview(tokenInput)
+        self.view.addSubview(driverIDInput)
         NSLayoutConstraint.activate(
-            [tokenInput.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-             tokenInput.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-             tokenInput.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 120),
-             tokenInput.heightAnchor.constraint(equalToConstant: 160)]
+            [driverIDInput.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
+             driverIDInput.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+             driverIDInput.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 120)]
+        )
+        
+        self.view.addSubview(passwordInput)
+        NSLayoutConstraint.activate(
+            [passwordInput.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
+             passwordInput.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+             passwordInput.topAnchor.constraint(equalTo: driverIDInput.bottomAnchor, constant: 30)]
         )
     }
     
@@ -75,7 +81,7 @@ class LoginViewController: UIViewController {
         NSLayoutConstraint.activate(
             [loginBtn.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 100),
              loginBtn.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -100),
-             loginBtn.topAnchor.constraint(equalTo: self.tokenInput.topAnchor, constant: 300)]
+             loginBtn.topAnchor.constraint(equalTo: self.passwordInput.bottomAnchor, constant: 80)]
         )
     }
     
@@ -84,10 +90,23 @@ class LoginViewController: UIViewController {
         let tabbarVC = TabBarController()
         tabbarVC.modalPresentationStyle = .fullScreen
         
-        if let token = self.tokenInput.text {
-            UserDefaults.standard.set(token, forKey: "tempToken")
+        if let driverID = Int(driverIDInput.text ?? ""), let pw = passwordInput.text {
+            NetworkService.shared.login(driverID: driverID, pw: pw)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { value in
+                    switch value {
+                    case .failure( _):
+                        break
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { [weak self] login in
+                    guard let token = login.biz_data?.access_token else { return }
+                    AppConfigurator.shared.setDriverID(driverID: driverID)
+                    AppConfigurator.shared.setToken(token: token)
+                    self?.present(tabbarVC, animated: false)
+                })
+                .store(in: &disposables)
         }
-        
-        self.present(tabbarVC, animated: false)
     }
 }

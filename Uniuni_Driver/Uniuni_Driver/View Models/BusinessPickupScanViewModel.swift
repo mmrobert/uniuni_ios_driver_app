@@ -14,7 +14,6 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     @Published var scannedPackage: ScannedPackage?
     @Published var scannedPackagesList: [ScannedPackage] = []
-    @Published var inputedPackagesList: [ScannedPackage] = []
     
     @Published var scanList: [ScanListItem] = []
     @Published var summaryData: BusinessPickupScanSummaryDataModel.SummaryData?
@@ -60,7 +59,7 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     func checkPickupScanned(trackingNo: String) {
         let manifestNo = self.selectedListItem?.package.manifest_no ?? ""
-        NetworkService.shared.businessPickupScanCheck(driverID: AppConstants.driverID, manifestNo: manifestNo, trackingNo: trackingNo)
+        NetworkService.shared.businessPickupScanCheck(driverID: AppConfigurator.shared.driverID, manifestNo: manifestNo, trackingNo: trackingNo)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -99,47 +98,8 @@ class BusinessPickupScanViewModel: ObservableObject {
             .store(in: &disposables)
     }
     
-    func checkPickupManualInput(trackingNo: String) {
-        let manifestNo = self.selectedListItem?.package.manifest_no ?? ""
-        NetworkService.shared.businessPickupScanCheck(driverID: AppConstants.driverID, manifestNo: manifestNo, trackingNo: trackingNo)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] value in
-                guard let strongSelf = self else { return }
-                strongSelf.showingProgressView = false
-                switch value {
-                case .failure(let error):
-                    switch error {
-                    case .invalidURL( _):
-                        strongSelf.showingNetworkErrorAlert = true
-                    case .netConnection( _):
-                        strongSelf.showingNetworkErrorAlert = true
-                    case .failStatusCode( _):
-                        strongSelf.showingNetworkErrorAlert = true
-                    default:
-                        break
-                    }
-                case .finished:
-                    break
-                }
-            }, receiveValue: { [weak self] response in
-                guard let strongSelf = self else { return }
-                strongSelf.showingProgressView = false
-                if response.status?.lowercased() == "success" {
-                    if let item = response.data {
-                        let inputed = strongSelf.createScannedPackage(package: item, wrongPack: false)
-                        if !strongSelf.manualListContainElement(element: inputed) {
-                            strongSelf.inputedPackagesList.insert(inputed, at: 0)
-                        }
-                    }
-                } else {
-                    strongSelf.showingWrongPackageAlert = true
-                }
-            })
-            .store(in: &disposables)
-    }
-    
     func fetchScanList() {
-        NetworkService.shared.businessPickupScanList(driverID: AppConstants.driverID)
+        NetworkService.shared.businessPickupScanList(driverID: AppConfigurator.shared.driverID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -175,7 +135,7 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     func fetchSummary() {
         let manifestNo = self.selectedListItem?.package.manifest_no ?? ""
-        NetworkService.shared.businessPickupScanSummary(driverID: AppConstants.driverID, manifestNo: manifestNo)
+        NetworkService.shared.businessPickupScanSummary(driverID: AppConfigurator.shared.driverID, manifestNo: manifestNo)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -207,9 +167,9 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     func completeBusinessScan() {
         let manifestNo = self.selectedListItem?.package.manifest_no ?? ""
-        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.6)?.jpegData(compressionQuality: 1)
+        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         
-        NetworkService.shared.completeBusinessPickupScan(driverID: AppConstants.driverID, vcode: AppConstants.vcode, manifestNo: manifestNo, signature: signature)
+        NetworkService.shared.completeBusinessPickupScan(driverID: AppConfigurator.shared.driverID, vcode: AppConfigurator.shared.vcode, manifestNo: manifestNo, signature: signature)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 self?.showingProgressView = false
@@ -233,15 +193,6 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     private func listContainElement(element: ScannedPackage) -> Bool {
         if self.scannedPackagesList.firstIndex(where: {
-            $0.package.tno == element.package.tno
-        }) != nil {
-            return true
-        }
-        return false
-    }
-    
-    private func manualListContainElement(element: ScannedPackage) -> Bool {
-        if self.inputedPackagesList.firstIndex(where: {
             $0.package.tno == element.package.tno
         }) != nil {
             return true

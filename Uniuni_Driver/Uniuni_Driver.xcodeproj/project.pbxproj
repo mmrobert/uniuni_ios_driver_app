@@ -26,6 +26,8 @@
 		9B39AB1D287A250C00877EBA /* MapPackageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */; };
 		9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */; };
 		9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */; };
+		9B45141C290D833A0080CCE9 /* LoginDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B45141B290D833A0080CCE9 /* LoginDataModel.swift */; };
+		9B45142029194F0D0080CCE9 /* ScanHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */; };
 		9B4ED765289421B800B4C93C /* AppConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4ED764289421B800B4C93C /* AppConfigurator.swift */; };
 		9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8C2858DCF5006865AA /* AppDelegate.swift */; };
 		9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B513C8E2858DCF5006865AA /* SceneDelegate.swift */; };
@@ -46,7 +48,6 @@
 		9B6B33D028B2975E0036293E /* FailedPackageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B33CF28B2975E0036293E /* FailedPackageDetailView.swift */; };
 		9B7EDEAD28EA1962004C5738 /* PickupManualInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEAC28EA1962004C5738 /* PickupManualInputView.swift */; };
 		9B7EDEAF28EA1980004C5738 /* PickupGenerateReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */; };
-		9B7EDEB128EA1ED8004C5738 /* PickupManualInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */; };
 		9B7EDEB328EC7D98004C5738 /* PickupGenerateReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */; };
 		9B7EDEB528ED33F1004C5738 /* PickupScanReportDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB428ED33F1004C5738 /* PickupScanReportDataModel.swift */; };
 		9B7EDEB728EDBA93004C5738 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB628EDBA93004C5738 /* NavigationBarModifier.swift */; };
@@ -158,6 +159,8 @@
 		9B39AB1C287A250C00877EBA /* MapPackageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPackageCardView.swift; sourceTree = "<group>"; };
 		9B39AB1E287A6CD300877EBA /* MapPackageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPackageCardViewModel.swift; sourceTree = "<group>"; };
 		9B39AB20287A6E1B00877EBA /* DistanceUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUnit.swift; sourceTree = "<group>"; };
+		9B45141B290D833A0080CCE9 /* LoginDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataModel.swift; sourceTree = "<group>"; };
+		9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHomeViewController.swift; sourceTree = "<group>"; };
 		9B4ED764289421B800B4C93C /* AppConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurator.swift; sourceTree = "<group>"; };
 		9B513C892858DCF5006865AA /* Uniuni_Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uniuni_Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B513C8C2858DCF5006865AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -181,7 +184,6 @@
 		9B6B33CF28B2975E0036293E /* FailedPackageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedPackageDetailView.swift; sourceTree = "<group>"; };
 		9B7EDEAC28EA1962004C5738 /* PickupManualInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupManualInputView.swift; sourceTree = "<group>"; };
 		9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportView.swift; sourceTree = "<group>"; };
-		9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupManualInputViewModel.swift; sourceTree = "<group>"; };
 		9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportViewModel.swift; sourceTree = "<group>"; };
 		9B7EDEB428ED33F1004C5738 /* PickupScanReportDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupScanReportDataModel.swift; sourceTree = "<group>"; };
 		9B7EDEB628EDBA93004C5738 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				9B5B8F7728A00D1900CEA6BC /* CompleteDeliveryNavigator.swift */,
 				9B5B8F7F28A407FC00CEA6BC /* TakePhotosViewController.swift */,
 				9B6B33CD28B296580036293E /* FailedDeliveryNavigator.swift */,
+				9B45141F29194F0C0080CCE9 /* ScanHomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -426,6 +429,7 @@
 				9B7EDECF28F363A1004C5738 /* BusinessPickupScanCheckDataModel.swift */,
 				9B7EDED128F393EB004C5738 /* BusinessPickupScanSummaryDataModel.swift */,
 				9B7EDED328F395C8004C5738 /* BusinessPickupScanCompleteDataModel.swift */,
+				9B45141B290D833A0080CCE9 /* LoginDataModel.swift */,
 			);
 			path = "Data Models";
 			sourceTree = "<group>";
@@ -482,7 +486,6 @@
 				9B20240129045CED004C5F7D /* UndeliveredPackageDetailViewModel.swift */,
 				9BF4A8D028DD55F200A6C67E /* ScanHomeViewModel.swift */,
 				9BF4A8BB28C4F7D000A6C67E /* PickupScanPackagesViewModel.swift */,
-				9B7EDEB028EA1ED8004C5738 /* PickupManualInputViewModel.swift */,
 				9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */,
 				9B7EDEBA28EE6BDB004C5738 /* DropoffScanPackagesViewModel.swift */,
 				9B7EDECB28F32F1D004C5738 /* BusinessPickupScanViewModel.swift */,
@@ -751,6 +754,7 @@
 				9BC9F80E285EBE0B00376D95 /* DeliveryListViewController.swift in Sources */,
 				9B2023FE28FB2B84004C5F7D /* BusinessPickupManualInputView.swift in Sources */,
 				9B7EDECE28F35DBA004C5738 /* BusinessPickupScanListDataModel.swift in Sources */,
+				9B45141C290D833A0080CCE9 /* LoginDataModel.swift in Sources */,
 				9B7EDECA28F32EE8004C5738 /* BusinessPickupScanView.swift in Sources */,
 				9B20240229045CED004C5F7D /* UndeliveredPackageDetailViewModel.swift in Sources */,
 				9B202400290455D2004C5F7D /* UndeliveredPackageDetailView.swift in Sources */,
@@ -786,7 +790,6 @@
 				9BF4A8CF28CD9CE800A6C67E /* AppGlobalVariables.swift in Sources */,
 				9BCA84FF286F319D0046C0C2 /* PaddingLabel.swift in Sources */,
 				9BC9F810285F67A500376D95 /* UINavigationController-Extension.swift in Sources */,
-				9B7EDEB128EA1ED8004C5738 /* PickupManualInputViewModel.swift in Sources */,
 				9BC2D4F52869E56500354726 /* Date-Extension.swift in Sources */,
 				9BE4BE342862CE29006391D9 /* CoreDataManager.swift in Sources */,
 				9B7EDED428F395C8004C5738 /* BusinessPickupScanCompleteDataModel.swift in Sources */,
@@ -806,6 +809,7 @@
 				9B513C8D2858DCF5006865AA /* AppDelegate.swift in Sources */,
 				9B513C8F2858DCF5006865AA /* SceneDelegate.swift in Sources */,
 				9BF4A8BC28C4F7D000A6C67E /* PickupScanPackagesViewModel.swift in Sources */,
+				9B45142029194F0D0080CCE9 /* ScanHomeViewController.swift in Sources */,
 				9BC724BC28846D8100229E51 /* UnderlinedLabel.swift in Sources */,
 				9BF4A8C228C5249500A6C67E /* ScanHomeView.swift in Sources */,
 				9BC724BE28846E1300229E51 /* LeadingTitleLabel.swift in Sources */,
@@ -1021,6 +1025,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take photos for confirmation.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Get the user location for navigation purposes.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save photo to gallery";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1032,7 +1037,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver8";
+				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver18";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1054,6 +1059,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Uniuni Driver";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take photos for confirmation.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Get the user location for navigation purposes.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save photo to gallery";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1065,7 +1071,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver8";
+				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver18";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

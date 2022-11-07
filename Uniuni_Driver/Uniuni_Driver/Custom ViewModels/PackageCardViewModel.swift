@@ -17,7 +17,9 @@ class PackageCardViewModel {
     var routeNo: Int?
     var receiverName: String?
     var receiverAddress: String?
+    var assignTime: String?
     var receiverDistance: String?
+    var note: String?
     var failedHandleType: FailedHandleType?
 
     init(trackingNo: String?,
@@ -27,7 +29,9 @@ class PackageCardViewModel {
          routeNo: Int?,
          receiverName: String?,
          receiverAddress: String?,
+         assignTime: String?,
          receiverDistance: String?,
+         note: String?,
          failedHandleType: FailedHandleType?) {
 
         self.trackingNo = trackingNo
@@ -37,7 +41,9 @@ class PackageCardViewModel {
         self.routeNo = routeNo
         self.receiverName = receiverName
         self.receiverAddress = receiverAddress
+        self.assignTime = assignTime
         self.receiverDistance = receiverDistance
+        self.note = note
         self.failedHandleType = failedHandleType
     }
 }

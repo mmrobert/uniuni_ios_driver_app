@@ -23,7 +23,7 @@ class PickupGenerateReportViewModel: ObservableObject {
     private var disposables = Set<AnyCancellable>()
     
     init() {
-        self.fetchScanBatchID(driverID: AppConstants.driverID)
+        self.fetchScanBatchID(driverID: AppConfigurator.shared.driverID)
     }
     
     func fetchScanBatchID(driverID: Int) {

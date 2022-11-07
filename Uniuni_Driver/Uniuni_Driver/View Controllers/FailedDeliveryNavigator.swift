@@ -16,6 +16,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
     
     private struct Constants {
         static let bizMsgSuccess = "DELIVERY.SUBMIT.SUCCESS"
+        static let bizMsgRetrySuccess = "DELIVERY.RETRY.SUCCESS"
     }
     
     private var packageViewModel: PackageViewModel
@@ -64,7 +65,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         break
                     }
                 } else {
-                    strongSelf.backToDeliveryList()
+                    strongSelf.back()
                 }
             })
             .store(in: &disposables)
@@ -138,7 +139,15 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
         configuration.filter = .images
         switch self.photoTakingFlow {
         case .taking:
-            configuration.selectionLimit = 2 - self.photos.count
+            
+            switch failedReason {
+            case .redelivery:
+                configuration.selectionLimit = 1 - self.photos.count
+            case .failedContactCustomer:
+                configuration.selectionLimit = 2 - self.photos.count
+            case .wrongAddress, .poBox:
+                break
+            }
             let picker = PHPickerViewController(configuration: configuration)
             picker.delegate = self
             self.photoTakingViewController?.present(picker, animated: true)
@@ -163,7 +172,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
         case .failedContactCustomer:
             failed = 1
             podImages = self.photos.compactMap {
-                $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
+                $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
             }
         case .wrongAddress:
             failed = 2
@@ -210,9 +219,9 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
         let lat = self.currentLocation.coordinate.latitude
         let lng = self.currentLocation.coordinate.longitude
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
-        NetworkService.shared.reDeliveryTry(driverID: AppConstants.driverID, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
+        NetworkService.shared.reDeliveryTry(driverID: AppConfigurator.shared.driverID, orderID: orderID, latitude: lat, longitude: lng, podImages: podImages)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in
                 guard let strongSelf = self else { return }
@@ -234,7 +243,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                 }
             }, receiveValue: { [weak self] response in
                 guard let strongSelf = self else { return }
-                if response.biz_code?.lowercased() == Constants.bizMsgSuccess.lowercased() {
+                if response.biz_code?.lowercased() == Constants.bizMsgRetrySuccess.lowercased() {
                     strongSelf.showingSuccessfulAlert = true
                 } else {
                     strongSelf.showingSuccessfulAlert = false
@@ -250,7 +259,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 1)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
         CoreDataManager.shared.saveFailedUploaded(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
     }
@@ -319,10 +328,20 @@ extension FailedDeliveryNavigator: PHPickerViewControllerDelegate {
                         strongSelf.photoTaken = image
                     }
                 }
-                if strongSelf.photos.count >= 2 {
-                    strongSelf.dismissPhotoTaking()
-                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
+                if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<FailedDeliveryNavigator> {
                     photoTakingVC.updateTitle()
+                }
+                switch strongSelf.failedReason {
+                case .redelivery:
+                    if strongSelf.photos.count >= 1 {
+                        strongSelf.dismissPhotoTaking()
+                    }
+                case .failedContactCustomer:
+                    if strongSelf.photos.count >= 2 {
+                        strongSelf.dismissPhotoTaking()
+                    }
+                case .wrongAddress, .poBox:
+                    break
                 }
             case .review(let index):
                 if images.count > 0 {

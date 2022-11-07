@@ -32,21 +32,23 @@ struct BusinessPickupCardView: View {
                     .multilineTextAlignment(.leading)
             }
             Spacer()
-            Image(systemName: "chevron.right")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 16, height: 24)
-                .onTapGesture {
-                    self.businessPickup = true
-                    AppGlobalVariables.shared.tabBarHiden = true
-                }
+            VStack {
+                Image(systemName: "chevron.right")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 16, height: 24)
+            }
+            .onAppear {
+                self.businessPickup = false
+            }
+            NavigationLink("", isActive: $businessPickup) {
+                BusinessPickupScanListView(viewModel: BusinessPickupScanViewModel(), businessPickup: $businessPickup)
+            }
         }
         .padding(EdgeInsets(top: 20, leading: 20, bottom: 16, trailing: 15))
-        .onAppear {
-            self.businessPickup = false
-        }
-        NavigationLink("", isActive: $businessPickup) {
-            BusinessPickupScanListView(viewModel: BusinessPickupScanViewModel())
+        .onTapGesture {
+            self.businessPickup = true
+            AppGlobalVariables.shared.tabBarHiden = true
         }
     }
 }

@@ -100,6 +100,7 @@ class MapClusterViewController: UIViewController {
         self.setupCurrentLocation()
         
         //self.servicesListViewModel.saveMockServicesList()
+        self.setupBackButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,6 +111,24 @@ class MapClusterViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.showDetailPackageCard()
+    }
+    
+    private func setupBackButton() {
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        let backButton = UIBarButtonItem(image: UIImage.iconBack, style: .plain, target: self, action: #selector(MapClusterViewController.backButtonAction))
+        self.navigationItem.leftBarButtonItem = backButton
+    }
+    
+    @objc
+    private func backButtonAction() {
+        if let const = self.detailCardViewTopConstraint?.constant, const < -8 {
+            self.detailCardViewTopConstraint?.constant = 0
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.detailCardView.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     private func setupMapView() {
@@ -134,7 +153,7 @@ class MapClusterViewController: UIViewController {
             self?.observingViewModels()
             self?.observingError()
             self?.packagesListViewModel.fetchPackagesFromCoreData()
-            self?.servicesListViewModel.fetchServicesFromAPI(driverID: AppConstants.driverID)
+            self?.servicesListViewModel.fetchServicesFromAPI(driverID: AppConfigurator.shared.driverID)
             //self?.servicesListViewModel.fetchServicePointsFromCoreData()
         }
     }
@@ -343,7 +362,7 @@ class MapClusterViewController: UIViewController {
                         self.currentLocation.coordinate.longitude)
         let orderId = packageToShow.order_id ?? 0
         if let needRetry = self.packageToShowDetail?.need_retry, needRetry > 0 {
-            self.mapViewModel?.reDeliveryHistory(driverID: AppConstants.driverID, orderID: orderId) { [weak self] retryData in
+            self.mapViewModel?.reDeliveryHistory(driverID: AppConfigurator.shared.driverID, orderID: orderId) { [weak self] retryData in
                 guard let strongSelf = self else { return }
                 strongSelf.packageToShowDetail?.redeliveryData = retryData
                 packageToShow.redeliveryData = retryData
@@ -411,7 +430,7 @@ class MapClusterViewController: UIViewController {
                 if let retryTime = strongSelf.packageToShowDetail?.redeliveryData?.retry_times, retryTime >= 2 {
                     strongSelf.showReasonOfFailPickup(redelivery: false)
                 } else {
-                    strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConstants.driverID, orderID: orderId) { retryData in
+                    strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConfigurator.shared.driverID, orderID: orderId) { retryData in
                         if let remain = retryData?.remaining_time, remain > 0 {
                             let positiveAction = Action(title: String.OKStr)
                             strongSelf.showAlert(title: String.attemptFailedStr, msg: String.yourTwoAttemptsAreTooCloseStr, positiveAction: positiveAction, negativeAction: nil)
@@ -448,7 +467,7 @@ class MapClusterViewController: UIViewController {
             strongSelf.detailCardView.updateAddressType(addressType: .house)
             strongSelf.packageToShowDetail?.address_type = .house
             strongSelf.packagesListViewModel.updatePackageForCoreData(pack: strongSelf.packageToShowDetail)
-            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.house.rawValue)
+            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConfigurator.shared.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.house.rawValue)
         }
         let townhouseAct = UIAlertAction(title: String.townhouseStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -457,7 +476,7 @@ class MapClusterViewController: UIViewController {
             strongSelf.detailCardView.updateAddressType(addressType: .townhouse)
             strongSelf.packageToShowDetail?.address_type = .townhouse
             strongSelf.packagesListViewModel.updatePackageForCoreData(pack: strongSelf.packageToShowDetail)
-            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.townhouse.rawValue)
+            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConfigurator.shared.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.townhouse.rawValue)
         }
         let businessAct = UIAlertAction(title: String.businessStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -466,7 +485,7 @@ class MapClusterViewController: UIViewController {
             strongSelf.detailCardView.updateAddressType(addressType: .business)
             strongSelf.packageToShowDetail?.address_type = .business
             strongSelf.packagesListViewModel.updatePackageForCoreData(pack: strongSelf.packageToShowDetail)
-            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.business.rawValue)
+            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConfigurator.shared.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.business.rawValue)
         }
         let apartmentAct = UIAlertAction(title: String.apartmentStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -475,7 +494,7 @@ class MapClusterViewController: UIViewController {
             strongSelf.detailCardView.updateAddressType(addressType: .apartment)
             strongSelf.packageToShowDetail?.address_type = .apartment
             strongSelf.packagesListViewModel.updatePackageForCoreData(pack: strongSelf.packageToShowDetail)
-            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConstants.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.apartment.rawValue)
+            strongSelf.mapViewModel?.updateAddressTypeFromAPI(driverID: AppConfigurator.shared.driverID, orderSN: strongSelf.packageToShowDetail?.order_sn ?? "", addressType: AddressType.apartment.rawValue)
         }
         
         alert.addAction(houseAct)
@@ -1070,8 +1089,10 @@ class MapClusterViewController: UIViewController {
             bearing: nil,
             pitch: nil
         )
-        mapView.camera.ease(to: camera, duration: Constants.mapZoneUpdateDuration, curve: .linear) { _ in
-            completion?()
+        self.mapView.camera.fly(to: camera, duration: 0) { _ in
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.8) {
+                completion?()
+            }
         }
     }
     

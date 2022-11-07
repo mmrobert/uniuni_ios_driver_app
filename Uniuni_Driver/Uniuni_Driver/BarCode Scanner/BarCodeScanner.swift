@@ -29,8 +29,10 @@ class BarCodeScanner: NSObject, ObservableObject {
     @Published var barCodeDetected: String?
     @Published var codeScannerError: BarCodeScannerError?
     
-    private var scanInterval: Double = 1.2
+    private var scanInterval: Double = 2.2
     private var lastTime = Date(timeIntervalSince1970: 0)
+    
+    private var previousScanned: String? = nil
     
     // MARK: - Initialization
     
@@ -153,6 +155,10 @@ extension BarCodeScanner: AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
+        if code == self.previousScanned {
+            return
+        }
+        
         let now = Date()
         if now.timeIntervalSince(lastTime) >= scanInterval {
             lastTime = now
@@ -160,6 +166,7 @@ extension BarCodeScanner: AVCaptureMetadataOutputObjectsDelegate {
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             // notify observer
             self.barCodeDetected = code
+            self.previousScanned = code
         }
     }
 }

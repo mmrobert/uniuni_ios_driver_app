@@ -28,15 +28,15 @@ class MapPackageCardView: UIView {
     struct Theme {
         var backgroundColor: UIColor = .white
         var trackingNoTextColor: UIColor = .black
-        var trackingNoTextFont: UIFont = UIFont.boldSystemFont(ofSize: 20)
+        var trackingNoTextFont: UIFont = UIFont.boldSystemFont(ofSize: 16)
         var expressTypeTextColor: UIColor? = UIColor.redBackground
         var expressTypeTextFont: UIFont = UIFont.systemFont(ofSize: 12)
         var expressTypeBackgroundColor: UIColor? = UIColor.redBackground
         var receiverAddressTextColor: UIColor = .black
-        var receiverAddressTextFont: UIFont = UIFont.systemFont(ofSize: 16)
+        var receiverAddressTextFont: UIFont = UIFont.systemFont(ofSize: 18)
         var distanceUnitTextFont: UIFont = UIFont.systemFont(ofSize: 10)
         var distanceUnitTextColor: UIColor? = UIColor.lightBlackText
-        var distanceValueTextFont: UIFont = UIFont.systemFont(ofSize: 34)
+        var distanceValueTextFont: UIFont = UIFont.systemFont(ofSize: 30)
         var distanceValueTextColor: UIColor? = UIColor.highlightedBlue
         var buttonBackgroundColor: UIColor? = UIColor.black
         var buttonTextColor: UIColor? = UIColor.white

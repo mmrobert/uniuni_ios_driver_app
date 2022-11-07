@@ -18,6 +18,7 @@ enum NetworkAPIs {
     }
     
     // MARK: - for each endpoind of backend
+    case login(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchDeliveringList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchUndeliveredList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
     case fetchServiceList(pathParas: [String]?, queryParas: [String:String]?, bodyParas: [String:Any?]?)
@@ -60,6 +61,8 @@ enum NetworkAPIs {
     // MARK: - Request Method
     var method: RequestMethod {
         switch self {
+        case .login( _, _, _):
+            return .post
         case .fetchDeliveringList( _, _, _):
             return .get
         case .fetchUndeliveredList( _, _, _):
@@ -112,6 +115,8 @@ enum NetworkAPIs {
     // MARK: - path string
     var path: String {
         switch self {
+        case .login( _, _, _):
+            return "/auth/login"
         case .fetchDeliveringList( _, _, _):
             return "/delivery/parcels/delivering"
         case .fetchUndeliveredList( _, _, _):
@@ -236,6 +241,8 @@ enum NetworkAPIs {
     // MARK: - query parameters like ...?key=value
     var queryItems: [URLQueryItem]? {
         switch self {
+        case .login( _, _, _):
+            return nil
         case .fetchDeliveringList( _, let queryParas, _),
                 .fetchUndeliveredList( _, let queryParas, _),
                 .fetchServiceList( _, let queryParas, _),
@@ -272,6 +279,8 @@ enum NetworkAPIs {
     // MARK: - body parameters
     var bodyParameters: [String:Any?]? {
         switch self {
+        case .login( _, _, let bodyParas):
+            return bodyParas
         case .fetchDeliveringList( _, _, let bodyParas):
             return bodyParas
         case .fetchUndeliveredList( _, _, let bodyParas):
@@ -341,8 +350,7 @@ enum NetworkAPIs {
         // HTTP Method
         urlRequest.httpMethod = method.rawValue
         
-        let tempToken = AppConstants.token
-        //let tempToken = (UserDefaults.standard.object(forKey: "tempToken") as? String) ?? AppConstants.token
+        let tempToken = AppConfigurator.shared.token
         // Headers
         let bearer = "Bearer \(tempToken)"
         urlRequest.setValue(bearer, forHTTPHeaderField: "Authorization")
@@ -408,8 +416,14 @@ enum NetworkAPIs {
             .tryMap { element in
                 let httpResponse = element.response as? HTTPURLResponse
                 if let httpResponse = httpResponse, httpResponse.statusCode == 200 {
-                    //let kk = String(data: element.data, encoding: .utf8)
-                    //print("cheng=data= \(kk)")
+                    switch self {
+                    case .completeDelivery( _, _, _):
+                        //let kk = String(data: element.data, encoding: .utf8)
+                        //print("cheng=data= \(kk)")
+                        break
+                    default:
+                        break
+                    }
                     return element.data
                 } else if let httpResponse = httpResponse, httpResponse.statusCode == 403 {
                     if case .checkPickupScanned( _, _, _) = self {

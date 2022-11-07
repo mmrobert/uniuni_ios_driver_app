@@ -12,16 +12,18 @@ struct PickupScanView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject private var viewModel: PickupScanPackagesViewModel
     
-    @ObservedObject private var manualInputViewModel = PickupManualInputViewModel()
     @ObservedObject private var generateReportViewModel = PickupGenerateReportViewModel()
     
     @State private var focusViewHiden: Bool = false
     @State private var manualInput: Bool = false
     @State private var generateReport: Bool = false
     
-    init(viewModel: PickupScanPackagesViewModel) {
+    @Binding var scanToPickup: Bool
+    
+    init(viewModel: PickupScanPackagesViewModel, scanToPickup: Binding<Bool>) {
         self.viewModel = viewModel
-        viewModel.fetchScanBatchID(driverID: AppConstants.driverID)
+        self._scanToPickup = scanToPickup
+        viewModel.fetchScanBatchID(driverID: AppConfigurator.shared.driverID)
     }
     
     var body: some View {
@@ -75,7 +77,7 @@ struct PickupScanView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 74)
-                .background(self.wrongPackage(pack: viewModel.scannedPackage) ? Color(red: 222 / 255, green: 237 / 255, blue: 1.0) : Color(red: 1.0, green: 214 / 255, blue: 214 / 255))
+                .background(!self.wrongPackage(pack: viewModel.scannedPackage) ? Color(red: 222 / 255, green: 237 / 255, blue: 1.0) : Color(red: 1.0, green: 214 / 255, blue: 214 / 255))
                 
                 List {
                     ForEach(viewModel.scannedPackagesList) { pack in
@@ -93,15 +95,17 @@ struct PickupScanView: View {
                 .background(Color("screen-base"))
                 
                 VStack {
-                    Button(String.generateReportStr) {
+                    Button(action: {
                         self.generateReport = true
+                    }) {
+                        Text(String.generateReportStr)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(Color("tab-bar-tint"))
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
                     }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(Color("tab-bar-tint"))
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .cornerRadius(24)
-                    .padding(EdgeInsets(top: 10, leading: 20, bottom: -30, trailing: 20))
                 }
                 .background(Color("screen-base"))
                 .onAppear {
@@ -117,10 +121,10 @@ struct PickupScanView: View {
             }
             .isHidden(!self.viewModel.showingProgressView)
             NavigationLink("", isActive: $manualInput) {
-                PickupManualInputView(viewModel: manualInputViewModel)
+                PickupManualInputView(viewModel: self.viewModel)
             }
             NavigationLink("", isActive: $generateReport) {
-                PickupGenerateReportView(viewModel: generateReportViewModel)
+                PickupGenerateReportView(viewModel: generateReportViewModel, scanToPickup: $scanToPickup)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -207,6 +211,10 @@ struct PickupScanView: View {
 
 struct PickupScanView_Previews: PreviewProvider {
     static var previews: some View {
-        PickupScanView(viewModel: PickupScanPackagesViewModel())
+        let binding = Binding<Bool>(
+            get: { false },
+            set: { _ in }
+        )
+        PickupScanView(viewModel: PickupScanPackagesViewModel(), scanToPickup: binding)
     }
 }

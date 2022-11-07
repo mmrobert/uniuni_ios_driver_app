@@ -58,7 +58,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         break
                     }
                 } else {
-                    strongSelf.backToDeliveryList()
+                    strongSelf.back()
                 }
             })
             .store(in: &disposables)
@@ -145,7 +145,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
         NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil, longitude: self.currentLocation.coordinate.longitude, latitude: self.currentLocation.coordinate.latitude)
             .receive(on: DispatchQueue.main)
@@ -186,7 +186,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 1.0)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
         CoreDataManager.shared.saveFailedUploaded(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
     }
@@ -245,10 +245,11 @@ extension CompleteDeliveryNavigator: PHPickerViewControllerDelegate {
                         strongSelf.photoTaken = image
                     }
                 }
+                if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
+                    photoTakingVC.updateTitle()
+                }
                 if strongSelf.photos.count >= 2 {
                     strongSelf.dismissPhotoTaking()
-                } else if let photoTakingVC = strongSelf.photoTakingViewController as? TakePhotosViewController<CompleteDeliveryNavigator> {
-                    photoTakingVC.updateTitle()
                 }
             case .review(let index):
                 if images.count > 0 {

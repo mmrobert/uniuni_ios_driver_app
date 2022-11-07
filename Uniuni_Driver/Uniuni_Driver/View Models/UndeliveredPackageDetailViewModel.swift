@@ -13,9 +13,6 @@ class UndeliveredPackageDetailViewModel: ObservableObject {
     @Published var packageViewModel: PackageViewModel?
     @Published var showingNetworkErrorAlert: Bool = false
     
-    @Published var showingProgressView: Bool = false
-    @Published var showingBackground: Bool = false
-    
     @Published var failedReason: Int?
     @Published var pods: [String] = []
     
@@ -31,8 +28,6 @@ class UndeliveredPackageDetailViewModel: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { [weak self] value in
                     guard let strongSelf = self else { return }
-                    strongSelf.showingProgressView = false
-                    strongSelf.showingBackground = false
                     switch value {
                     case .failure( _):
                         strongSelf.showingNetworkErrorAlert = true
@@ -41,8 +36,6 @@ class UndeliveredPackageDetailViewModel: ObservableObject {
                     }
                 }, receiveValue: { [weak self] history in
                     guard let strongSelf = self else { return }
-                    strongSelf.showingProgressView = false
-                    strongSelf.showingBackground = false
                     guard let biz_data = history.biz_data else { return }
                     strongSelf.parseLatestDelivery(history: biz_data)
                 })

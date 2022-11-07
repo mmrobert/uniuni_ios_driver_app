@@ -126,6 +126,7 @@ extension String {
     static let businessPickupStr = NSLocalizedString("Business Pick-up", comment: "")
     static let pickupParcelsFromABusinessPartnerStr = NSLocalizedString("Pick-up parcels from a business partner", comment: "")
     static let noServicePointIsAssignedToYouStr = NSLocalizedString("No service point is assigned to you", comment: "")
+    static let noServicePointIsCurrentlyAssignedToYouStr = NSLocalizedString("No service point is currently assigned to you", comment: "")
     static let pickupScanStr = NSLocalizedString("Pick-up Scan", comment: "")
     static let pleaseScanAParcelStr = NSLocalizedString("Please scan a parcel", comment: "")
     static let generateReportStr = NSLocalizedString("Generate Report", comment: "")
