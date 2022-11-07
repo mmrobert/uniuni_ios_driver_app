@@ -20,6 +20,7 @@ struct SearchCellView: View {
     var body: some View {
         HStack {
             Text(package.tracking_no ?? "")
+                .padding(EdgeInsets(top: 0, leading: 25, bottom: 0, trailing: 25))
         }
         .onTapGesture {
             self.selectedPackage = self.package

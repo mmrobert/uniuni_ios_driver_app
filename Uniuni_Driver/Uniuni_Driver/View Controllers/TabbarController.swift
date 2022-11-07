@@ -40,8 +40,10 @@ class TabBarController: UITabBarController {
     private func scanTab() -> UIViewController {
         let scanView = ScanHomeView(viewModel: ScanHomeViewModel())
         let scanVC = UIHostingController(rootView: scanView)
-        scanVC.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
-        return scanVC
+        let scanNav = UINavigationController(rootViewController: scanVC)
+        scanNav.navigationBar.backgroundColor = .white
+        scanNav.tabBarItem = UITabBarItem(title: String.scanStr, image: UIImage.scan, tag: 2)
+        return scanNav
     }
     
     private func incomeTab() -> UINavigationController {

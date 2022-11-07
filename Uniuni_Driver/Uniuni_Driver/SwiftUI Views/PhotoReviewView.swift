@@ -96,9 +96,24 @@ struct PhotoReviewView<Navigator>: View where Navigator: TakePhotosViewControlle
                             if let photo = self.navigator.photoTaken {
                                 self.navigator.photos.append(photo)
                             }
-                            self.navigator.dismissPhotoReview(animated: true) {
-                                if self.navigator.photos.count == 2 {
-                                    self.navigator.dismissPhotoTaking(animated: false, completion: nil)
+                            self.navigator.dismissPhotoReview(animated: false) {
+                                if let navi = self.navigator as? FailedDeliveryNavigator {
+                                    switch navi.getFailedReason() {
+                                    case .redelivery:
+                                        if self.navigator.photos.count == 1 {
+                                            self.navigator.dismissPhotoTaking(animated: false, completion: nil)
+                                        }
+                                    case .failedContactCustomer:
+                                        if self.navigator.photos.count == 2 {
+                                            self.navigator.dismissPhotoTaking(animated: false, completion: nil)
+                                        }
+                                    case .wrongAddress, .poBox:
+                                        break
+                                    }
+                                } else {
+                                    if self.navigator.photos.count == 2 {
+                                        self.navigator.dismissPhotoTaking(animated: false, completion: nil)
+                                    }
                                 }
                             }
                         case .review(let index):

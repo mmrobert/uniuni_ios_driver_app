@@ -11,12 +11,14 @@ struct ScanHomeView: View {
     
     @ObservedObject private var viewModel: ScanHomeViewModel
     
+    @State private var scrollViewContentSize: CGSize = .zero
+    
     init(viewModel: ScanHomeViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        NavigationView {
+        VStack {
             VStack {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 1) {
@@ -33,9 +35,16 @@ struct ScanHomeView: View {
                             .cornerRadius(16)
                             .padding(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
                     }
-                    .background(Color("screen-base"))
+                    .background(
+                        GeometryReader { geo -> Color in
+                            DispatchQueue.main.async {
+                                scrollViewContentSize = geo.size
+                            }
+                            return Color("screen-base")
+                        }
+                    )
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxHeight: scrollViewContentSize.height)
                 .onAppear {
                     viewModel.fetchPacksPickDropInfo(driverID: AppConfigurator.shared.driverID)
                 }

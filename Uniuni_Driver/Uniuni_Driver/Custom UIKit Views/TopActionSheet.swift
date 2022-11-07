@@ -22,7 +22,7 @@ class TopActionSheet: UIViewController {
     
     struct Theme {
         var backgroundColor: UIColor = .clear
-        var backgroundOverlayColor: UIColor = .black.withAlphaComponent(0.2)
+        var backgroundOverlayColor: UIColor = .white.withAlphaComponent(0.3)
         var titleTextFont: UIFont = UIFont.systemFont(ofSize: 13)
         var titleTextColor: UIColor? = UIColor.lightBlackText
         var titleBackgroundColor: UIColor = .white
@@ -72,6 +72,8 @@ class TopActionSheet: UIViewController {
     }()
     
     private var viewModel: TopActionSheetViewModel?
+    
+    private var viewTopConstraint: NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +83,16 @@ class TopActionSheet: UIViewController {
         self.setupTitleView()
         self.setupActionsContainerView()
         self.setupActionsStackView()
+        
+        self.viewTopConstraint?.constant = -220
+        
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(TopActionSheet.viewTapped))
+        self.view.addGestureRecognizer(singleTap)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.animateFromTopIn()
     }
 
     func configure(viewModel: TopActionSheetViewModel, theme: TopActionSheet.Theme? = nil) {
@@ -89,6 +101,29 @@ class TopActionSheet: UIViewController {
         self.configureActions(viewModel: viewModel, theme: theme)
         
         self.view.layoutIfNeeded()
+    }
+    
+    private func animateFromTopIn() {
+        self.viewTopConstraint?.constant = Constants.navigationBarHeight
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.view.layoutIfNeeded()
+        }) { _ in }
+    }
+    
+    private func animateFromTopOut() {
+        self.viewTopConstraint?.constant = -220
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.view.layoutIfNeeded()
+        }) { [weak self] _ in
+            self?.dismiss(animated: false)
+        }
+    }
+    
+    @objc
+    private func viewTapped() {
+        self.animateFromTopOut()
     }
     
     private func configureTitleView(viewModel: TopActionSheetViewModel, theme: TopActionSheet.Theme?) {
@@ -153,7 +188,7 @@ class TopActionSheet: UIViewController {
         if let handler = actions?.first?.handler {
             handler(label.text)
         }
-        self.dismiss(animated: true)
+        self.animateFromTopOut()
     }
 }
 
@@ -175,9 +210,15 @@ extension TopActionSheet {
         
         self.titleLabel.padding(top: 0, bottom: 0, left: Constants.leadingSpacing, right: 0)
         self.view.addSubview(self.titleLabel)
+        
+        
+        self.viewTopConstraint = titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: Constants.navigationBarHeight)
+        guard let topConstraint = self.viewTopConstraint else {
+            return
+        }
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: Constants.navigationBarHeight),
+            topConstraint,
             titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: Constants.titleHeight)
         ])

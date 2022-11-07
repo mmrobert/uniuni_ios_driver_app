@@ -417,9 +417,10 @@ enum NetworkAPIs {
                 let httpResponse = element.response as? HTTPURLResponse
                 if let httpResponse = httpResponse, httpResponse.statusCode == 200 {
                     switch self {
-                    case .completeDropoffScan( _, _, _):
-                        let kk = String(data: element.data, encoding: .utf8)
-                        print("cheng=data= \(kk)")
+                    case .completeDelivery( _, _, _):
+                        //let kk = String(data: element.data, encoding: .utf8)
+                        //print("cheng=data= \(kk)")
+                        break
                     default:
                         break
                     }

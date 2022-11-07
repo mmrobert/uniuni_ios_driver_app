@@ -39,6 +39,7 @@ struct CompletePackageDetailView: View {
                                     Spacer()
                                 }
                             }
+                            .frame(maxWidth: .infinity, maxHeight: self.requiredSignatureReminding() ? 28 : 0)
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                             .isHidden(!self.requiredSignatureReminding())
                             
@@ -82,25 +83,6 @@ struct CompletePackageDetailView: View {
                                 TitleTextView(title: String.buzzStr, text: packageViewModel.buzz_code)
                                 TitleTextView(title: String.noteStr, text: packageViewModel.postscript)
                             }
-                            HStack {
-                                Text(String.photosStr)
-                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                    .font(.bold(.system(size: 20))())
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-                            HStack {
-                                if packageViewModel.SG == 1 {
-                                    Text(String.take2PhotosSignatureStr)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                        .foregroundColor(.gray)
-                                } else {
-                                    Text(String.take2PhotosStr)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                        .foregroundColor(.gray)
-                                }
-                                Spacer()
-                            }
                         }
                         .background(
                             GeometryReader { geo -> Color in
@@ -112,7 +94,27 @@ struct CompletePackageDetailView: View {
                         )
                     }
                     .frame(maxHeight: scrollViewContentSize.height)
+                    Spacer()
                     VStack {
+                        HStack {
+                            Text(String.photosStr)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                .font(.bold(.system(size: 20))())
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+                        HStack {
+                            if packageViewModel.SG == 1 {
+                                Text(String.take2PhotosSignatureStr)
+                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                    .foregroundColor(.gray)
+                            } else {
+                                Text(String.take2PhotosStr)
+                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                        }
                         HStack(spacing: 6) {
                             if navigator.photos.count == 0 {
                                 ZStack {
@@ -131,7 +133,7 @@ struct CompletePackageDetailView: View {
                                     .resizable()
                                     .frame(width: 137, height: 124)
                                     .onTapGesture {
-                                        self.navigator.startPhotoTakingFlow()
+                                        self.navigator.startPhotoReviewFlow(index: 0)
                                     }
                                 ZStack {
                                     Color("screen-base")

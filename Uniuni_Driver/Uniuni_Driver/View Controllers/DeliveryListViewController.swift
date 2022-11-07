@@ -81,6 +81,7 @@ class DeliveryListViewController: UIViewController {
         self.view.backgroundColor = UIColor.screenBase
         self.navigationController?.configureNavigationBar(isLargeTitle: false, backgroundColor: UIColor.tabbarBackground, tintColor: UIColor.naviBarButton)
         self.navigationController?.configureStatusBar(backgroundColor: UIColor.tabbarBackground)
+        self.navigationController?.navigationBar.backgroundColor = .white
         self.configureLeftButtonItems()
         self.configureRightButtonItems()
         
@@ -237,8 +238,9 @@ class DeliveryListViewController: UIViewController {
     @objc
     private func searchButtonAction() {
         let searchView = PackageSearchView(naviController: self.navigationController)
-
         let searchVC = UIHostingController(rootView: searchView)
+        searchVC.hidesBottomBarWhenPushed = true
+        
         self.navigationController?.pushViewController(searchVC, animated: true)
     }
     
@@ -249,6 +251,7 @@ class DeliveryListViewController: UIViewController {
             servicesListViewModel: ServicePointsListViewModel(),
             mapViewModel: MapViewModel())
         mapView.packageToShowDetail = nil
+        mapView.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(mapView, animated: true)
     }
     
@@ -278,7 +281,7 @@ class DeliveryListViewController: UIViewController {
         let actions = [expressSort, dateSort, routeSort, distanceSort]
         sortSelection.configure(viewModel: TopActionSheetViewModel(title: String.sortListByStr, actions: actions))
         sortSelection.modalPresentationStyle = .overCurrentContext
-        self.present(sortSelection, animated: true)
+        self.present(sortSelection, animated: false)
     }
     
     private func showAlert(title: String?, msg: String?, positiveAction: Action?, negativeAction: Action?) {
@@ -376,11 +379,13 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
                 servicesListViewModel: ServicePointsListViewModel(),
                 mapViewModel: MapViewModel())
             mapView.packageToShowDetail = pack
+            mapView.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(mapView, animated: true)
         case 1:
             let undeliveredVM = UndeliveredPackageDetailViewModel(packageViewModel: pack)
             let undeliveredView = UndeliveredPackageDetailView(naviController: self.navigationController, viewModel: undeliveredVM)
             let undeliveredVC = UIHostingController(rootView: undeliveredView)
+            undeliveredVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(undeliveredVC, animated: true)
         default:
             let mapView = MapClusterViewController(
@@ -388,6 +393,7 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
                 servicesListViewModel: ServicePointsListViewModel(),
                 mapViewModel: MapViewModel())
             mapView.packageToShowDetail = pack
+            mapView.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(mapView, animated: true)
         }
     }

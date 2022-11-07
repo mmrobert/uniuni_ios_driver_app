@@ -76,25 +76,6 @@ struct UndeliveredPackageDetailView: View {
                             TitleTextView(title: String.buzzStr, text: viewModel.packageViewModel?.buzz_code)
                             TitleTextView(title: String.noteStr, text: viewModel.packageViewModel?.postscript)
                         }
-                        HStack {
-                            Text(String.photosStr)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-                                .font(.bold(.system(size: 20))())
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        HStack {
-                            if viewModel.packageViewModel?.SG == 1 {
-                                Text(String.take2PhotosSignatureStr)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .foregroundColor(.gray)
-                            } else {
-                                Text(String.take2PhotosStr)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .foregroundColor(.gray)
-                            }
-                            Spacer()
-                        }
                     }
                     .background(
                         GeometryReader { geo -> Color in
@@ -106,6 +87,25 @@ struct UndeliveredPackageDetailView: View {
                     )
                 }
                 .frame(maxHeight: scrollViewContentSize.height)
+                HStack {
+                    Text(String.photosStr)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                        .font(.bold(.system(size: 20))())
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                HStack {
+                    if viewModel.packageViewModel?.SG == 1 {
+                        Text(String.take2PhotosSignatureStr)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .foregroundColor(.gray)
+                    } else {
+                        Text(String.take2PhotosStr)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                }
                 Spacer()
                 VStack {
                     HStack(spacing: 16) {
@@ -140,24 +140,10 @@ struct UndeliveredPackageDetailView: View {
                         }
                     }
                     .onAppear {
-                        viewModel.showingBackground = true
-                        viewModel.showingProgressView = true
                         viewModel.fetchPackageDeliveryHistoryFromAPI()
                     }
                 }
             }
-            VStack {
-                Color("black-transparent-0.4")
-                    .ignoresSafeArea()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .isHidden(!viewModel.showingBackground)
-            VStack {
-                ProgressView()
-                    .scaleEffect(4)
-                    .progressViewStyle(CircularProgressViewStyle())
-            }
-            .isHidden(!viewModel.showingProgressView)
         }
         .navigationBarTitle(viewModel.packageViewModel?.tracking_no ?? "")
         .navigationBarTitleDisplayMode(.inline)
@@ -202,15 +188,6 @@ struct UndeliveredPackageDetailView: View {
             return ""
         }
     }
-    /*
-    private func requiredSignatureReminding() -> Bool {
-        if viewModel.packageViewModel?.SG == 1 {
-            return true
-        } else {
-            return false
-        }
-    }
-     */
 }
 
 struct UndeliveredPackageDetailView_Previews: PreviewProvider {

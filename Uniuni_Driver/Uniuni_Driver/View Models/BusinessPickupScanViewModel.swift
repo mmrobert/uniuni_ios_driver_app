@@ -167,7 +167,7 @@ class BusinessPickupScanViewModel: ObservableObject {
     
     func completeBusinessScan() {
         let manifestNo = self.selectedListItem?.package.manifest_no ?? ""
-        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.6)?.jpegData(compressionQuality: 1)
+        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         
         NetworkService.shared.completeBusinessPickupScan(driverID: AppConfigurator.shared.driverID, vcode: AppConfigurator.shared.vcode, manifestNo: manifestNo, signature: signature)
             .receive(on: DispatchQueue.main)

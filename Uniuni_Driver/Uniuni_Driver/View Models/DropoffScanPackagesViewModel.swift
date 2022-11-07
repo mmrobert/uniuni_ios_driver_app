@@ -155,7 +155,7 @@ class DropoffScanPackagesViewModel: ObservableObject {
         if scanneds.count > 0 {
             scannedItems = scanneds.joined(separator: "|")
         }
-        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.6)?.jpegData(compressionQuality: 1)
+        let signature = self.signatureView?.signature?.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         NetworkService.shared.completeDropoffScan(driverID: AppConfigurator.shared.driverID, servicePointID: servicePointID, scannedItems: scannedItems, signature: signature)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] value in

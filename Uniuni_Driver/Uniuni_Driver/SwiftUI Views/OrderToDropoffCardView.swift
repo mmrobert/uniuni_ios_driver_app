@@ -47,6 +47,7 @@ struct OrderToDropoffCardView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 78, height: 164)
+                    .padding(.trailing, 20)
             }
             .onAppear {
                 self.scanToDropoff = false

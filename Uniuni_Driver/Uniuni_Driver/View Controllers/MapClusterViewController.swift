@@ -1089,8 +1089,10 @@ class MapClusterViewController: UIViewController {
             bearing: nil,
             pitch: nil
         )
-        mapView.camera.ease(to: camera, duration: Constants.mapZoneUpdateDuration, curve: .linear) { _ in
-            completion?()
+        self.mapView.camera.fly(to: camera, duration: 0) { _ in
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.8) {
+                completion?()
+            }
         }
     }
     

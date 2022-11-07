@@ -16,28 +16,36 @@ struct PackageSearchView: View {
     @State private var selectedPackage: PackageViewModel?
     
     var body: some View {
-        List {
-            ForEach(searchString == "" ? viewModel.list : viewModel.list.filter {
-                guard let trackingNo = $0.tracking_no else {
-                    return false
+        VStack {
+            Divider()
+                .frame(width: 0, height: 0)
+            VStack {
+                List {
+                    ForEach(searchString == "" ? viewModel.list : viewModel.list.filter {
+                        guard let trackingNo = $0.tracking_no else {
+                            return false
+                        }
+                        return trackingNo.contains(searchString)
+                    }) {
+                        SearchCellView(package: $0, selectedPackage: $selectedPackage)
+                    }
                 }
-                return trackingNo.contains(searchString)
-            }) {
-                SearchCellView(package: $0, selectedPackage: $selectedPackage)
+                .listStyle(.plain)
+                .background(.white)
+                .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
             }
+            .navigationTitle(String.searchStr)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: Button {
+                self.naviController?.popViewController(animated: true)
+            } label: {
+                Image("icon-back")
+            })
         }
-        .navigationTitle(String.searchStr)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button {
-            self.naviController?.popViewController(animated: true)
-        } label: {
-            Image("icon-back")
-        })
         .onAppear {
             viewModel.fetchPackagesFromCoreData()
         }
-        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: selectedPackage) { _ in
             guard let selectedPackage = self.selectedPackage else {
                 return
@@ -52,11 +60,13 @@ struct PackageSearchView: View {
                         servicesListViewModel: ServicePointsListViewModel(),
                         mapViewModel: MapViewModel())
                     mapView.packageToShowDetail = selectedPackage
+                    mapView.hidesBottomBarWhenPushed = true
                     self.naviController?.pushViewController(mapView, animated: true)
                 case .undelivered211, .undelivered206:
                     let undeliveredVM = UndeliveredPackageDetailViewModel(packageViewModel: selectedPackage)
                     let undeliveredView = UndeliveredPackageDetailView(naviController: self.naviController, viewModel: undeliveredVM)
                     let undeliveredVC = UIHostingController(rootView: undeliveredView)
+                    undeliveredVC.hidesBottomBarWhenPushed = true
                     self.naviController?.pushViewController(undeliveredVC, animated: true)
                 case .none:
                     break

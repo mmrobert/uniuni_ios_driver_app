@@ -145,7 +145,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 0.4)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
         NetworkService.shared.completeDelivery(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil, longitude: self.currentLocation.coordinate.longitude, latitude: self.currentLocation.coordinate.latitude)
             .receive(on: DispatchQueue.main)
@@ -186,7 +186,7 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
             return
         }
         let podImages = self.photos.compactMap {
-            $0.compressImageTo(expectedSizeInMB: 1.0)?.jpegData(compressionQuality: 1)
+            $0.compressImageTo(expectedSizeInMB: 0.14)?.jpegData(compressionQuality: 1)
         }
         CoreDataManager.shared.saveFailedUploaded(orderID: orderID, deliveryResult: 0, podImages: podImages, failedReason: nil)
     }

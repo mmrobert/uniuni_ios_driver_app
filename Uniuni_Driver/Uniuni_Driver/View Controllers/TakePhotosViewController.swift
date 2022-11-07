@@ -280,11 +280,18 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                 self.remindingLabel.attributedText = remindingText
             } else {
                 self.titleLabel.text = String.secondPhotoStr
-                if navigator.getPackageViewModel().SG == 1 {
-                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
-                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
-                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
-                    self.remindingLabel.attributedText = remindingText
+                if let navi = self.navigator as? CompleteDeliveryNavigator {
+                    if navi.getPackageViewModel().SG == 1 || navigator.getPackageViewModel().goods_type == .medical {
+                        let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                        let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                        remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                        self.remindingLabel.attributedText = remindingText
+                    } else {
+                        let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                        let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                        remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                        self.remindingLabel.attributedText = remindingText
+                    }
                 } else {
                     let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
                     let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
@@ -301,11 +308,18 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                 self.remindingLabel.attributedText = remindingText
             } else {
                 self.titleLabel.text = String.secondPhotoStr
-                if navigator.getPackageViewModel().SG == 1 {
-                    let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
-                    let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
-                    remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
-                    self.remindingLabel.attributedText = remindingText
+                if let navi = self.navigator as? CompleteDeliveryNavigator {
+                    if navi.getPackageViewModel().SG == 1 || navigator.getPackageViewModel().goods_type == .medical {
+                        let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheCustomersSignatureStr)
+                        let range2 = (String.takeAPhotoOfTheCustomersSignatureStr as NSString).range(of: String.customersSignatureStr)
+                        remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                        self.remindingLabel.attributedText = remindingText
+                    } else {
+                        let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
+                        let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
+                        remindingText.setAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightRed ?? UIColor.white], range: range2)
+                        self.remindingLabel.attributedText = remindingText
+                    }
                 } else {
                     let remindingText = NSMutableAttributedString(string: String.takeAPhotoOfTheParcelLocationStr)
                     let range2 = (String.takeAPhotoOfTheParcelLocationStr as NSString).range(of: String.parcelLocationStr)
