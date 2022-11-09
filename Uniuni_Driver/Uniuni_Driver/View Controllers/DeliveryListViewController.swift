@@ -379,6 +379,7 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
                 servicesListViewModel: ServicePointsListViewModel(),
                 mapViewModel: MapViewModel())
             mapView.packageToShowDetail = pack
+            AppGlobalVariables.shared.originOfDeliveryFlow = .fromList
             mapView.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(mapView, animated: true)
         case 1:
@@ -393,6 +394,7 @@ extension DeliveryListViewController: UITableViewDataSource, UITableViewDelegate
                 servicesListViewModel: ServicePointsListViewModel(),
                 mapViewModel: MapViewModel())
             mapView.packageToShowDetail = pack
+            AppGlobalVariables.shared.originOfDeliveryFlow = .fromList
             mapView.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(mapView, animated: true)
         }

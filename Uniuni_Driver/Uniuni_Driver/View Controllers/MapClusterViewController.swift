@@ -246,6 +246,7 @@ class MapClusterViewController: UIViewController {
                 }
             } else {
                 self?.restoreViewAnnotationColor()
+                
                 if let isService = (feature.properties?["isService"] as? JSONValue)?.rawValue as? Bool, isService {
                     let service = self?.servicesList.filter {
                         $0.name == feature.identifier?.rawValue as? String
@@ -418,8 +419,14 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            let completeNavi = CompleteDeliveryNavigator(presenter: strongSelf, packageViewModel: vm)
-            completeNavi.presentDeliveryDetail()
+            strongSelf.detailCardViewTopConstraint?.constant = 25
+            UIView.animate(withDuration: 0.5, animations: {
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in
+                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
+                let completeNavi = CompleteDeliveryNavigator(presenter: strongSelf, packageViewModel: vm)
+                completeNavi.presentDeliveryDetail()
+            }
         }
         
         self.detailCardView.failedAction = { [weak self] in
@@ -427,20 +434,33 @@ class MapClusterViewController: UIViewController {
                 return
             }
             if let needRetry = strongSelf.packageToShowDetail?.need_retry, needRetry > 0 {
-                if let retryTime = strongSelf.packageToShowDetail?.redeliveryData?.retry_times, retryTime >= 2 {
-                    strongSelf.showReasonOfFailPickup(redelivery: false)
-                } else {
-                    strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConfigurator.shared.driverID, orderID: orderId) { retryData in
-                        if let remain = retryData?.remaining_time, remain > 0 {
-                            let positiveAction = Action(title: String.OKStr)
-                            strongSelf.showAlert(title: String.attemptFailedStr, msg: String.yourTwoAttemptsAreTooCloseStr, positiveAction: positiveAction, negativeAction: nil)
-                        } else {
-                            strongSelf.showReasonOfFailPickup(redelivery: true)
+                if let retryTime = strongSelf.packageToShowDetail?.redeliveryData?.retry_times {
+                    if retryTime == 0 {
+                        strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConfigurator.shared.driverID, orderID: orderId) { retryData in
+                            if let remain = retryData?.remaining_time, remain > 0 {
+                                let positiveAction = Action(title: String.OKStr)
+                                strongSelf.showAlert(title: String.attemptFailedStr, msg: String.yourTwoAttemptsAreTooCloseStr, positiveAction: positiveAction, negativeAction: nil)
+                            } else {
+                                strongSelf.showReasonOfFailPickup(failedChoose: .firstDelivery)
+                            }
                         }
+                    } else if retryTime == 1 {
+                        strongSelf.mapViewModel?.reDeliveryHistory(driverID: AppConfigurator.shared.driverID, orderID: orderId) { retryData in
+                            if let remain = retryData?.remaining_time, remain > 0 {
+                                let positiveAction = Action(title: String.OKStr)
+                                strongSelf.showAlert(title: String.attemptFailedStr, msg: String.yourTwoAttemptsAreTooCloseStr, positiveAction: positiveAction, negativeAction: nil)
+                            } else {
+                                strongSelf.showReasonOfFailPickup(failedChoose: .secondDelivery)
+                            }
+                        }
+                    } else {
+                        strongSelf.showReasonOfFailPickup(failedChoose: .thirdDelivery)
                     }
+                } else {
+                    strongSelf.showReasonOfFailPickup(failedChoose: .noRedelivery)
                 }
             } else {
-                strongSelf.showReasonOfFailPickup(redelivery: false)
+                strongSelf.showReasonOfFailPickup(failedChoose: .noRedelivery)
             }
         }
         
@@ -777,36 +797,43 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func showReasonOfFailPickup(redelivery: Bool) {
+    private func showReasonOfFailPickup(failedChoose: FailedChoose) {
         
         let alert = UIAlertController(title: String.reasonOfFailStr, message: String.chooseAReasonOfFailingDeliveryStr, preferredStyle: .actionSheet)
         
-        if redelivery {
-            let redeliveryAct = UIAlertAction(title: String.redeliveryStr, style: .default) { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
-                }
-                guard let vm = strongSelf.packageToShowDetail else {
-                    return
-                }
+        let redeliveryAct = UIAlertAction(title: String.redeliveryStr, style: .default) { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+            guard let vm = strongSelf.packageToShowDetail else {
+                return
+            }
+            
+            strongSelf.detailCardViewTopConstraint?.constant = 20
+            UIView.animate(withDuration: 0.5, animations: {
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in
+                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
                 let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .redelivery, currentLocation: self?.currentLocation)
                 failedNavi.presentFailedDetail()
             }
-            alert.addAction(redeliveryAct)
-        } else {
-            let contactAct = UIAlertAction(title: String.failToContactCustomerStr, style: .default) { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
-                }
-                guard let vm = strongSelf.packageToShowDetail else {
-                    return
-                }
+        }
+        let contactAct = UIAlertAction(title: String.failToContactCustomerStr, style: .default) { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+            guard let vm = strongSelf.packageToShowDetail else {
+                return
+            }
+            strongSelf.detailCardViewTopConstraint?.constant = 20
+            UIView.animate(withDuration: 0.5, animations: {
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in
+                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
                 let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .failedContactCustomer)
                 failedNavi.presentFailedDetail()
             }
-            alert.addAction(contactAct)
         }
-        
         let wrongAddAct = UIAlertAction(title: String.wrongAddressStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
                 return
@@ -814,8 +841,14 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .wrongAddress)
-            failedNavi.presentFailedDetail()
+            strongSelf.detailCardViewTopConstraint?.constant = 20
+            UIView.animate(withDuration: 0.5, animations: {
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in
+                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
+                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .wrongAddress)
+                failedNavi.presentFailedDetail()
+            }
         }
         let poboxAct = UIAlertAction(title: String.POBoxStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -824,14 +857,31 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .poBox)
-            failedNavi.presentFailedDetail()
+            strongSelf.detailCardViewTopConstraint?.constant = 20
+            UIView.animate(withDuration: 0.5, animations: {
+                strongSelf.detailCardView.layoutIfNeeded()
+            }) { _ in
+                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
+                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .poBox)
+                failedNavi.presentFailedDetail()
+            }
         }
-        alert.addAction(wrongAddAct)
-        alert.addAction(poboxAct)
+        switch failedChoose {
+        case .noRedelivery:
+            alert.addAction(contactAct)
+            alert.addAction(wrongAddAct)
+            alert.addAction(poboxAct)
+        case .firstDelivery:
+            alert.addAction(redeliveryAct)
+            alert.addAction(wrongAddAct)
+            alert.addAction(poboxAct)
+        case .secondDelivery:
+            alert.addAction(redeliveryAct)
+        case .thirdDelivery:
+            alert.addAction(contactAct)
+        }
         
         let cancelAct = UIAlertAction(title: String.cancelStr, style: .cancel)
-        
         alert.addAction(cancelAct)
         
         // for iPad Support
@@ -921,7 +971,29 @@ class MapClusterViewController: UIViewController {
         Publishers.CombineLatest(self.packagesListViewModel.$list, self.servicesListViewModel.$list)
             .sink(receiveValue: { [weak self] (packList, serviceList) in
                 guard let strongSelf = self else { return }
-                strongSelf.packagesList = packList
+                
+                let packs = packList.filter { pack in
+                    guard let state = pack.state else {
+                        return false
+                    }
+                    switch state {
+                    case .delivering:
+                        return true
+                    case .delivering231:
+                        return true
+                    case .delivering232:
+                        return true
+                    case .undelivered211:
+                        return false
+                    case .undelivered206:
+                        return false
+                    case .none:
+                        return false
+                    }
+                }
+                
+                strongSelf.packagesList = packs
+                
                 strongSelf.servicesList = serviceList
                 if strongSelf.packageToShowDetail == nil {
                     strongSelf.findPackageRegion(packagesList: packList, servicesList: serviceList)
@@ -1090,7 +1162,7 @@ class MapClusterViewController: UIViewController {
             pitch: nil
         )
         self.mapView.camera.fly(to: camera, duration: 0) { _ in
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.8) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.2) {
                 completion?()
             }
         }
@@ -1328,4 +1400,11 @@ extension MapClusterViewController {
             detailCardView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)]
         )
     }
+}
+
+enum FailedChoose {
+    case noRedelivery
+    case firstDelivery
+    case secondDelivery
+    case thirdDelivery
 }

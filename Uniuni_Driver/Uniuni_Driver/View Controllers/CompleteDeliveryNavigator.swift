@@ -58,7 +58,13 @@ class CompleteDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         break
                     }
                 } else {
-                    strongSelf.back()
+                    switch AppGlobalVariables.shared.originOfDeliveryFlow {
+                    case .fromList:
+                        AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
+                        strongSelf.backToDeliveryList()
+                    case .fromMap:
+                        strongSelf.back()
+                    }
                 }
             })
             .store(in: &disposables)

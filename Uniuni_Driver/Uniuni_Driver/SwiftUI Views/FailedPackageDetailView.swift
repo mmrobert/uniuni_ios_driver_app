@@ -34,12 +34,12 @@ struct FailedPackageDetailView: View {
                         VStack {
                             HStack {
                                 Text(String.orderInformationStr)
-                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 3, trailing: 20))
                                     .font(.bold(.system(size: 20))())
                                     .foregroundColor(.primary)
                                 Spacer()
                             }
-                            VStack {
+                            VStack(spacing: 3) {
                                 TitleTextView(title: String.trackingNoStr, text: packageViewModel.tracking_no)
                                 TitleTextView(title: String.orderTypeStr, text: packageViewModel.goods_type?.getDisplayString(), textColor: goodsTypeColor())
                                 TitleTextView(title: String.routeNoStr, text: "\(packageViewModel.route_no ?? 0)")
@@ -51,24 +51,24 @@ struct FailedPackageDetailView: View {
                             }
                             HStack {
                                 Text(String.customerInformationStr)
-                                    .padding(EdgeInsets(top: 2, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 2, leading: 20, bottom: 3, trailing: 20))
                                     .font(.bold(.system(size: 20))())
                                     .foregroundColor(.primary)
                                 Spacer()
                             }
-                            VStack {
+                            VStack(spacing: 3) {
                                 TitleTextView(title: String.nameStr, text: packageViewModel.name)
                                 TitleTextView(title: String.phoneNumberStr, text: packageViewModel.mobile)
                                 TitleTextView(title: String.addressStr, text: (packageViewModel.address ?? ""))
                             }
                             HStack {
                                 Text(String.customerNotesStr)
-                                    .padding(EdgeInsets(top: 2, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 2, leading: 20, bottom: 3, trailing: 20))
                                     .font(.bold(.system(size: 20))())
                                     .foregroundColor(.primary)
                                 Spacer()
                             }
-                            VStack {
+                            VStack(spacing: 3) {
                                 TitleTextView(title: String.buzzStr, text: packageViewModel.buzz_code)
                                 TitleTextView(title: String.noteStr, text: packageViewModel.postscript)
                             }
@@ -202,6 +202,7 @@ struct FailedPackageDetailView: View {
                             }
                         }
                     }
+                    .overlay(Divider().background(Color.gray.opacity(0.3)), alignment: .top)
                     Spacer()
                     VStack {
                         switch failedReason {
@@ -284,7 +285,13 @@ struct FailedPackageDetailView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.navigator.showingSuccessfulAlert = false
                         self.navigator.showingBackground = false
-                        self.navigator.back()
+                        switch AppGlobalVariables.shared.originOfDeliveryFlow {
+                        case .fromList:
+                            AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
+                            self.navigator.backToDeliveryList()
+                        case .fromMap:
+                            self.navigator.back()
+                        }
                     }
                 }
             }

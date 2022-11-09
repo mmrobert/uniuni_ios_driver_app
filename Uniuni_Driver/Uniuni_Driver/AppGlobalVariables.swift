@@ -16,4 +16,10 @@ class AppGlobalVariables: ObservableObject {
     
     @Published var tabBarHiden: Bool = false
     
+    var originOfDeliveryFlow: OriginOfDeliveryFlow = .fromMap
+    
+    enum OriginOfDeliveryFlow {
+        case fromList
+        case fromMap
+    }
 }

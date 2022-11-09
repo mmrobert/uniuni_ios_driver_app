@@ -60,6 +60,7 @@ struct PackageSearchView: View {
                         servicesListViewModel: ServicePointsListViewModel(),
                         mapViewModel: MapViewModel())
                     mapView.packageToShowDetail = selectedPackage
+                    AppGlobalVariables.shared.originOfDeliveryFlow = .fromList
                     mapView.hidesBottomBarWhenPushed = true
                     self.naviController?.pushViewController(mapView, animated: true)
                 case .undelivered211, .undelivered206:

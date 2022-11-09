@@ -33,7 +33,7 @@ class MapPackageCardView: UIView {
         var expressTypeTextFont: UIFont = UIFont.systemFont(ofSize: 12)
         var expressTypeBackgroundColor: UIColor? = UIColor.redBackground
         var receiverAddressTextColor: UIColor = .black
-        var receiverAddressTextFont: UIFont = UIFont.systemFont(ofSize: 18)
+        var receiverAddressTextFont: UIFont = UIFont.systemFont(ofSize: 20)
         var distanceUnitTextFont: UIFont = UIFont.systemFont(ofSize: 10)
         var distanceUnitTextColor: UIColor? = UIColor.lightBlackText
         var distanceValueTextFont: UIFont = UIFont.systemFont(ofSize: 30)
@@ -78,7 +78,7 @@ class MapPackageCardView: UIView {
         label.font = Theme.default.expressTypeTextFont
         label.textColor = Theme.default.expressTypeTextColor
         label.numberOfLines = 1
-        label.textAlignment = .center
+        label.textAlignment = .right
         return label
     }()
     
@@ -107,7 +107,7 @@ class MapPackageCardView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
         view.distribution = .fillProportionally
-        view.alignment = .center
+        view.alignment = .trailing
         return view
     }()
     
