@@ -20,6 +20,9 @@ struct UndeliveredPackageDetailView: View {
     init(naviController: UINavigationController?, viewModel: UndeliveredPackageDetailViewModel) {
         self.naviController = naviController
         self.viewModel = viewModel
+        let tempToken = AppConfigurator.shared.token
+        let bearer = "Bearer \(tempToken)"
+        SDWebImageDownloader.shared.setValue(bearer, forHTTPHeaderField: "Authorization")
     }
     
     var body: some View {
@@ -87,6 +90,9 @@ struct UndeliveredPackageDetailView: View {
                     )
                 }
                 .frame(maxHeight: scrollViewContentSize.height)
+                Divider()
+                    .background(Color.gray.opacity(0.3))
+                    .isHidden(shadowHiden())
                 VStack {
                     HStack {
                         Text(String.photosStr)
@@ -112,7 +118,7 @@ struct UndeliveredPackageDetailView: View {
                             ForEach(viewModel.pods, id: \.self) { pod in
                                 WebImage(url: URL(string: pod))
                                     .resizable()
-                                    .placeholder { Rectangle().foregroundColor(Color("light-gray-198")) }
+                                    .placeholder { Rectangle().foregroundColor(.white) }
                                     .transition(.fade(duration: 0.5))
                                     .scaledToFit()
                                     .frame(width: 137, height: 124)
@@ -122,7 +128,7 @@ struct UndeliveredPackageDetailView: View {
                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     }
                 }
-                .overlay(Divider().background(Color.gray.opacity(0.3)), alignment: .top)
+                .isHidden(shadowHiden())
                 Spacer()
                 VStack {
                     Button(action: {
@@ -189,6 +195,13 @@ struct UndeliveredPackageDetailView: View {
         default:
             return ""
         }
+    }
+    
+    private func shadowHiden() -> Bool {
+        if viewModel.pods.count > 0 {
+            return false
+        }
+        return true
     }
 }
 

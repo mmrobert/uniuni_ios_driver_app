@@ -251,6 +251,7 @@ class DeliveryListViewController: UIViewController {
             servicesListViewModel: ServicePointsListViewModel(),
             mapViewModel: MapViewModel())
         mapView.packageToShowDetail = nil
+        AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
         mapView.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(mapView, animated: true)
     }

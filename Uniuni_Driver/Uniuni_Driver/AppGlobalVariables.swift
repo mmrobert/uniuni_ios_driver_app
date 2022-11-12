@@ -15,6 +15,7 @@ class AppGlobalVariables: ObservableObject {
     private init() {}
     
     @Published var tabBarHiden: Bool = false
+    @Published var packagesListUpdated: Bool = false
     
     var originOfDeliveryFlow: OriginOfDeliveryFlow = .fromMap
     

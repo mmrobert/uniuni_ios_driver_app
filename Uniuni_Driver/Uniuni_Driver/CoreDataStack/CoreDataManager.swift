@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import CoreData
 
-class CoreDataManager {
+class CoreDataManager: ObservableObject {
     
     static let shared = CoreDataManager()
     

@@ -49,9 +49,6 @@ class MapClusterViewController: UIViewController {
     private var packagesList: [PackageViewModel] = []
     private var servicesList: [ServicePointViewModel] = []
     
-    private let orangePin = UIImageView(image: UIImage.mapPinOrange)
-    private let orangeServicePoint = UIImageView(image: UIImage.mapServiceOrange)
-    
     private let cardView: MapPackageCardView = {
         let view = MapPackageCardView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +107,7 @@ class MapClusterViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.showDetailPackageCard()
+        //self.showDetailPackageCard()
     }
     
     private func setupBackButton() {
@@ -121,8 +118,9 @@ class MapClusterViewController: UIViewController {
     
     @objc
     private func backButtonAction() {
+        self.cardViewTopConstraint?.constant = 30
         if let const = self.detailCardViewTopConstraint?.constant, const < -8 {
-            self.detailCardViewTopConstraint?.constant = 0
+            self.detailCardViewTopConstraint?.constant = 30
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.detailCardView.layoutIfNeeded()
             }, completion: nil)
@@ -147,12 +145,13 @@ class MapClusterViewController: UIViewController {
             self?.setupCluster()
         }
         mapView.mapboxMap.onNext(event: .mapLoaded) { [weak self] _ in
-            self?.setupInitZoom()
+            //self?.setupInitZoom()
             self?.setupSingleTapAction()
+            self?.showDetailPackageCard()
             // fetch packages
             self?.observingViewModels()
             self?.observingError()
-            self?.packagesListViewModel.fetchPackagesFromCoreData()
+            self?.packagesListViewModel.fetchPackagesFromAPI(driverID: AppConfigurator.shared.driverID)
             self?.servicesListViewModel.fetchServicesFromAPI(driverID: AppConfigurator.shared.driverID)
             //self?.servicesListViewModel.fetchServicePointsFromCoreData()
         }
@@ -245,16 +244,12 @@ class MapClusterViewController: UIViewController {
                     }
                 }
             } else {
-                self?.restoreViewAnnotationColor()
-                
                 if let isService = (feature.properties?["isService"] as? JSONValue)?.rawValue as? Bool, isService {
                     let service = self?.servicesList.filter {
                         $0.name == feature.identifier?.rawValue as? String
                     }.first
                     if let service = service {
-                        let lat = service.lat ?? Constants.defaultLocation.coordinate.latitude
-                        let lng = service.lng ?? Constants.defaultLocation.coordinate.longitude
-                        self?.addOrangeServicePoint(at: CLLocationCoordinate2D(latitude: lat, longitude: lng))
+                        self?.updateDataSource(packagesList: self?.packagesList ?? [], servicesList: self?.servicesList ?? [], selectedService: service.name)
                         self?.showServicePointCard(feature: feature)
                     }
                 } else {
@@ -262,9 +257,7 @@ class MapClusterViewController: UIViewController {
                         $0.tracking_no == feature.identifier?.rawValue as? String
                     }.first
                     if let package = package {
-                        let lat = Double(package.lat ?? "") ?? Constants.defaultLocation.coordinate.latitude
-                        let lng = Double(package.lng ?? "") ?? Constants.defaultLocation.coordinate.longitude
-                        self?.addOrangePin(at: CLLocationCoordinate2D(latitude: lat, longitude: lng))
+                        self?.updateDataSource(packagesList: self?.packagesList ?? [], servicesList: self?.servicesList ?? [], selectedPackage: package.tracking_no)
                         self?.showPackageCard(feature: feature)
                     }
                 }
@@ -291,7 +284,7 @@ class MapClusterViewController: UIViewController {
             buttonTitle: String.parcelDetailsStr
         )
         self.cardView.buttonAction = { [weak self] in
-            self?.cardViewTopConstraint?.constant = 0
+            self?.cardViewTopConstraint?.constant = 30
             UIView.animate(withDuration: 0.5, animations: {
                 self?.cardView.layoutIfNeeded()
             }) { _ in
@@ -308,9 +301,7 @@ class MapClusterViewController: UIViewController {
     }
     
     private func hidePackageCard() {
-        
-        self.restoreViewAnnotationColor()
-        self.cardViewTopConstraint?.constant = 0
+        self.cardViewTopConstraint?.constant = 30
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             self?.cardView.layoutIfNeeded()
         }) { _ in }
@@ -419,14 +410,9 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            strongSelf.detailCardViewTopConstraint?.constant = 25
-            UIView.animate(withDuration: 0.5, animations: {
-                strongSelf.detailCardView.layoutIfNeeded()
-            }) { _ in
-                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
-                let completeNavi = CompleteDeliveryNavigator(presenter: strongSelf, packageViewModel: vm)
-                completeNavi.presentDeliveryDetail()
-            }
+            
+            let completeNavi = CompleteDeliveryNavigator(presenter: strongSelf, packageViewModel: vm)
+            completeNavi.presentDeliveryDetail()
         }
         
         self.detailCardView.failedAction = { [weak self] in
@@ -809,14 +795,8 @@ class MapClusterViewController: UIViewController {
                 return
             }
             
-            strongSelf.detailCardViewTopConstraint?.constant = 20
-            UIView.animate(withDuration: 0.5, animations: {
-                strongSelf.detailCardView.layoutIfNeeded()
-            }) { _ in
-                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
-                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .redelivery, currentLocation: self?.currentLocation)
-                failedNavi.presentFailedDetail()
-            }
+            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .redelivery, currentLocation: self?.currentLocation)
+            failedNavi.presentFailedDetail()
         }
         let contactAct = UIAlertAction(title: String.failToContactCustomerStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -825,14 +805,8 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            strongSelf.detailCardViewTopConstraint?.constant = 20
-            UIView.animate(withDuration: 0.5, animations: {
-                strongSelf.detailCardView.layoutIfNeeded()
-            }) { _ in
-                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
-                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .failedContactCustomer)
-                failedNavi.presentFailedDetail()
-            }
+            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .failedContactCustomer)
+            failedNavi.presentFailedDetail()
         }
         let wrongAddAct = UIAlertAction(title: String.wrongAddressStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -841,14 +815,8 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            strongSelf.detailCardViewTopConstraint?.constant = 20
-            UIView.animate(withDuration: 0.5, animations: {
-                strongSelf.detailCardView.layoutIfNeeded()
-            }) { _ in
-                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
-                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .wrongAddress)
-                failedNavi.presentFailedDetail()
-            }
+            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .wrongAddress)
+            failedNavi.presentFailedDetail()
         }
         let poboxAct = UIAlertAction(title: String.POBoxStr, style: .default) { [weak self] _ in
             guard let strongSelf = self else {
@@ -857,14 +825,8 @@ class MapClusterViewController: UIViewController {
             guard let vm = strongSelf.packageToShowDetail else {
                 return
             }
-            strongSelf.detailCardViewTopConstraint?.constant = 20
-            UIView.animate(withDuration: 0.5, animations: {
-                strongSelf.detailCardView.layoutIfNeeded()
-            }) { _ in
-                strongSelf.updateDataSource(packagesList: strongSelf.packagesList, servicesList: strongSelf.servicesList)
-                let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .poBox)
-                failedNavi.presentFailedDetail()
-            }
+            let failedNavi = FailedDeliveryNavigator(presenter: strongSelf, packageViewModel: vm, failedReason: .poBox)
+            failedNavi.presentFailedDetail()
         }
         switch failedChoose {
         case .noRedelivery:
@@ -922,51 +884,6 @@ class MapClusterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func addOrangePin(at coordinate: CLLocationCoordinate2D) {
-        let options = ViewAnnotationOptions(
-            geometry: Point(coordinate),
-            width: nil,
-            height: nil,
-            associatedFeatureId: nil,
-            allowOverlap: false,
-            visible: true,
-            anchor: .center,
-            offsetX: nil,
-            offsetY: nil,
-            selected: false
-        )
-        do {
-            try mapView.viewAnnotations.add(self.orangePin, options: options)
-        } catch {
-            print("Failed to add viewAnnotation: \(error.localizedDescription)")
-        }
-    }
-    
-    private func addOrangeServicePoint(at coordinate: CLLocationCoordinate2D) {
-        let options = ViewAnnotationOptions(
-            geometry: Point(coordinate),
-            width: nil,
-            height: nil,
-            associatedFeatureId: nil,
-            allowOverlap: false,
-            visible: true,
-            anchor: .center,
-            offsetX: nil,
-            offsetY: nil,
-            selected: false
-        )
-        do {
-            try mapView.viewAnnotations.add(self.orangeServicePoint, options: options)
-        } catch {
-            print("Failed to add viewAnnotation: \(error.localizedDescription)")
-        }
-    }
-    
-    private func restoreViewAnnotationColor() {
-        mapView.viewAnnotations.remove(self.orangePin)
-        mapView.viewAnnotations.remove(self.orangeServicePoint)
-    }
-    
     private func observingViewModels() {
         Publishers.CombineLatest(self.packagesListViewModel.$list, self.servicesListViewModel.$list)
             .sink(receiveValue: { [weak self] (packList, serviceList) in
@@ -995,9 +912,20 @@ class MapClusterViewController: UIViewController {
                 strongSelf.packagesList = packs
                 
                 strongSelf.servicesList = serviceList
-                if strongSelf.packageToShowDetail == nil {
-                    strongSelf.findPackageRegion(packagesList: packList, servicesList: serviceList)
-                    strongSelf.updateDataSource(packagesList: packList, servicesList: serviceList)
+                if strongSelf.packageToShowDetail == nil || AppGlobalVariables.shared.packagesListUpdated {
+                    strongSelf.cardViewTopConstraint?.constant = 30
+                    if let const = strongSelf.detailCardViewTopConstraint?.constant, const < -8 {
+                        strongSelf.updateDataSource(packagesList: packs, servicesList: serviceList)
+                        strongSelf.findPackageRegion(packagesList: packs, servicesList: serviceList) {
+                            strongSelf.detailCardViewTopConstraint?.constant = 30
+                            UIView.animate(withDuration: 0.5, animations: {
+                                strongSelf.detailCardView.layoutIfNeeded()
+                            }, completion: nil)
+                        }
+                    } else {
+                        strongSelf.updateDataSource(packagesList: packs, servicesList: serviceList)
+                        strongSelf.findPackageRegion(packagesList: packs, servicesList: serviceList)
+                    }
                 }
             })
             .store(in: &disposables)
@@ -1098,7 +1026,7 @@ class MapClusterViewController: UIViewController {
             .store(in: &disposables)
     }
     
-    private func findPackageRegion(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {
+    private func findPackageRegion(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel], completion: (() -> ())? = nil) {
         
         let latsPack: [Double] = packagesList.compactMap { pack -> Double? in
             Double(pack.lat ?? "")
@@ -1138,7 +1066,7 @@ class MapClusterViewController: UIViewController {
             lngMax += 0.05
         }
         
-        updateCameraBound(latRegion: (latMin, latMax), lngRegion: (lngMin, lngMax))
+        updateCameraBound(latRegion: (latMin, latMax), lngRegion: (lngMin, lngMax), completion: completion)
     }
     
     private func updateCameraBound(latRegion: (min: Double, max: Double), lngRegion: (min: Double, max: Double), completion: (() -> ())? = nil) {
@@ -1162,22 +1090,22 @@ class MapClusterViewController: UIViewController {
             pitch: nil
         )
         self.mapView.camera.fly(to: camera, duration: 0) { _ in
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.2) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                 completion?()
             }
         }
     }
     
-    private func updateDataSource(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel]) {
+    private func updateDataSource(packagesList: [PackageViewModel], servicesList: [ServicePointViewModel], selectedPackage: String? = nil, selectedService: String? = nil) {
         
-        let packGeoJsonObject = GeoJsonDataModel.map(packagesList: packagesList)
+        let packGeoJsonObject = GeoJsonDataModel.map(packagesList: packagesList, selected: selectedPackage)
         do {
             try self.mapView.mapboxMap.style.updateGeoJSONSource(withId: Constants.packagesSourceID, geoJSON: packGeoJsonObject)
         } catch {
             print("Failed to update the layer: \(error.localizedDescription)")
         }
         
-        let serviceGeoJsonObject = GeoJsonDataModel.map(servicesList: servicesList)
+        let serviceGeoJsonObject = GeoJsonDataModel.map(servicesList: servicesList, selected: selectedService)
         do {
             try self.mapView.mapboxMap.style.updateGeoJSONSource(withId: Constants.servicesSourceID, geoJSON: serviceGeoJsonObject)
         } catch {
@@ -1330,6 +1258,11 @@ class MapClusterViewController: UIViewController {
         
         let expression = Exp(.switchCase) {
             Exp(.eq) {
+                Exp(.get) { "isSelected" }
+                true
+            }
+            Constants.packageOrangeIcon
+            Exp(.eq) {
                 Exp(.get) { "express" }
                 false
             }
@@ -1353,7 +1286,22 @@ class MapClusterViewController: UIViewController {
     private func createServicePointsLayer() -> SymbolLayer {
         
         var servicesLayer = SymbolLayer(id: Constants.servicePointsLayerID)
-        servicesLayer.iconImage = .constant(.name(Constants.serviceBlackIcon))
+        
+        let expression = Exp(.switchCase) {
+            Exp(.eq) {
+                Exp(.get) { "isSelected" }
+                false
+            }
+            Constants.serviceBlackIcon
+            Exp(.eq) {
+                Exp(.get) { "isSelected" }
+                true
+            }
+            Constants.serviceOrangeIcon
+            ""
+        }
+        
+        servicesLayer.iconImage = .expression(expression)
         
         return servicesLayer
     }

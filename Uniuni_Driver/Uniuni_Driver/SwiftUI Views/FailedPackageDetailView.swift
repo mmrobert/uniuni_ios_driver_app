@@ -83,6 +83,9 @@ struct FailedPackageDetailView: View {
                         )
                     }
                     .frame(maxHeight: scrollViewContentSize.height)
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .isHidden(shadowHiden())
                     VStack {
                         switch failedReason {
                         case .redelivery:
@@ -202,7 +205,6 @@ struct FailedPackageDetailView: View {
                             }
                         }
                     }
-                    .overlay(Divider().background(Color.gray.opacity(0.3)), alignment: .top)
                     Spacer()
                     VStack {
                         switch failedReason {
@@ -290,6 +292,7 @@ struct FailedPackageDetailView: View {
                             AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
                             self.navigator.backToDeliveryList()
                         case .fromMap:
+                            AppGlobalVariables.shared.packagesListUpdated = true
                             self.navigator.back()
                         }
                     }
@@ -359,6 +362,19 @@ struct FailedPackageDetailView: View {
             return .black
         case .express:
             return Color("red-background")
+        }
+    }
+    
+    private func shadowHiden() -> Bool {
+        switch failedReason {
+        case .redelivery:
+            return false
+        case .failedContactCustomer:
+            return false
+        case .wrongAddress:
+            return true
+        case .poBox:
+            return true
         }
     }
 }

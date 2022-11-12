@@ -17,7 +17,7 @@ struct AppConfigurator {
     
     public var baseURL: String {
         if targetName == "Uniuni_Driver" {
-            return "https://deliverydev.uniexpress.ca"
+            return "https://delivery-service-api.qa.uniuni.ca"
         } else {
             return ""
         }

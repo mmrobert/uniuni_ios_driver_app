@@ -50,7 +50,6 @@
 		9B7EDEAF28EA1980004C5738 /* PickupGenerateReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */; };
 		9B7EDEB328EC7D98004C5738 /* PickupGenerateReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */; };
 		9B7EDEB528ED33F1004C5738 /* PickupScanReportDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB428ED33F1004C5738 /* PickupScanReportDataModel.swift */; };
-		9B7EDEB728EDBA93004C5738 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB628EDBA93004C5738 /* NavigationBarModifier.swift */; };
 		9B7EDEB928EE6A0B004C5738 /* DropoffScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEB828EE6A0B004C5738 /* DropoffScanView.swift */; };
 		9B7EDEBB28EE6BDB004C5738 /* DropoffScanPackagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEBA28EE6BDB004C5738 /* DropoffScanPackagesViewModel.swift */; };
 		9B7EDEBD28EE8051004C5738 /* PencilKitSignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7EDEBC28EE8051004C5738 /* PencilKitSignatureView.swift */; };
@@ -186,7 +185,6 @@
 		9B7EDEAE28EA1980004C5738 /* PickupGenerateReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportView.swift; sourceTree = "<group>"; };
 		9B7EDEB228EC7D98004C5738 /* PickupGenerateReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupGenerateReportViewModel.swift; sourceTree = "<group>"; };
 		9B7EDEB428ED33F1004C5738 /* PickupScanReportDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupScanReportDataModel.swift; sourceTree = "<group>"; };
-		9B7EDEB628EDBA93004C5738 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
 		9B7EDEB828EE6A0B004C5738 /* DropoffScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropoffScanView.swift; sourceTree = "<group>"; };
 		9B7EDEBA28EE6BDB004C5738 /* DropoffScanPackagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropoffScanPackagesViewModel.swift; sourceTree = "<group>"; };
 		9B7EDEBC28EE8051004C5738 /* PencilKitSignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilKitSignatureView.swift; sourceTree = "<group>"; };
@@ -368,7 +366,6 @@
 				9BB33A0528767809003ABD2F /* Data Models */,
 				9B02F04F2859788800C23165 /* Custom UIKit Views */,
 				9BC2D4EF2867B8E600354726 /* Custom ViewModels */,
-				9BC9F80A285E604900376D95 /* Protocols */,
 				9BC9F7FE285E505A00376D95 /* Extensions */,
 				9BD86CB32895777500228432 /* APIManager */,
 				9BE4BE322862CE00006391D9 /* CoreDataStack */,
@@ -445,7 +442,6 @@
 				9B5B8F7B28A02A0400CEA6BC /* TitleTextView.swift */,
 				9BAE07E828A80A2D00167795 /* PhotoReviewView.swift */,
 				9B6B33C728AD35550036293E /* ViewHidenModifier.swift */,
-				9B7EDEB628EDBA93004C5738 /* NavigationBarModifier.swift */,
 				9B6B33C928B082010036293E /* PopupSwiftUIView.swift */,
 				9BF4A8C128C5249500A6C67E /* ScanHomeView.swift */,
 				9BF4A8B528C45B3600A6C67E /* OrderToPickupCardView.swift */,
@@ -515,13 +511,6 @@
 				9BACEFA5287543E300969C44 /* Double-Extension.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		9BC9F80A285E604900376D95 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		9BD86CB32895777500228432 /* APIManager */ = {
@@ -820,7 +809,6 @@
 				9B92E6AE289239F7007B34EE /* AddressNavigationType.swift in Sources */,
 				9B6B33C628ACAB250036293E /* SpinnerViewController.swift in Sources */,
 				9B39AB21287A6E1B00877EBA /* DistanceUnit.swift in Sources */,
-				9B7EDEB728EDBA93004C5738 /* NavigationBarModifier.swift in Sources */,
 				9BC2D4EE2867B85800354726 /* PackageCardView.swift in Sources */,
 				9B39AB1F287A6CD300877EBA /* MapPackageCardViewModel.swift in Sources */,
 				9B5B8F7C28A02A0400CEA6BC /* TitleTextView.swift in Sources */,
@@ -1037,7 +1025,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver18";
+				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver28";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1071,7 +1059,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver18";
+				PRODUCT_BUNDLE_IDENTIFIER = "UniuniExpress.Uniuni-Driver28";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

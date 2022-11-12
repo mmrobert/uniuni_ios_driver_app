@@ -22,7 +22,7 @@ class TopActionSheet: UIViewController {
     
     struct Theme {
         var backgroundColor: UIColor = .clear
-        var backgroundOverlayColor: UIColor = .white.withAlphaComponent(0.3)
+        var backgroundOverlayColor: UIColor = .black.withAlphaComponent(0.3)
         var titleTextFont: UIFont = UIFont.systemFont(ofSize: 13)
         var titleTextColor: UIColor? = UIColor.lightBlackText
         var titleBackgroundColor: UIColor = .white

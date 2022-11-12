@@ -21,11 +21,10 @@ class PackagesListViewModel: ObservableObject {
     private var disposables = Set<AnyCancellable>()
     
     init(list: [PackageDataModel]? = nil) {
-        guard let list = list else {
-            return
-        }
-        self.list = list.map {
-            PackageViewModel(dataModel: $0)
+        if let list = list {
+            self.list = list.map {
+                PackageViewModel(dataModel: $0)
+            }
         }
         
         self.coreDataManager.$failedUploadeds
@@ -37,9 +36,15 @@ class PackagesListViewModel: ObservableObject {
             .store(in: &disposables)
         self.coreDataManager.fetchFailedUploadeds()
         
-        let tempToken = AppConfigurator.shared.token
-        let bearer = "Bearer \(tempToken)"
-        SDWebImageDownloader.shared.setValue(bearer, forHTTPHeaderField: "Authorization")
+        AppGlobalVariables.shared.$packagesListUpdated
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] updated in
+                guard let strongSelf = self else { return }
+                if updated {
+                    strongSelf.fetchPackagesFromAPI(driverID: AppConfigurator.shared.driverID)
+                }
+            })
+            .store(in: &disposables)
     }
     
     func fetchPackagesFromAPI(driverID: Int) {
@@ -93,16 +98,18 @@ class PackagesListViewModel: ObservableObject {
     }
     
     private func updatePackagesList(data: [PackageViewModel]) {
+        var temp = self.list
         for pack in data {
-            if let packIndex = self.list.firstIndex(where: {
+            if let packIndex = temp.firstIndex(where: {
                 $0.tracking_no == pack.tracking_no
             }) {
-                _ = self.list.remove(at: packIndex)
-                self.list.append(pack)
+                _ = temp.remove(at: packIndex)
+                temp.append(pack)
             } else {
-                self.list.append(pack)
+                temp.append(pack)
             }
         }
+        self.list = temp
     }
     
     private func removeFailedUploaded(biz_data: [PackageDataModel]) -> [PackageDataModel] {

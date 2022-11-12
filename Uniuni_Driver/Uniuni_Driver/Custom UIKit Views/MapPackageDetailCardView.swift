@@ -73,16 +73,6 @@ class MapPackageDetailCardView: UIView {
         return label
     }()
     
-    private lazy var packDetailContainer2: UIStackView = {
-        let view = UIStackView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.axis = .vertical
-        view.distribution = .fillProportionally
-        view.alignment = .leading
-        view.spacing = -4
-        return view
-    }()
-    
     private lazy var routeAddressContainer: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -554,15 +544,19 @@ extension MapPackageDetailCardView {
     }
     
     private func setupPackDetailContainer2() {
-        self.addSubview(packDetailContainer2)
+        self.addSubview(buzzLabel)
+        self.addSubview(noteLabel)
         NSLayoutConstraint.activate(
-            [packDetailContainer2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
-             packDetailContainer2.topAnchor.constraint(equalTo: signatureRemindingLabel.bottomAnchor, constant: 4),
-             packDetailContainer2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
-             packDetailContainer2.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)]
+            [buzzLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
+             buzzLabel.topAnchor.constraint(equalTo: signatureRemindingLabel.bottomAnchor, constant: 4),
+             buzzLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
+             buzzLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 18)]
         )
-        self.packDetailContainer2.addArrangedSubview(buzzLabel)
-        self.packDetailContainer2.addArrangedSubview(noteLabel)
+        NSLayoutConstraint.activate(
+            [noteLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
+             noteLabel.topAnchor.constraint(equalTo: buzzLabel.bottomAnchor, constant: 4),
+             noteLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing)]
+        )
     }
     
     private func setupButtons() {
@@ -586,7 +580,7 @@ extension MapPackageDetailCardView {
         NSLayoutConstraint.activate(
             [buttonsContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
              buttonsContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
-             buttonsContainer.topAnchor.constraint(equalTo: packDetailContainer2.bottomAnchor, constant: 3 * Constants.verticalSpacing),
+             buttonsContainer.topAnchor.constraint(equalTo: noteLabel.bottomAnchor, constant: 3 * Constants.verticalSpacing),
              buttonsContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.bottomSpacing)]
         )
     }

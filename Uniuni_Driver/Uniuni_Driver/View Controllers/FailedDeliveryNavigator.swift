@@ -70,6 +70,7 @@ class FailedDeliveryNavigator: NSObject, TakePhotosViewControllerNavigator {
                         AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
                         strongSelf.backToDeliveryList()
                     case .fromMap:
+                        AppGlobalVariables.shared.packagesListUpdated = true
                         strongSelf.back()
                     }
                 }

@@ -16,7 +16,7 @@ struct GeoJsonDataModel {
         static let defaultRouteNo: Int = 0
     }
     
-    static func map(packagesList: [PackageViewModel]) -> GeoJSONObject {
+    static func map(packagesList: [PackageViewModel], selected: String? = nil) -> GeoJSONObject {
         
         var features: [Feature] = []
         for package in packagesList {
@@ -28,9 +28,18 @@ struct GeoJsonDataModel {
             feature.identifier = FeatureIdentifier(package.tracking_no ?? "")
             let isExpress = package.express_type == .express ? true : false
             let routeNo = String(package.route_no ?? Constants.defaultRouteNo)
-            feature.properties = ["express": .boolean(isExpress),
-                                  "routeNo": .string(routeNo),
-                                  "isService": .boolean(false)]
+            
+            if package.tracking_no == selected {
+                feature.properties = ["express": .boolean(isExpress),
+                                      "routeNo": .string(routeNo),
+                                      "isService": .boolean(false),
+                                      "isSelected": .boolean(true)]
+            } else {
+                feature.properties = ["express": .boolean(isExpress),
+                                      "routeNo": .string(routeNo),
+                                      "isService": .boolean(false),
+                                      "isSelected": .boolean(false)]
+            }
             features.append(feature)
         }
         
@@ -38,7 +47,7 @@ struct GeoJsonDataModel {
         return .featureCollection(featureCollection)
     }
     
-    static func map(servicesList: [ServicePointViewModel]) -> GeoJSONObject {
+    static func map(servicesList: [ServicePointViewModel], selected: String? = nil) -> GeoJSONObject {
         
         var features: [Feature] = []
         for service in servicesList {
@@ -48,7 +57,14 @@ struct GeoJsonDataModel {
             let geometry: Geometry = .point(point)
             var feature = Feature(geometry: geometry)
             feature.identifier = FeatureIdentifier(service.name ?? "")
-            feature.properties = ["isService": .boolean(true)]
+            
+            if service.name == selected {
+                feature.properties = ["isService": .boolean(true),
+                                      "isSelected": .boolean(true)]
+            } else {
+                feature.properties = ["isService": .boolean(true),
+                                      "isSelected": .boolean(false)]
+            }
             features.append(feature)
         }
 

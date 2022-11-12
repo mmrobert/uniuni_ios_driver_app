@@ -225,6 +225,7 @@ struct CompletePackageDetailView: View {
                             AppGlobalVariables.shared.originOfDeliveryFlow = .fromMap
                             self.navigator.backToDeliveryList()
                         case .fromMap:
+                            AppGlobalVariables.shared.packagesListUpdated = true
                             self.navigator.back()
                         }
                     }

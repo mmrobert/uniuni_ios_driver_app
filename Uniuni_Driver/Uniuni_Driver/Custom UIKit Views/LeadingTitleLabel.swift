@@ -45,7 +45,7 @@ class LeadingTitleLabel: UIView {
         label.isUserInteractionEnabled = false
         label.font = Theme.default.mainTextFont
         label.textColor = Theme.default.mainTextColor
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.textAlignment = .left
         return label
     }()
@@ -109,7 +109,8 @@ extension LeadingTitleLabel {
     private func setupTitleLabel() {
         self.addSubview(self.titleLabel)
         NSLayoutConstraint.activate(
-            [titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing)]
+            [titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingSpacing),
+             titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.topSpacing)]
         )
         titleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
@@ -121,8 +122,7 @@ extension LeadingTitleLabel {
             [mainLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: Constants.horizontalSpacing),
              mainLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constants.trailingSpacing),
              mainLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.topSpacing),
-             mainLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.bottomSpacing),
-             mainLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)]
+             mainLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.bottomSpacing)]
         )
     }
 }
