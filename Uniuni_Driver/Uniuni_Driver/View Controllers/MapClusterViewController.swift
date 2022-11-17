@@ -236,6 +236,28 @@ class MapClusterViewController: UIViewController {
                                 return false
                             }
                         }).first
+                        
+                        do {
+                            try solidView?.mapboxMap.style.updateLayer(withId: Constants.clusteredCircleLayerID, type: CircleLayer.self) { layer in
+                                guard let clusterID = (feature.properties?["cluster_id"] as? JSONValue)?.rawValue as? Double else {
+                                    return
+                                }
+                                print("cheng===== \(clusterID)")
+                                let expression = Exp(.switchCase) {
+                                    Exp(.eq) {
+                                        Exp(.get) { "cluster_id" }
+                                        clusterID
+                                    }
+                                    UIColor.tabbarTint ?? UIColor.lightGray
+                                    UIColor.grayHalfTransparent ?? UIColor.lightGray
+                                }
+                                layer.circleColor =  .expression(expression)
+                            }
+                        } catch {
+                            print("Error for updating cluster layer")
+                        }
+                        
+                        
                         if let pack = pack {
                             self?.showPackageCard(feature: pack)
                         }
