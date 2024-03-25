@@ -85,7 +85,7 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
         return button
     }()
     
-    var previewView: CameraPreviewView = {
+    private var previewView: CameraPreviewView = {
         let view = CameraPreviewView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black
@@ -456,7 +456,6 @@ class TakePhotosViewController<Navigator>: UIViewController, AVCapturePhotoCaptu
                 deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
                     return
             }
-            
             cameraPreviewLayerConnection.videoOrientation = newCameraOrientation
         }
     }

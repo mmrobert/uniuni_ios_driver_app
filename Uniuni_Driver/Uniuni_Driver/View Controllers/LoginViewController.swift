@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing;
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         return textField
     }()
